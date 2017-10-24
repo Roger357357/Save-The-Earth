@@ -1,0 +1,347 @@
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
+#include <stdbool.h>
+#include <stdio.h>
+
+const int LARGURA_TELA = 1280;
+const int ALTURA_TELA = 720;
+
+ALLEGRO_DISPLAY *janela = NULL;
+ALLEGRO_SAMPLE *musica_capa = NULL;
+ALLEGRO_SAMPLE *sample = NULL;
+ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
+ALLEGRO_BITMAP *fundo = NULL;
+ALLEGRO_SAMPLE_ID *id_music = NULL;
+
+bool ajustes = false;
+bool melodia = false;
+bool iniciar = false;
+bool tela_inicial = true;
+bool saire = false;
+
+bool inicializar();
+
+int main(void)
+{
+    if (!inicializar())
+    {
+        fprintf(stderr, "Falha ao inicializar Allegro.\n");
+        return -1;
+    }
+
+
+    al_set_sample_instance_playing(musica_capa, true);
+    al_init_image_addon();
+    al_init_primitives_addon();
+    al_register_event_source(fila_eventos, al_get_display_event_source(janela));
+    al_install_keyboard();
+
+    fundo = al_load_bitmap("fundo da capa.png");
+    if (!fundo)
+    {
+        fprintf(stderr, "Falha ao carregar fundo.png\n");
+        al_destroy_event_queue(fila_eventos);
+        al_destroy_display(janela);
+        al_destroy_sample(sample);
+        return false;
+    }
+
+
+    while (!saire)
+    {
+        // Verificamos se há eventos na fila
+        while (!al_is_event_queue_empty(fila_eventos))
+        {
+            ALLEGRO_EVENT evento;
+            al_wait_for_event(fila_eventos, &evento);
+
+                if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                {
+                    saire = true;
+                }
+
+            if(tela_inicial == true)
+            {
+                al_draw_bitmap(fundo , 0, 0, 0);
+
+                if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                {
+                    saire = true;
+                }
+
+                if(ajustes == false)
+                {
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            tela_inicial = true;
+                        }
+                    }
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 190 &&
+                            evento.mouse.x <= 419 &&
+                            evento.mouse.y >= 505 &&
+                            evento.mouse.y <= 644)
+                        {
+                            ajustes = true;
+                            tela_inicial = false;
+                        }
+                    }
+                }
+
+                if(iniciar == false)
+                {
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            tela_inicial = true;
+                        }
+                    }
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 475 &&
+                            evento.mouse.x <= 718 &&
+                            evento.mouse.y >= 505 &&
+                            evento.mouse.y <= 644)
+                        {
+                            iniciar = true;
+                            tela_inicial = false;
+                        }
+
+                    }
+                }
+
+                if(saire == false)
+                {
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            tela_inicial = true;
+                        }
+                    }
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 772 &&
+                            evento.mouse.x <= 1002 &&
+                            evento.mouse.y >= 505 &&
+                            evento.mouse.y <= 644)
+                        {
+                            saire = true;
+                        }
+                    }
+                }
+            }
+
+            if(ajustes == true)
+            {
+                fundo = al_load_bitmap("setting.png");
+                al_draw_bitmap(fundo, 0, 0, 0);
+
+                if(melodia == true)
+                {
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            melodia = true;
+                        }
+                    }
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 190 &&
+                            evento.mouse.x <= 419 &&
+                            evento.mouse.y >= 505 &&
+                            evento.mouse.y <= 644)
+                        {
+                            melodia = false;
+                        }
+                    }
+                }
+                else if(melodia == false)
+                {
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            melodia = false;
+                        }
+                    }
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 190 &&
+                            evento.mouse.x <= 419 &&
+                            evento.mouse.y >= 505 &&
+                            evento.mouse.y <= 644)
+                        {
+                            melodia = true;
+                        }
+                    }
+                }
+
+                //if(melodia == true)
+                //{
+                   //foto melodia on
+               // }
+                //else if(melodia == false)
+                //{
+                   // foto melodia off
+               // }
+            }
+
+            if(iniciar == true)
+            {
+                fundo = al_load_bitmap("tela escolha.png");
+                al_draw_bitmap(fundo, 0, 0, 0);
+
+                if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                {
+                    saire = true;
+                }
+            }
+
+
+        }
+        // Atualiza a tela
+        al_flip_display();
+    }
+
+    al_destroy_bitmap(fundo);
+    al_destroy_sample(musica_capa);
+    al_destroy_event_queue(fila_eventos);
+    al_destroy_display(janela);
+
+    return 0;
+}
+
+bool inicializar()
+{
+
+    if (!al_init())
+    {
+        fprintf(stderr, "Não inicializou Allegro.\n");
+        return false;
+    }
+
+    if (!al_install_audio())
+    {
+        fprintf(stderr, "Falha ao inicializar áudio.\n");
+        return false;
+    }
+
+    if (!al_init_acodec_addon())
+    {
+        fprintf(stderr, "Falha ao inicializar codecs de áudio.\n");
+        return false;
+    }
+
+    if (!al_reserve_samples(1))
+    {
+        fprintf(stderr, "Falha ao alocar canais de áudio.\n");
+        return false;
+    }
+    if (!al_install_keyboard())
+    {
+        fprintf(stderr, "Falha ao inicializar teclado.\n");
+        return false;
+    }
+
+    janela = al_create_display(LARGURA_TELA, ALTURA_TELA);
+    if (!janela)
+    {
+        fprintf(stderr, "Falha ao criar a janela.\n");
+        return false;
+    }
+    fila_eventos = al_create_event_queue();
+    if (!fila_eventos)
+    {
+        fprintf(stderr, "Falha ao criar fila de eventos.\n");
+        al_destroy_display(janela);
+        al_destroy_sample(sample);
+        return false;
+    }
+
+    id_music = malloc(sizeof(ALLEGRO_SAMPLE_ID));
+    musica_capa = al_load_sample("04.wav");
+    al_play_sample(musica_capa, 0.6, 0.3, 1, ALLEGRO_PLAYMODE_LOOP, id_music);
+    if (!musica_capa)
+    {
+        fprintf(stderr, "Falha ao carregar audio.\n");
+        al_destroy_event_queue(fila_eventos);
+        al_destroy_display(janela);
+        al_destroy_sample(sample);
+        return false;
+    }
+    // Configura o título da janela
+    al_set_window_title(janela, "SAVE THE EARTH - The Social Problems");
+
+    // Torna apto o uso de mouse na aplicação
+    if (!al_install_mouse())
+    {
+        fprintf(stderr, "Falha ao inicializar o mouse.\n");
+        al_destroy_display(janela);
+        return -1;
+    }
+
+    // Atribui o cursor padrão do sistema para ser usado
+    if (!al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT))
+    {
+        fprintf(stderr, "Falha ao atribuir ponteiro do mouse.\n");
+        al_destroy_display(janela);
+        return -1;
+    }
+
+
+    if (!id_music)
+    {
+        fprintf(stderr, "Falha ao carregar id_music.\n");
+        al_destroy_event_queue(fila_eventos);
+        al_destroy_display(janela);
+        al_destroy_sample(sample);
+        return false;
+    }
+
+    // Dizemos que vamos tratar os eventos vindos do mouse
+    al_register_event_source(fila_eventos, al_get_mouse_event_source());
+    al_register_event_source(fila_eventos, al_get_keyboard_event_source());
+    al_register_event_source(fila_eventos, al_get_display_event_source(janela));
+
+    return true;
+}
+
