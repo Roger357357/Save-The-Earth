@@ -168,6 +168,7 @@ int main(void)
 
             if(tela_ajustes == true)
             {
+                tela_inicial = false;
                 al_draw_bitmap(ajustes, 0, 0, 0);
 
                 if(voltar_tela_inicial == false)
@@ -305,6 +306,7 @@ int main(void)
                             evento.mouse.y <= 595)
                         {
                             efeito_sonoro = true;
+
                         }
                     }
                 }
@@ -320,6 +322,7 @@ int main(void)
                             evento.mouse.y <= 720)
                         {
                             efeito_sonoro = true;
+
                         }
                     }
 
@@ -341,7 +344,7 @@ int main(void)
 
             if(iniciar == true)
             {
-                fundo = al_load_bitmap("tela escolha.png");
+                fundo = al_load_bitmap("tela escolha voltar.png");
                 al_draw_bitmap(fundo, 0, 0, 0);
 
                 if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -378,7 +381,7 @@ int main(void)
                 }
                 else if(nave1 == false)
                 {
-                    fundo = al_load_bitmap("tela escolha.png");
+                    fundo = al_load_bitmap("tela escolha voltar.png");
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
