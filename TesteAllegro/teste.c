@@ -71,6 +71,34 @@ int main(void)
                 {
                     saire = true;
                 }
+                if(voltar_tela_inicial == true)
+                {
+                    tela_inicial = true;
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            tela_inicial = true;
+                        }
+                    }
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 58 &&
+                            evento.mouse.x <= 280 &&
+                            evento.mouse.y >= 547 &&
+                            evento.mouse.y <= 675)
+                        {
+                            voltar_tela_inicial = true;
+                            tela_ajustes = false;
+                        }
+                    }
+                }
 
             if(tela_inicial == true)
             {
@@ -164,6 +192,7 @@ int main(void)
                         }
                     }
                 }
+
             }
 
             if(tela_ajustes == true)
@@ -200,34 +229,7 @@ int main(void)
                 }
 
 
-                    if(voltar_tela_inicial == true)
-                {
-                    tela_inicial = true;
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
-                    {
-                        // Verificamos se ele está sobre a região da imagem habilitado
-                        if (evento.mouse.x >= 0 &&
-                            evento.mouse.x <= 1280 &&
-                            evento.mouse.y >= 0 &&
-                            evento.mouse.y <= 720)
-                        {
-                            tela_inicial = true;
-                        }
-                    }
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-                    {
-                        // Verificamos se ele está sobre a região da imagem habilitado
-                        if (evento.mouse.x >= 58 &&
-                            evento.mouse.x <= 280 &&
-                            evento.mouse.y >= 547 &&
-                            evento.mouse.y <= 675)
-                        {
-                            voltar_tela_inicial = true;
-                            tela_ajustes = false;
-                        }
-                    }
-                }
 
 
                 if(melodia == true)
