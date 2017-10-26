@@ -21,6 +21,10 @@ ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_BITMAP *fundo = NULL;
 ALLEGRO_BITMAP *ajustes = NULL;
+ALLEGRO_BITMAP *tela_iniciar = NULL;
+ALLEGRO_BITMAP *tela_nave1 = NULL;
+ALLEGRO_BITMAP *tela_nave2 = NULL;
+ALLEGRO_BITMAP *tela_nave3 = NULL;
 ALLEGRO_BITMAP *botao_off = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
 
@@ -30,6 +34,7 @@ ALLEGRO_SAMPLE_ID *id_music = NULL;
 
 bool tela_ajustes = false;
 bool melodia = false;
+bool musica = true;
 bool efeito_sonoro = false;
 bool iniciar = false;
 bool nave1 = false;
@@ -65,6 +70,10 @@ int main(void)
     fundo = al_load_bitmap("background.png");
     ajustes = al_load_bitmap("setting.png");
     botao_off = al_load_bitmap("off.png");
+    tela_iniciar = al_load_bitmap("tela_escolha.png");
+    tela_nave1 = al_load_bitmap("nave1.png");
+    tela_nave2 = al_load_bitmap("nave2.png");
+    tela_nave3 = al_load_bitmap("nave3.png");
 
 
     if (!fundo)
@@ -89,6 +98,11 @@ int main(void)
                 {
                     saire = true;
                 }
+
+                if(musica == true)
+                {
+
+                }
                 if(voltar_tela_ajustes == true)
                 {
                     tela_inicial = true;
@@ -107,10 +121,10 @@ int main(void)
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
-                        if (evento.mouse.x >= 58 &&
-                            evento.mouse.x <= 280 &&
-                            evento.mouse.y >= 547 &&
-                            evento.mouse.y <= 675)
+                        if (evento.mouse.x >= 73 &&
+                            evento.mouse.x <= 290 &&
+                            evento.mouse.y >= 526 &&
+                            evento.mouse.y <= 679)
                         {
                             voltar_tela_ajustes = true;
                             tela_ajustes = false;
@@ -119,7 +133,6 @@ int main(void)
                 }
                 if(voltar_tela_inicial == true)
                 {
-                    tela_inicial = true;
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
@@ -140,7 +153,6 @@ int main(void)
                             evento.mouse.y >= 510 &&
                             evento.mouse.y <= 650)
                         {
-                            voltar_tela_inicial = true;
                             iniciar = false;
                         }
                     }
@@ -244,7 +256,13 @@ int main(void)
             if(tela_ajustes == true)
             {
                 tela_inicial = false;
+                saire = false;
                 al_draw_bitmap(ajustes, 0, 0, 0);
+
+                if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                {
+                    saire = true;
+                }
 
                 if(voltar_tela_ajustes == false)
                 {
@@ -263,10 +281,10 @@ int main(void)
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
-                        if (evento.mouse.x >= 58 &&
-                            evento.mouse.x <= 280 &&
-                            evento.mouse.y >= 547 &&
-                            evento.mouse.y <= 675)
+                        if (evento.mouse.x >= 73 &&
+                            evento.mouse.x <= 290 &&
+                            evento.mouse.y >= 526 &&
+                            evento.mouse.y <= 679)
                         {
                             voltar_tela_ajustes = true;
                             tela_ajustes = false;
@@ -281,6 +299,8 @@ int main(void)
                 if(melodia == true)
                 {
                     al_draw_bitmap(botao_off, 420, 175, 0);
+                    musica_capa = 1;
+
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED || ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
@@ -394,8 +414,8 @@ int main(void)
             {
                 tela_inicial = false;
                 tela_ajustes = false;
-                fundo = al_load_bitmap("tela_escolha.png");
-                al_draw_bitmap(fundo, 0, 0, 0);
+                saire = false;
+                al_draw_bitmap(tela_iniciar, 0, 0, 0);
 
                 if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                 {
@@ -426,14 +446,12 @@ int main(void)
                         {
                             voltar_tela_inicial = true;
                             iniciar = false;
-                            tela_inicial = true;
                         }
                     }
                 }
 
-                if(nave1 == true)
+                if(nave1 == false)
                 {
-                    fundo = al_load_bitmap("nave1.png");
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
@@ -459,9 +477,9 @@ int main(void)
                         }
                     }
                 }
-                else if(nave1 == false)
+                else if(nave1 == true)
                 {
-                    fundo = al_load_bitmap("tela_escolha.png");
+                    al_draw_bitmap(tela_nave1, 0, 0, 0);
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
@@ -470,7 +488,7 @@ int main(void)
                             evento.mouse.y >= 0 &&
                             evento.mouse.y <= 720)
                         {
-                            iniciar = true;
+                            nave1 = true;
                         }
                     }
 
@@ -483,7 +501,7 @@ int main(void)
                             evento.mouse.y <= 466)
                         {
                             nave1 = false;
-                            iniciar = true;
+                            iniciar = false;
                         }
                     }
                 }
@@ -498,6 +516,11 @@ int main(void)
 
     al_destroy_bitmap(fundo);
     al_destroy_bitmap(ajustes);
+    al_destroy_bitmap(botao_off);
+    al_destroy_bitmap(tela_iniciar);
+    al_destroy_bitmap(tela_nave1);
+    al_destroy_bitmap(tela_nave2);
+    al_destroy_bitmap(tela_nave3);
     al_destroy_sample(musica_capa);
     al_destroy_event_queue(fila_eventos);
     al_destroy_display(janela);
