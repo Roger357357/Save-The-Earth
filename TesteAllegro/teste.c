@@ -74,7 +74,7 @@ int main(void)
                 if(voltar_tela_inicial == true)
                 {
                     tela_inicial = true;
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
@@ -234,8 +234,8 @@ int main(void)
 
                 if(melodia == true)
                 {
-                    al_draw_bitmap(botao_off, 435, 196, 0);
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    al_draw_bitmap(botao_off, 420, 175, 0);
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED || ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
@@ -247,7 +247,7 @@ int main(void)
                         }
                     }
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 440 &&
@@ -261,7 +261,7 @@ int main(void)
                 }
                 else if(melodia == false)
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED || ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
@@ -273,7 +273,7 @@ int main(void)
                         }
                     }
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 440 &&
@@ -287,7 +287,7 @@ int main(void)
                 }
                 if(efeito_sonoro == false)
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED || ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
@@ -299,7 +299,7 @@ int main(void)
                         }
                     }
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 875 &&
@@ -314,8 +314,8 @@ int main(void)
                 }
                 else if(efeito_sonoro == true)
                 {
-                    al_draw_bitmap(botao_off, 865, 424, 0);
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    al_draw_bitmap(botao_off, 855, 410, 0);
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED || ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
@@ -328,7 +328,7 @@ int main(void)
                         }
                     }
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 875 &&
