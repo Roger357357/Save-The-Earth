@@ -2106,11 +2106,11 @@
 1508965725 c:\users\roger.fgalmeida\desktop\save-the-earth\allegro5\include\allegro5\allegro_primitives.h
 	<allegro5/allegro.h>
 
-<<<<<<< HEAD
+1508988159 D
+
 1508990617 source:c:\users\rogerfelipe\documents\github\save-the-earth\testeallegro\teste.c
-=======
-1508991054 source:c:\users\matheus\documents\github\save-the-earth\testeallegro\teste.c
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
+
+1509048093 source:c:\users\matheus\documents\github\save-the-earth\testeallegro\teste.c
 	<allegro5/allegro.h>
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
@@ -2119,11 +2119,14 @@
 	<stdbool.h>
 	<stdio.h>
 
-<<<<<<< HEAD
-1508897749 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\allegro.h
-=======
-1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\allegro.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
+1508988159 a0c5453762351d5ff3a10ae594d45328f98b4
+	<allegro5/allegro.h>
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_acodec.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_primitives.h>
+	<stdbool.h>
+	<stdio.h>
 	"allegro5/base.h"
 	"allegro5/altime.h"
 	"allegro5/bitmap.h"
@@ -2163,12 +2166,6 @@
 	"allegro5/transformations.h"
 	"allegro5/utf8.h"
 	"allegro5/alcompat.h"
-
-<<<<<<< HEAD
-1508897749 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\base.h
-=======
-1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\base.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
 	<errno.h>
 	<limits.h>
 	<limits.h>
@@ -2181,12 +2178,6 @@
 	<fortify/fortify.h>
 	<dmalloc.h>
 	"allegro5/internal/alconfig.h"
-
-<<<<<<< HEAD
-1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\internal\alconfig.h
-=======
-1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\internal\alconfig.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
 	"allegro5/platform/alplatf.h"
 	"allegro5/platform/alwatcom.h"
 	"allegro5/platform/almngw32.h"
@@ -2200,56 +2191,93 @@
 	"allegro5/platform/allegro_sdl_config.h"
 	"allegro5/platform/astdint.h"
 	"allegro5/platform/astdbool.h"
-
-<<<<<<< HEAD
-1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\alplatf.h
-
-1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\alwatcom.h
-=======
-1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\alplatf.h
-
-1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\alwatcom.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
 	<io.h>
 	<i86.h>
 	<conio.h>
 	<fcntl.h>
 	<direct.h>
 	<malloc.h>
+	<io.h>
+	<fcntl.h>
+	<direct.h>
+	<malloc.h>
+	"allegro5/platform/alplatf.h"
+	<io.h>
+	<fcntl.h>
+	<direct.h>
+	<malloc.h>
+	<io.h>
+	<fcntl.h>
+	<direct.h>
+	<malloc.h>
+	"allegro5/platform/alplatf.h"
+	<fcntl.h>
+	<unistd.h>
+	<sys/types.h>
+	<fcntl.h>
+	<unistd.h>
+	"alunix.h"
+	"allegro5/platform/alplatf.h"
+	"allegro5/base.h"
+	"allegro5/path.h"
+	"allegro5/utf8.h"
+	"allegro5/base.h"
+	"allegro5/display.h"
+	"allegro5/utf8.h"
+	"allegro5/bitmap.h"
+	"allegro5/color.h"
+	"allegro5/events.h"
+	"allegro5/base.h"
+	"allegro5/fixed.h"
+	"allegro5/inline/fmaths.inl"
+	"allegro5/base.h"
+	"allegro5/file.h"
+	"allegro5/path.h"
+	<sys/types.h>
+	"allegro5/base.h"
+	"allegro5/display.h"
+	"allegro5/events.h"
+	"allegro5/joystick.h"
+	"allegro5/keyboard.h"
+	"allegro5/mouse.h"
+	"allegro5/touch_input.h"
+	"allegro5/base.h"
+	"allegro5/events.h"
+	"allegro5/keycodes.h"
+	<allegro5/allegro.h>
 
-<<<<<<< HEAD
+1508897749 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\allegro.h
+
+1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\allegro.h
+
+1508897749 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\base.h
+
+1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\base.h
+
+1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\internal\alconfig.h
+
+1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\internal\alconfig.h
+
+1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\alplatf.h
+
+1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\alwatcom.h
+
+1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\alplatf.h
+
+1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\alwatcom.h
+
 1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\almngw32.h
-=======
+
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\almngw32.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	<io.h>
-	<fcntl.h>
-	<direct.h>
-	<malloc.h>
-	"allegro5/platform/alplatf.h"
 
-<<<<<<< HEAD
 1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\albcc32.h
-=======
+
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\albcc32.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	<io.h>
-	<fcntl.h>
-	<direct.h>
-	<malloc.h>
 
-<<<<<<< HEAD
 1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\almsvc.h
-=======
-1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\almsvc.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	<io.h>
-	<fcntl.h>
-	<direct.h>
-	<malloc.h>
-	"allegro5/platform/alplatf.h"
 
-<<<<<<< HEAD
+1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\almsvc.h
+
 1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\aliphonecfg.h
 	<fcntl.h>
 	<unistd.h>
@@ -2260,7 +2288,7 @@
 1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\alandroidcfg.h
 
 1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\alraspberrypicfg.h
-=======
+
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\aliphonecfg.h
 	<fcntl.h>
 	<unistd.h>
@@ -2271,22 +2299,11 @@
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\alandroidcfg.h
 
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\alraspberrypicfg.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	<fcntl.h>
-	<unistd.h>
-	<sys/types.h>
 
-<<<<<<< HEAD
 1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\alucfg.h
-=======
-1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\alucfg.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	<fcntl.h>
-	<unistd.h>
-	"alunix.h"
-	"allegro5/platform/alplatf.h"
 
-<<<<<<< HEAD
+1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\alucfg.h
+
 1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\alunix.h
 
 1508897751 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\platform\allegro_sdl_config.h
@@ -2317,7 +2334,7 @@
 	"allegro5/file.h"
 
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\file.h
-=======
+
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\alunix.h
 
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\platform\allegro_sdl_config.h
@@ -2348,12 +2365,7 @@
 	"allegro5/file.h"
 
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\file.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	"allegro5/base.h"
-	"allegro5/path.h"
-	"allegro5/utf8.h"
 
-<<<<<<< HEAD
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\path.h
 	"allegro5/base.h"
 
@@ -2368,7 +2380,7 @@
 	"allegro5/color.h"
 
 1508897749 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\clipboard.h
-=======
+
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\path.h
 	"allegro5/base.h"
 
@@ -2383,21 +2395,11 @@
 	"allegro5/color.h"
 
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\clipboard.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	"allegro5/base.h"
-	"allegro5/display.h"
-	"allegro5/utf8.h"
 
-<<<<<<< HEAD
 1508897749 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\display.h
-=======
-1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\display.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	"allegro5/bitmap.h"
-	"allegro5/color.h"
-	"allegro5/events.h"
 
-<<<<<<< HEAD
+1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\display.h
+
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\events.h
 	"allegro5/altime.h"
 
@@ -2421,7 +2423,7 @@
 	"allegro5/base.h"
 
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\fmaths.h
-=======
+
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\events.h
 	"allegro5/altime.h"
 
@@ -2445,64 +2447,39 @@
 	"allegro5/base.h"
 
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\fmaths.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	"allegro5/base.h"
-	"allegro5/fixed.h"
-	"allegro5/inline/fmaths.inl"
 
-<<<<<<< HEAD
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\inline\fmaths.inl
 	"allegro5/error.h"
 
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\fshook.h
-=======
+
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\inline\fmaths.inl
 	"allegro5/error.h"
 
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\fshook.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	"allegro5/base.h"
-	"allegro5/file.h"
-	"allegro5/path.h"
-	<sys/types.h>
 
-<<<<<<< HEAD
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\fullscreen_mode.h
 	"allegro5/base.h"
 
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\haptic.h
-=======
+
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\fullscreen_mode.h
 	"allegro5/base.h"
 
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\haptic.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	"allegro5/base.h"
-	"allegro5/display.h"
-	"allegro5/events.h"
-	"allegro5/joystick.h"
-	"allegro5/keyboard.h"
-	"allegro5/mouse.h"
-	"allegro5/touch_input.h"
 
-<<<<<<< HEAD
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\joystick.h
 	"allegro5/base.h"
 	"allegro5/events.h"
 
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\keyboard.h
-=======
+
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\joystick.h
 	"allegro5/base.h"
 	"allegro5/events.h"
 
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\keyboard.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	"allegro5/base.h"
-	"allegro5/events.h"
-	"allegro5/keycodes.h"
 
-<<<<<<< HEAD
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\keycodes.h
 
 1508897750 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\mouse.h
@@ -2559,7 +2536,7 @@
 	"allegro5/base.h"
 
 1508897749 c:\users\rogerfelipe\documents\github\save-the-earth\allegro5\include\allegro5\allegro_primitives.h
-=======
+
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\keycodes.h
 
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\mouse.h
@@ -2616,6 +2593,4 @@
 	"allegro5/base.h"
 
 1508988159 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\allegro_primitives.h
->>>>>>> be7a0c5453762351d5ff3a10ae594d45328f98b4
-	<allegro5/allegro.h>
 

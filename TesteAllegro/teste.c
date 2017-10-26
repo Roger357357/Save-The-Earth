@@ -6,8 +6,14 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+// ########################################################################################################################################
+
 const int LARGURA_TELA = 1280;
 const int ALTURA_TELA = 720;
+
+// ----------------------------------------------------------------------------------------------------------------------------------------
+
+// ########################################################################################################################################
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_SAMPLE *musica_capa = NULL;
@@ -17,6 +23,10 @@ ALLEGRO_BITMAP *fundo = NULL;
 ALLEGRO_BITMAP *ajustes = NULL;
 ALLEGRO_BITMAP *botao_off = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
+
+// ----------------------------------------------------------------------------------------------------------------------------------------
+
+// ########################################################################################################################################
 
 bool tela_ajustes = false;
 bool melodia = false;
@@ -29,6 +39,10 @@ bool voltar_tela_ajustes = false;
 bool voltar_tela_inicial = false;
 bool tela_inicial = true;
 bool saire = false;
+
+// ----------------------------------------------------------------------------------------------------------------------------------------
+
+// ########################################################################################################################################
 
 bool inicializar();
 
@@ -47,9 +61,12 @@ int main(void)
     al_register_event_source(fila_eventos, al_get_display_event_source(janela));
     al_install_keyboard();
 
-    fundo = al_load_bitmap("fundo da capa.png");
+
+    fundo = al_load_bitmap("background.png");
     ajustes = al_load_bitmap("setting.png");
-    botao_off = al_load_bitmap("off (2).png");
+    botao_off = al_load_bitmap("off.png");
+
+
     if (!fundo)
     {
         fprintf(stderr, "Falha ao carregar fundo.png\n");
@@ -377,7 +394,7 @@ int main(void)
             {
                 tela_inicial = false;
                 tela_ajustes = false;
-                fundo = al_load_bitmap("tela escolha voltar.png");
+                fundo = al_load_bitmap("tela_escolha.png");
                 al_draw_bitmap(fundo, 0, 0, 0);
 
                 if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -444,7 +461,7 @@ int main(void)
                 }
                 else if(nave1 == false)
                 {
-                    fundo = al_load_bitmap("tela escolha voltar.png");
+                    fundo = al_load_bitmap("tela_escolha.png");
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         // Verificamos se ele está sobre a região da imagem habilitado
@@ -487,6 +504,10 @@ int main(void)
 
     return 0;
 }
+
+// ----------------------------------------------------------------------------------------------------------------------------------------
+
+// ########################################################################################################################################
 
 bool inicializar()
 {
@@ -583,3 +604,10 @@ bool inicializar()
 
     return true;
 }
+
+// ----------------------------------------------------------------------------------------------------------------------------------------
+
+// ########################################################################################################################################
+
+
+
