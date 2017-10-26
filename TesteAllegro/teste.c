@@ -25,6 +25,7 @@ bool iniciar = false;
 bool nave1 = false;
 bool nave2 = false;
 bool nave3 = false;
+bool voltar_tela_ajustes = false;
 bool voltar_tela_inicial = false;
 bool tela_inicial = true;
 bool saire = false;
@@ -71,7 +72,7 @@ int main(void)
                 {
                     saire = true;
                 }
-                if(voltar_tela_inicial == true)
+                if(voltar_tela_ajustes == true)
                 {
                     tela_inicial = true;
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
@@ -94,8 +95,36 @@ int main(void)
                             evento.mouse.y >= 547 &&
                             evento.mouse.y <= 675)
                         {
-                            voltar_tela_inicial = true;
+                            voltar_tela_ajustes = true;
                             tela_ajustes = false;
+                        }
+                    }
+                }
+                if(voltar_tela_inicial == true)
+                {
+                    tela_inicial = true;
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                           tela_inicial = true;
+                        }
+                    }
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 100 &&
+                            evento.mouse.x <= 316 &&
+                            evento.mouse.y >= 510 &&
+                            evento.mouse.y <= 650)
+                        {
+                            voltar_tela_inicial = true;
+                            iniciar = false;
                         }
                     }
                 }
@@ -200,7 +229,7 @@ int main(void)
                 tela_inicial = false;
                 al_draw_bitmap(ajustes, 0, 0, 0);
 
-                if(voltar_tela_inicial == false)
+                if(voltar_tela_ajustes == false)
                 {
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
@@ -222,7 +251,7 @@ int main(void)
                             evento.mouse.y >= 547 &&
                             evento.mouse.y <= 675)
                         {
-                            voltar_tela_inicial = true;
+                            voltar_tela_ajustes = true;
                             tela_ajustes = false;
                         }
                     }
@@ -346,6 +375,8 @@ int main(void)
 
             if(iniciar == true)
             {
+                tela_inicial = false;
+                tela_ajustes = false;
                 fundo = al_load_bitmap("tela escolha voltar.png");
                 al_draw_bitmap(fundo, 0, 0, 0);
 
@@ -353,6 +384,36 @@ int main(void)
                 {
                     saire = true;
                 }
+
+                if(voltar_tela_inicial == false)
+                {
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            iniciar = true;
+                        }
+                    }
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    {
+                        // Verificamos se ele está sobre a região da imagem habilitado
+                        if (evento.mouse.x >= 100 &&
+                            evento.mouse.x <= 316 &&
+                            evento.mouse.y >= 510 &&
+                            evento.mouse.y <= 650)
+                        {
+                            voltar_tela_inicial = true;
+                            iniciar = false;
+                            tela_inicial = true;
+                        }
+                    }
+                }
+
                 if(nave1 == true)
                 {
                     fundo = al_load_bitmap("nave1.png");
