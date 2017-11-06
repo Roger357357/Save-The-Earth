@@ -21,11 +21,12 @@ ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_BITMAP *fundo = NULL;
 ALLEGRO_BITMAP *ajustes = NULL;
-ALLEGRO_BITMAP *tela_iniciar = NULL;
+ALLEGRO_BITMAP *escolha = NULL;
 ALLEGRO_BITMAP *tela_nave1 = NULL;
 ALLEGRO_BITMAP *tela_nave2 = NULL;
 ALLEGRO_BITMAP *tela_nave3 = NULL;
 ALLEGRO_BITMAP *botao_off = NULL;
+ALLEGRO_BITMAP *correto = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -34,15 +35,14 @@ ALLEGRO_SAMPLE_ID *id_music = NULL;
 
 bool tela_ajustes = false;
 bool melodia = false;
-bool musica = true;
 bool efeito_sonoro = false;
-bool iniciar = false;
+bool tela_de_escolha = false;
 bool nave1 = false;
 bool nave2 = false;
 bool nave3 = false;
-bool voltar_tela_ajustes = false;
-bool voltar_tela_inicial = false;
-bool tela_inicial = true;
+bool btvoltar_datela_ajustes = false;
+bool btvoltar_datela_inicial = false;
+bool tela_da_capa = true;
 bool saire = false;
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -59,6 +59,9 @@ int main(void)
         return -1;
     }
 
+// ----------------------------------------------------------------------------------------------------------------------------------------
+
+// ########################################################################################################################################
 
     al_set_sample_instance_playing(musica_capa, true);
     al_init_image_addon();
@@ -66,15 +69,21 @@ int main(void)
     al_register_event_source(fila_eventos, al_get_display_event_source(janela));
     al_install_keyboard();
 
+// ----------------------------------------------------------------------------------------------------------------------------------------
+        // CARREGAMENTO DOS ARQUIVOS "IMAGENS"
+// ########################################################################################################################################
 
     fundo = al_load_bitmap("background.png");
     ajustes = al_load_bitmap("setting.png");
     botao_off = al_load_bitmap("off.png");
-    tela_iniciar = al_load_bitmap("tela_escolha.png");
+    escolha = al_load_bitmap("tela_escolha.png");
     tela_nave1 = al_load_bitmap("nave1.png");
     tela_nave2 = al_load_bitmap("nave2.png");
     tela_nave3 = al_load_bitmap("nave3.png");
+    correto = al_load_bitmap("correto.png");
+// ----------------------------------------------------------------------------------------------------------------------------------------
 
+// ########################################################################################################################################
 
     if (!fundo)
     {
@@ -88,7 +97,6 @@ int main(void)
 
     while (!saire)
     {
-        // Verificamos se há eventos na fila
         while (!al_is_event_queue_empty(fila_eventos))
         {
             ALLEGRO_EVENT evento;
@@ -99,148 +107,148 @@ int main(void)
                     saire = true;
                 }
 
-                if(musica == true)
-                {
+// ----------------------------------------------------------------------------------------------------------------------------------------
+        //  BOTÃO VOLTAR DA TELA AJUSTES
+// ########################################################################################################################################
 
-                }
-                if(voltar_tela_ajustes == true)
+                if(btvoltar_datela_ajustes == true)
                 {
-                    tela_inicial = true;
+                    tela_da_capa = true;
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
                             evento.mouse.y <= 720)
                         {
-                            tela_inicial = true;
+                            tela_da_capa = true;
                         }
                     }
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 73 &&
                             evento.mouse.x <= 290 &&
                             evento.mouse.y >= 526 &&
                             evento.mouse.y <= 679)
                         {
-                            voltar_tela_ajustes = true;
+                            btvoltar_datela_ajustes = true;
                             tela_ajustes = false;
                         }
                     }
                 }
-                if(voltar_tela_inicial == true)
+// ----------------------------------------------------------------------------------------------------------------------------------------
+        //  BOTÃO DE VOLTAR DA TELA DE ESCOLHA DE NAVES
+// ########################################################################################################################################
+
+                if(btvoltar_datela_inicial == true)
                 {
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
                             evento.mouse.y <= 720)
                         {
-                           tela_inicial = true;
+                           tela_da_capa = true;
                         }
                     }
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 100 &&
                             evento.mouse.x <= 316 &&
                             evento.mouse.y >= 510 &&
                             evento.mouse.y <= 650)
                         {
-                            iniciar = false;
+                            tela_de_escolha = false;
                         }
                     }
                 }
+// ----------------------------------------------------------------------------------------------------------------------------------------
+        // TELA DA CAPA DE FUNDO
+// ########################################################################################################################################
 
-            if(tela_inicial == true)
+            if(tela_da_capa == true)
             {
                 al_draw_bitmap(fundo , 0, 0, 0);
 
                 if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                 {
-                    saire = true;
+                    saire = true; //BOTÃO "X" DA TELA
                 }
-
+//=======================================================================================================
+//      BOTÃO PARA A TELA AJUSTES
                 if(tela_ajustes == false)
                 {
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
                             evento.mouse.y <= 720)
                         {
-                            tela_inicial = true;
+                            tela_da_capa = true;
                         }
                     }
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 190 &&
                             evento.mouse.x <= 419 &&
                             evento.mouse.y >= 505 &&
                             evento.mouse.y <= 644)
                         {
                             tela_ajustes = true;
-                            tela_inicial = false;
+                            tela_da_capa = false;
                         }
                     }
                 }
-
-                if(iniciar == false)
+//=======================================================================================================
+//      BOTÃO PARA A TELA DE ESCOLHA DE NAVES
+                if(tela_de_escolha == false)
                 {
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
                             evento.mouse.y <= 720)
                         {
-                            tela_inicial = true;
+                            tela_da_capa = true;
                         }
                     }
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 475 &&
                             evento.mouse.x <= 718 &&
                             evento.mouse.y >= 505 &&
                             evento.mouse.y <= 644)
                         {
-                            iniciar = true;
-                            tela_inicial = false;
+                            tela_de_escolha = true;
+                            tela_da_capa = false;
                         }
 
                     }
                 }
-
+//=======================================================================================================
+//      BOTÃO PARA SAIR DO JOGO
                 if(saire == false)
                 {
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
                             evento.mouse.y <= 720)
                         {
-                            tela_inicial = true;
+                            tela_da_capa = true;
                         }
                     }
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 772 &&
                             evento.mouse.x <= 1002 &&
                             evento.mouse.y >= 505 &&
@@ -252,23 +260,26 @@ int main(void)
                 }
 
             }
+// ----------------------------------------------------------------------------------------------------------------------------------------
+        // TELA DE AJUSTES
+// ########################################################################################################################################
 
             if(tela_ajustes == true)
             {
-                tela_inicial = false;
+                tela_da_capa = false;
                 saire = false;
                 al_draw_bitmap(ajustes, 0, 0, 0);
 
                 if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                 {
-                    saire = true;
+                    saire = true; //BOTÃO "X" DA TELA
                 }
-
-                if(voltar_tela_ajustes == false)
+//=======================================================================================================
+//      BOTÃO DE VOLTAR PARA A TELA DA CAPA
+                if(btvoltar_datela_ajustes == false)
                 {
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
@@ -280,30 +291,24 @@ int main(void)
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 73 &&
                             evento.mouse.x <= 290 &&
                             evento.mouse.y >= 526 &&
                             evento.mouse.y <= 679)
                         {
-                            voltar_tela_ajustes = true;
+                            btvoltar_datela_ajustes = true;
                             tela_ajustes = false;
                         }
                     }
                 }
-
-
-
-
-
-                if(melodia == true)
+//=======================================================================================================
+//      BOTÃO DE MELODIA (LIGAR E DESLIGAR)
+                if(melodia == true)  // VERIFICAÇÃO DO ESTADO DO BOTÃO
                 {
                     al_draw_bitmap(botao_off, 420, 175, 0);
-                    musica_capa = 1;
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED || ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
@@ -315,7 +320,6 @@ int main(void)
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 440 &&
                             evento.mouse.x <= 686 &&
                             evento.mouse.y >= 196 &&
@@ -325,11 +329,10 @@ int main(void)
                         }
                     }
                 }
-                else if(melodia == false)
+                else if(melodia == false)  // VERIFICAÇÃO DO ESTADO DO BOTÃO
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED || ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
@@ -341,7 +344,6 @@ int main(void)
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 440 &&
                             evento.mouse.x <= 686 &&
                             evento.mouse.y >= 196 &&
@@ -351,11 +353,13 @@ int main(void)
                         }
                     }
                 }
-                if(efeito_sonoro == false)
+//=======================================================================================================
+//      BOTÃO DE EFEITOS SONOROS (LIGAR E DESLIGAR)
+
+                if(efeito_sonoro == false) // VERIFICAÇÃO DO ESTADO DO BOTÃO
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED || ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
@@ -367,7 +371,6 @@ int main(void)
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 875 &&
                             evento.mouse.x <= 1118 &&
                             evento.mouse.y >= 424 &&
@@ -378,12 +381,11 @@ int main(void)
                         }
                     }
                 }
-                else if(efeito_sonoro == true)
+                else if(efeito_sonoro == true)  // VERIFICAÇÃO DO ESTADO DO BOTÃO
                 {
                     al_draw_bitmap(botao_off, 855, 410, 0);
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED || ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
@@ -396,7 +398,6 @@ int main(void)
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 875 &&
                             evento.mouse.x <= 1118 &&
                             evento.mouse.y >= 424 &&
@@ -407,82 +408,79 @@ int main(void)
                     }
                 }
             }
+// ----------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-            if(iniciar == true)
+// ########################################################################################################################################
+          if(tela_de_escolha == true)
             {
-                tela_inicial = false;
+                tela_da_capa = false;
                 tela_ajustes = false;
                 saire = false;
-                al_draw_bitmap(tela_iniciar, 0, 0, 0);
+                al_draw_bitmap(escolha, 0, 0, 0);
 
                 if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                 {
                     saire = true;
                 }
 
-                if(voltar_tela_inicial == false)
+                if(btvoltar_datela_inicial == false)
                 {
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
                             evento.mouse.y <= 720)
                         {
-                            iniciar = true;
+                            tela_de_escolha = true;
                         }
                     }
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 100 &&
                             evento.mouse.x <= 316 &&
                             evento.mouse.y >= 510 &&
                             evento.mouse.y <= 650)
                         {
-                            voltar_tela_inicial = true;
-                            iniciar = false;
+                            btvoltar_datela_inicial = true;
+                            tela_de_escolha = false;
                         }
                     }
                 }
 
                 if(nave1 == false)
                 {
+
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
                             evento.mouse.y <= 720)
                         {
-                            iniciar = true;
+                            tela_de_escolha = true;
                         }
                     }
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 163 &&
                             evento.mouse.x <= 425 &&
                             evento.mouse.y >= 192 &&
                             evento.mouse.y <= 466)
                         {
                             nave1 = true;
-                            iniciar = false;
+                            tela_de_escolha = false;
+                            al_draw_bitmap(correto, 420, 175, 0);
                         }
                     }
                 }
+
                 else if(nave1 == true)
                 {
-                    al_draw_bitmap(tela_nave1, 0, 0, 0);
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 0 &&
                             evento.mouse.x <= 1280 &&
                             evento.mouse.y >= 0 &&
@@ -494,14 +492,13 @@ int main(void)
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        // Verificamos se ele está sobre a região da imagem habilitado
                         if (evento.mouse.x >= 163 &&
                             evento.mouse.x <= 425 &&
                             evento.mouse.y >= 192 &&
                             evento.mouse.y <= 466)
                         {
                             nave1 = false;
-                            iniciar = false;
+                            tela_de_escolha = false;
                         }
                     }
                 }
@@ -510,18 +507,19 @@ int main(void)
 
 
         }
-        // Atualiza a tela
+        // ATUALIZA A TELA
         al_flip_display();
     }
 
     al_destroy_bitmap(fundo);
     al_destroy_bitmap(ajustes);
     al_destroy_bitmap(botao_off);
-    al_destroy_bitmap(tela_iniciar);
+    al_destroy_bitmap(escolha);
     al_destroy_bitmap(tela_nave1);
     al_destroy_bitmap(tela_nave2);
     al_destroy_bitmap(tela_nave3);
     al_destroy_sample(musica_capa);
+    al_destroy_bitmap(correto);
     al_destroy_event_queue(fila_eventos);
     al_destroy_display(janela);
 
