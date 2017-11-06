@@ -201,7 +201,6 @@ int main(void)
                         {
                             tela_ajustes = true;
                             tela_da_capa = false;
-                           // tela_de_escolha = false;
                         }
                     }
                 }
@@ -499,6 +498,7 @@ int main(void)
                             evento.mouse.y <= 676)
                         {
                             btcomecar_datela_escolha = true;
+                            tela_de_escolha = false;
                         }
                     }
                 }
@@ -507,7 +507,6 @@ int main(void)
 //      BOTÃO DE ESCOLHA DA NAVE 1
                 if(nave1 == false)
                 {
-
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         if (evento.mouse.x >= 0 &&
@@ -516,6 +515,7 @@ int main(void)
                             evento.mouse.y <= 720)
                         {
                             tela_de_escolha = true;
+                            btcomecar_datela_escolha = false;
                         }
                     }
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
@@ -535,7 +535,6 @@ int main(void)
 
                 else if(nave1 == true)
                 {
-                    al_draw_bitmap(correto, 200, 241, 0);
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         if (evento.mouse.x >= 0 &&
@@ -553,7 +552,6 @@ int main(void)
 //      BOTÃO DE ESCOLHA DA NAVE 2
                 if(nave2 == false)
                 {
-
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         if (evento.mouse.x >= 0 &&
@@ -562,6 +560,7 @@ int main(void)
                             evento.mouse.y <= 720)
                         {
                             tela_de_escolha = true;
+                            btcomecar_datela_escolha = false;
                         }
                     }
 
@@ -581,7 +580,6 @@ int main(void)
 
                 else if(nave2 == true)
                 {
-                    al_draw_bitmap(correto, 539, 241, 0);
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         if (evento.mouse.x >= 0 &&
@@ -607,6 +605,7 @@ int main(void)
                             evento.mouse.y <= 720)
                         {
                             tela_de_escolha = true;
+                            btcomecar_datela_escolha = false;
                         }
                     }
 
@@ -626,7 +625,6 @@ int main(void)
 
                 else if(nave3 == true)
                 {
-                    al_draw_bitmap(correto, 888, 241, 0);
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         if (evento.mouse.x >= 0 &&
@@ -638,35 +636,36 @@ int main(void)
                         }
                     }
                 }
+
+                if(nave1 == true)
+                {
+                    al_draw_bitmap(correto, 200, 241, 0);
+                }
+                else if(nave2 == true)
+                {
+                    al_draw_bitmap(correto, 539, 241, 0);
+                }
+                else if(nave3)
+                {
+                    al_draw_bitmap(correto, 888, 241, 0);
+                }
             }
 //=======================================================================================================
 //      BOTÃO DE COMECAR DA TELA DE ESCOLHA
 
-            if(btcomecar_datela_escolha == true) // VERIFICAÇÃO DO ESTADO DO BOTÃO
+            if((btcomecar_datela_escolha == true) && (nave1 == true || nave2 == true || nave3 == true)) // VERIFICAÇÃO DO ESTADO DO BOTÃO
                 {
-                    al_draw_bitmap(fundo_nivel, 0, 0, 0);
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                      tela_de_escolha = false;
+                      saire = false;
+                      al_draw_bitmap(fundo_nivel, 0, 0, 0);
+
+                      if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                     {
-                        if (evento.mouse.x >= 0 &&
-                            evento.mouse.x <= 1280 &&
-                            evento.mouse.y >= 0 &&
-                            evento.mouse.y <= 720)
-                        {
-                            btcomecar_datela_escolha = true;
-                        }
+                      saire = true; // BOTÃO "X" DA TELA
                     }
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-                    {
-                        if (evento.mouse.x >= 554 &&
-                            evento.mouse.x <= 747 &&
-                            evento.mouse.y >= 534 &&
-                            evento.mouse.y <= 676)
-                        {
-                            btcomecar_datela_escolha = false;
-                        }
-                    }
                 }
+
         }
 
         // ATUALIZA A TELA
