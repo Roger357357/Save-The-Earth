@@ -22,9 +22,6 @@ ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_BITMAP *fundo = NULL;
 ALLEGRO_BITMAP *ajustes = NULL;
 ALLEGRO_BITMAP *escolha = NULL;
-ALLEGRO_BITMAP *tela_nave1 = NULL;
-ALLEGRO_BITMAP *tela_nave2 = NULL;
-ALLEGRO_BITMAP *tela_nave3 = NULL;
 ALLEGRO_BITMAP *botao_off = NULL;
 ALLEGRO_BITMAP *correto = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
@@ -77,9 +74,6 @@ int main(void)
     ajustes = al_load_bitmap("setting.png");
     botao_off = al_load_bitmap("off.png");
     escolha = al_load_bitmap("tela_escolha.png");
-    tela_nave1 = al_load_bitmap("nave1.png");
-    tela_nave2 = al_load_bitmap("nave2.png");
-    tela_nave3 = al_load_bitmap("nave3.png");
     correto = al_load_bitmap("correto.png");
 // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -471,14 +465,15 @@ int main(void)
                             evento.mouse.y <= 466)
                         {
                             nave1 = true;
-                            tela_de_escolha = false;
-                            al_draw_bitmap(correto, 420, 175, 0);
+                            nave2 = false;
+                            nave3 = false;
                         }
                     }
                 }
 
                 else if(nave1 == true)
                 {
+                    al_draw_bitmap(correto, 200, 241, 0);
                     if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
                     {
                         if (evento.mouse.x >= 0 &&
@@ -488,17 +483,90 @@ int main(void)
                         {
                             nave1 = true;
                         }
+
+                    }
+                }
+                if(nave2 == false)
+                {
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            tela_de_escolha = true;
+                        }
                     }
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
-                        if (evento.mouse.x >= 163 &&
-                            evento.mouse.x <= 425 &&
-                            evento.mouse.y >= 192 &&
-                            evento.mouse.y <= 466)
+                        if (evento.mouse.x >= 512 &&
+                            evento.mouse.x <= 765 &&
+                            evento.mouse.y >= 204 &&
+                            evento.mouse.y <= 459)
                         {
+                            nave2 = true;
                             nave1 = false;
-                            tela_de_escolha = false;
+                            nave3 = false;
+                        }
+                    }
+                }
+
+                else if(nave2 == true)
+                {
+                    al_draw_bitmap(correto, 539, 241, 0);
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            nave2 = true;
+                        }
+                    }
+                }
+                if(nave3 == false)
+                {
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            tela_de_escolha = true;
+                        }
+                    }
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    {
+                        if (evento.mouse.x >= 806 &&
+                            evento.mouse.x <= 1115 &&
+                            evento.mouse.y >= 204 &&
+                            evento.mouse.y <= 459)
+                        {
+                            nave3 = true;
+                            nave1 = false;
+                            nave2 = false;
+                        }
+                    }
+                }
+
+                else if(nave3 == true)
+                {
+                    al_draw_bitmap(correto, 888, 241, 0);
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
+                    {
+                        if (evento.mouse.x >= 0 &&
+                            evento.mouse.x <= 1280 &&
+                            evento.mouse.y >= 0 &&
+                            evento.mouse.y <= 720)
+                        {
+                            nave3 = true;
                         }
                     }
                 }
@@ -515,9 +583,6 @@ int main(void)
     al_destroy_bitmap(ajustes);
     al_destroy_bitmap(botao_off);
     al_destroy_bitmap(escolha);
-    al_destroy_bitmap(tela_nave1);
-    al_destroy_bitmap(tela_nave2);
-    al_destroy_bitmap(tela_nave3);
     al_destroy_sample(musica_capa);
     al_destroy_bitmap(correto);
     al_destroy_event_queue(fila_eventos);
