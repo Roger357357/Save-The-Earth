@@ -119,7 +119,6 @@ int main(void)
                 if (!jogando) {
                     btcomecar_datela_escolha = false;
                 }
-
 // ----------------------------------------------------------------------------------------------------------------------------------------
         //  BOTÃO VOLTAR DA TELA AJUSTES
 // ########################################################################################################################################
@@ -127,18 +126,8 @@ int main(void)
                 if(btvoltar_datela_ajustes == true)
                 {
                     tela_da_capa = true;
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-                    {
-                        if (evento.mouse.x >= 0 &&
-                            evento.mouse.x <= 1280 &&
-                            evento.mouse.y >= 0 &&
-                            evento.mouse.y <= 720)
-                        {
-                            tela_da_capa = true;
-                        }
-                    }
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         if (evento.mouse.x >= 73 &&
                             evento.mouse.x <= 290 &&
@@ -151,19 +140,22 @@ int main(void)
                     }
                 }
 // ----------------------------------------------------------------------------------------------------------------------------------------
-        //  BOTÃO DE VOLTAR DA TELA DE ESCOLHA DE NAVES
+        //  BOTÃO VOLTAR DA TELA DE ESCOLHA DE NAVES
 // ########################################################################################################################################
 
                 if(btvoltar_datela_escolha == true)
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    tela_da_capa = true;
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
-                        if (evento.mouse.x >= 100 &&
-                            evento.mouse.x <= 316 &&
-                            evento.mouse.y >= 510 &&
-                            evento.mouse.y <= 650)
+                        if (evento.mouse.x >= 130 &&
+                            evento.mouse.x <= 290 &&
+                            evento.mouse.y >= 535 &&
+                            evento.mouse.y <= 645)
                         {
-                            tela_da_capa = true;
+                            btvoltar_datela_escolha = true;
+                            tela_de_escolha = false;
                         }
                     }
                 }
@@ -181,7 +173,7 @@ int main(void)
                 }
 //=======================================================================================================
 //      BOTÃO PARA A TELA AJUSTES
-    
+
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                 {
                     if (evento.mouse.x >= 190 &&
@@ -191,7 +183,7 @@ int main(void)
                     {
                         tela_ajustes = true;
                     }
-                }                
+                }
 //=======================================================================================================
 //      BOTÃO PARA A TELA DE ESCOLHA DE NAVES
 
@@ -207,7 +199,7 @@ int main(void)
                 }
 //=======================================================================================================
 //      BOTÃO PARA SAIR DO JOGO
-                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                 {
                     if (evento.mouse.x >= 772 &&
                         evento.mouse.x <= 1002 &&
@@ -224,7 +216,7 @@ int main(void)
 
             if(tela_ajustes == true)
             {
-                tela_da_capa = false;
+                tela_de_escolha = false;
                 saire = false;
 
                 al_draw_bitmap(ajustes, 0, 0, 0);
@@ -236,18 +228,15 @@ int main(void)
 //=======================================================================================================
 //      BOTÃO DE VOLTAR PARA A TELA DA CAPA
 
-                if(btvoltar_datela_ajustes == false)
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                    if (evento.mouse.x >= 73 &&
+                        evento.mouse.x <= 290 &&
+                        evento.mouse.y >= 526 &&
+                        evento.mouse.y <= 679)
                     {
-                        if (evento.mouse.x >= 73 &&
-                            evento.mouse.x <= 290 &&
-                            evento.mouse.y >= 526 &&
-                            evento.mouse.y <= 679)
-                        {
-                            btvoltar_datela_ajustes = true;
-                            tela_ajustes = false;
-                        }
+                        btvoltar_datela_ajustes = true;
+                        tela_ajustes = false;
                     }
                 }
 //=======================================================================================================
@@ -319,7 +308,7 @@ int main(void)
 // ########################################################################################################################################
           if(tela_de_escolha == true)
             {
-                tela_da_capa = false;
+                tela_ajustes = false;
                 saire = false;
 
                 al_draw_bitmap(escolha, 0, 0, 0);
@@ -328,46 +317,44 @@ int main(void)
                 {
                     saire = true; // BOTÃO "X" DA TELA
                 }
-
 //=======================================================================================================
 //      BOTÃO DE VOLTAR PARA A TELA DE CAPA
-                if(btvoltar_datela_escolha == false)
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.mouse.x >= 100 &&
+                        evento.mouse.x <= 316 &&
+                        evento.mouse.y >= 510 &&
+                        evento.mouse.y <= 650)
                     {
-                        if (evento.mouse.x >= 100 &&
-                            evento.mouse.x <= 316 &&
-                            evento.mouse.y >= 510 &&
-                            evento.mouse.y <= 650)
-                        {
-                            btvoltar_datela_escolha = true;
-                            tela_de_escolha = false;
-                        }
+                        btvoltar_datela_escolha = true;
+                        tela_de_escolha = false;
                     }
                 }
 //=======================================================================================================
 //     BOTÃO DE COMEÇAR PARA JOGAR
+
                 printf("antes do if: %d\n", btcomecar_datela_escolha);
                if(btcomecar_datela_escolha == false) // VERIFICAÇÃO DO ESTADO DO BOTÃO
                 {
                     printf("dentro do if da tela de escolha\n");
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
-                        printf("dentro do if da tela de escolha - AND - button up\n");
+                        printf("dentro do if da tela de escolha - AND - button down\n");
                         if (evento.mouse.x >= 554 &&
                             evento.mouse.x <= 747 &&
                             evento.mouse.y >= 534 &&
                             evento.mouse.y <= 676)
                         {
-                            printf("dentro do if da tela de escolha - AND - button up - AND - dentro da área\n");
+                            printf("dentro do if da tela de escolha - AND - button down - AND - dentro da área\n");
                             btcomecar_datela_escolha = true;
                             tela_de_escolha = false;
                         }
                     }
                 }
-
 //=======================================================================================================
 //      BOTÃO DE ESCOLHA DA NAVE 1
+
                 if(nave1 == false)
                 {
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
@@ -410,18 +397,6 @@ int main(void)
 //      BOTÃO DE ESCOLHA DA NAVE 3
                 if(nave3 == false)
                 {
-                    // A PARTE ABAIXO PRECISA ARRUMAR
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
-                    {
-                        if (evento.mouse.x >= 0 &&
-                            evento.mouse.x <= 1280 &&
-                            evento.mouse.y >= 0 &&
-                            evento.mouse.y <= 720)
-                        {
-                            tela_de_escolha = true;
-                        }
-                    }
-
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
                         if (evento.mouse.x >= 806 &&
@@ -429,9 +404,9 @@ int main(void)
                             evento.mouse.y >= 204 &&
                             evento.mouse.y <= 459)
                         {
-                            nave3 = true;
                             nave1 = false;
                             nave2 = false;
+                            nave3 = true;
                         }
                     }
                 }
