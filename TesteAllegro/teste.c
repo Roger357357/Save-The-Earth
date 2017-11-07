@@ -5,7 +5,8 @@
 #include <allegro5/allegro_primitives.h>
 #include <stdbool.h>
 #include <stdio.h>
-
+// ----------------------------------------------------------------------------------------------------------------------------------------
+        // VARIÁVEIS GLOBAIS
 // ########################################################################################################################################
 
 const int LARGURA_TELA = 1280;
@@ -155,17 +156,6 @@ int main(void)
 
                 if(btvoltar_datela_escolha == true)
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_AXES || ALLEGRO_EVENT_MOUSE_WARPED)
-                    {
-                        if (evento.mouse.x >= 0 &&
-                            evento.mouse.x <= 1280 &&
-                            evento.mouse.y >= 0 &&
-                            evento.mouse.y <= 720)
-                        {
-                           tela_da_capa = true;
-                        }
-                    }
-
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
                         if (evento.mouse.x >= 100 &&
@@ -173,7 +163,7 @@ int main(void)
                             evento.mouse.y >= 510 &&
                             evento.mouse.y <= 650)
                         {
-                            tela_de_escolha = false;
+                            tela_da_capa = true;
                         }
                     }
                 }
@@ -191,69 +181,42 @@ int main(void)
                 }
 //=======================================================================================================
 //      BOTÃO PARA A TELA AJUSTES
-
-                if(tela_ajustes == false)
+    
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.mouse.x >= 190 &&
+                        evento.mouse.x <= 419 &&
+                        evento.mouse.y >= 505 &&
+                        evento.mouse.y <= 644)
                     {
-                        if (evento.mouse.x >= 190 &&
-                            evento.mouse.x <= 419 &&
-                            evento.mouse.y >= 505 &&
-                            evento.mouse.y <= 644)
-                        {
-                            tela_ajustes = true;
-                            tela_da_capa = false;
-                        }
+                        tela_ajustes = true;
                     }
-                }
+                }                
 //=======================================================================================================
 //      BOTÃO PARA A TELA DE ESCOLHA DE NAVES
 
-                if(tela_de_escolha == false)
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.mouse.x >= 475 &&
+                        evento.mouse.x <= 718 &&
+                        evento.mouse.y >= 505 &&
+                        evento.mouse.y <= 644)
                     {
-                        if (evento.mouse.x >= 475 &&
-                            evento.mouse.x <= 718 &&
-                            evento.mouse.y >= 505 &&
-                            evento.mouse.y <= 644)
-                        {
-                            tela_de_escolha = true;
-                            tela_da_capa = false;
-                            tela_ajustes = false;
-                        }
-
-                    }
-                    if(btvoltar_datela_escolha == true)
-                    {
-                        if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-                        {
-                            if (evento.mouse.x >= 100 &&
-                                evento.mouse.x <= 316 &&
-                                evento.mouse.y >= 510 &&
-                                evento.mouse.y <= 650)
-                            {
-                                tela_de_escolha = false;
-                            }
-                        }
+                        tela_de_escolha = true;
                     }
                 }
 //=======================================================================================================
 //      BOTÃO PARA SAIR DO JOGO
-                if(saire == false)
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.mouse.x >= 772 &&
+                        evento.mouse.x <= 1002 &&
+                        evento.mouse.y >= 505 &&
+                        evento.mouse.y <= 644)
                     {
-                        if (evento.mouse.x >= 772 &&
-                            evento.mouse.x <= 1002 &&
-                            evento.mouse.y >= 505 &&
-                            evento.mouse.y <= 644)
-                        {
-                            saire = true;
-                        }
+                        saire = true;
                     }
                 }
-
             }
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // TELA DE AJUSTES
@@ -275,7 +238,7 @@ int main(void)
 
                 if(btvoltar_datela_ajustes == false)
                 {
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         if (evento.mouse.x >= 73 &&
                             evento.mouse.x <= 290 &&
