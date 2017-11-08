@@ -25,6 +25,9 @@ ALLEGRO_BITMAP *ajustes = NULL;
 ALLEGRO_BITMAP *escolha = NULL;
 ALLEGRO_BITMAP *botao_off = NULL;
 ALLEGRO_BITMAP *correto = NULL;
+ALLEGRO_BITMAP *navea = NULL;
+ALLEGRO_BITMAP *naveb = NULL;
+ALLEGRO_BITMAP *navec = NULL;
 ALLEGRO_BITMAP *fundo_nivel = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
 
@@ -54,6 +57,13 @@ bool inicializar();
 
 int main(void)
 {
+//=======================================================================================================
+//      POSIÇÃO INICIAL DA NAVE NA TELA
+
+    int tecla = 0;
+    int pos_x = 1202 / 2;
+    int pos_y = 1242 / 2;
+
     if (!inicializar())
     {
         fprintf(stderr, "Falha ao inicializar Allegro.\n");
@@ -80,6 +90,9 @@ int main(void)
     escolha = al_load_bitmap("tela_escolha.png");
     correto = al_load_bitmap("correto.png");
     fundo_nivel = al_load_bitmap("fundo_nivel.png");
+    navea = al_load_bitmap("navea.png");
+    naveb = al_load_bitmap("naveb.png");
+    navec = al_load_bitmap("navec.png");
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // VERIFICAÇÃO DO CARREGAMENTO DO BACKGROUND (FUNDO)
@@ -438,6 +451,78 @@ int main(void)
                     saire = false;
 
                     al_draw_bitmap(fundo_nivel, 0, 0, 0);
+
+                    if(nave1 == true)
+                  {
+                    if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
+                   {
+                      switch(evento.keyboard.keycode)
+                    {
+                       case ALLEGRO_KEY_UP:
+                        pos_y -= 10;
+                       break;
+                       case ALLEGRO_KEY_DOWN:
+                        pos_y += 10;
+                       break;
+                       case ALLEGRO_KEY_LEFT:
+                        pos_x -= 10;
+                       break;
+                       case ALLEGRO_KEY_RIGHT:
+                        pos_x += 10;
+                       break;
+                    }
+                  }
+
+                al_draw_bitmap(navea, pos_x, pos_y, 0);
+                }
+                //printf("Nave 2: %d\n", nave2);
+                    if(nave2 == true)
+                 {
+                    if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
+                   {
+                      switch(evento.keyboard.keycode)
+                    {
+                       case ALLEGRO_KEY_UP:
+                        pos_y -= 10;
+                       break;
+                       case ALLEGRO_KEY_DOWN:
+                        pos_y += 10;
+                       break;
+                       case ALLEGRO_KEY_LEFT:
+                        pos_x -= 10;
+                       break;
+                       case ALLEGRO_KEY_RIGHT:
+                        pos_x += 10;
+                       break;
+                   }
+                  }
+                //printf("Nave 2: %d\n", nave2);
+                al_draw_bitmap(naveb, pos_x, pos_y, 0);
+                }
+                //printf("Nave 3: %d\n", nave3);
+                     if(nave3 == true)
+                 {
+                    if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
+                   {
+                      switch(evento.keyboard.keycode)
+                    {
+                       case ALLEGRO_KEY_UP:
+                        pos_y -= 10;
+                       break;
+                       case ALLEGRO_KEY_DOWN:
+                        pos_y += 10;
+                       break;
+                       case ALLEGRO_KEY_LEFT:
+                        pos_x -= 10;
+                       break;
+                       case ALLEGRO_KEY_RIGHT:
+                        pos_x += 10;
+                       break;
+                   }
+                  }
+                al_draw_bitmap(navec, pos_x, pos_y, 0);
+                }
+
                     jogando = true;
 
                     if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -457,6 +542,9 @@ int main(void)
     al_destroy_bitmap(ajustes);
     al_destroy_bitmap(botao_off);
     al_destroy_bitmap(escolha);
+    al_destroy_bitmap(navea);
+    al_destroy_bitmap(naveb);
+    al_destroy_bitmap(navec);
     al_destroy_sample(musica_capa);
     al_destroy_bitmap(correto);
     al_destroy_event_queue(fila_eventos);
