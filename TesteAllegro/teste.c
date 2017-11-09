@@ -66,6 +66,9 @@ int main(void)
     int pos_x = 1202 / 2;
     int pos_y = 1242 / 2;
 
+//=======================================================================================================
+//      VERIFICAÇÃO DA INICIALIZAÇÃO DO ALLEGRO - MENSAGEM DE ERRO
+
     if (!inicializar())
     {
         fprintf(stderr, "Falha ao inicializar Allegro.\n");
@@ -171,6 +174,9 @@ int main(void)
                         {
                             btvoltar_datela_escolha = true;
                             tela_de_escolha = false;
+                            nave1 = false;
+                            nave2 = false;
+                            nave3 = false;
                         }
                     }
                 }
@@ -321,7 +327,8 @@ int main(void)
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // TELA DE ESCOLHA DE NAVES
 // ########################################################################################################################################
-          if(tela_de_escolha == true)
+
+            if(tela_de_escolha == true)
             {
                 tela_ajustes = false;
                 saire = false;
@@ -344,13 +351,16 @@ int main(void)
                     {
                         btvoltar_datela_escolha = true;
                         tela_de_escolha = false;
+                        nave1 = false;
+                        nave2 = false;
+                        nave3 = false;
                     }
                 }
 //=======================================================================================================
 //     BOTÃO DE COMEÇAR PARA JOGAR
 
                 printf("antes do if: %d\n", btcomecar_datela_escolha);
-               if(btcomecar_datela_escolha == false) // VERIFICAÇÃO DO ESTADO DO BOTÃO
+                if(btcomecar_datela_escolha == false) // VERIFICAÇÃO DO ESTADO DO BOTÃO
                 {
                     printf("dentro do if da tela de escolha\n");
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
@@ -390,6 +400,7 @@ int main(void)
 
 //=======================================================================================================
 //      BOTÃO DE ESCOLHA DA NAVE 2
+
                 if(nave2 == false)
                 {
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
@@ -410,6 +421,7 @@ int main(void)
 
 //=======================================================================================================
 //      BOTÃO DE ESCOLHA DA NAVE 3
+
                 if(nave3 == false)
                 {
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
@@ -430,6 +442,7 @@ int main(void)
 
 //=======================================================================================================
 //      CÓDIGO DE DESENHAR O "CORRETO" NA NAVE SELECIONADA
+
                 if(nave1 == true)
                 {
                     al_draw_bitmap(correto, 200, 241, 0);
@@ -443,8 +456,9 @@ int main(void)
                     al_draw_bitmap(correto, 888, 241, 0);
                 }
             }
+
 //=======================================================================================================
-//      BOTÃO DE COMECAR DA TELA DE ESCOLHA
+//      BOTÃO DE COMECAR DA TELA DE ESCOLHA PARA A TELA DO NIVEL
 
             printf("antes da tela do if da tela do jogo: %d / n1: %d / n2: %d / n3: %d\n", btcomecar_datela_escolha, nave1, nave2, nave3);
             if((btcomecar_datela_escolha == true) && (nave1 == true || nave2 == true || nave3 == true)) // VERIFICAÇÃO DO ESTADO DO BOTÃO
@@ -454,147 +468,155 @@ int main(void)
 
                     al_draw_bitmap(fundo_nivel, 0, 0, 0);
 
+//=======================================================================================================
+//      MOVIMENTAÇÃO DA NAVE 1 NO NIVEL
+
                     if(nave1 == true) // MOVER A NAVE COM O TECLADO PRESSIONADO
-                  {
-                    if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
-                   {
-                      switch(evento.keyboard.keycode)
                     {
-                       case ALLEGRO_KEY_UP:
-                        teclas[UP] = true;
-                       break;
-                       case ALLEGRO_KEY_DOWN:
-                        teclas[DOWN] = true;
-                       break;
-                       case ALLEGRO_KEY_LEFT:
-                        teclas[LEFT] = true;
-                       break;
-                       case ALLEGRO_KEY_RIGHT:
-                        teclas[RIGHT] = true;
-                       break;
+                        if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
+                        {
+                            switch(evento.keyboard.keycode)
+                            {
+                                case ALLEGRO_KEY_UP:
+                                    teclas[UP] = true;
+                                    break;
+                                case ALLEGRO_KEY_DOWN:
+                                    teclas[DOWN] = true;
+                                    break;
+                                case ALLEGRO_KEY_LEFT:
+                                    teclas[LEFT] = true;
+                                    break;
+                                case ALLEGRO_KEY_RIGHT:
+                                    teclas[RIGHT] = true;
+                                    break;
+                            }
+                        }
+                        if (evento.type == ALLEGRO_EVENT_KEY_UP)
+                        {
+                            switch(evento.keyboard.keycode)
+                            {
+                                case ALLEGRO_KEY_UP:
+                                    teclas[UP] = false;
+                                    break;
+                                case ALLEGRO_KEY_DOWN:
+                                    teclas[DOWN] = false;
+                                    break;
+                                case ALLEGRO_KEY_LEFT:
+                                    teclas[LEFT] = false;
+                                    break;
+                                case ALLEGRO_KEY_RIGHT:
+                                    teclas[RIGHT] = false;
+                                    break;
+                            }
+                        }
+                        al_draw_bitmap(navea, pos_x, pos_y, 0);
+                        pos_y -= teclas[UP] * 10;
+                        pos_y += teclas[DOWN] * 10;
+                        pos_x -= teclas[LEFT] * 10;
+                        pos_x += teclas[RIGHT] * 10;
                     }
-                  }
-                  if (evento.type == ALLEGRO_EVENT_KEY_UP)
-                   {
-                      switch(evento.keyboard.keycode)
-                    {
-                       case ALLEGRO_KEY_UP:
-                        teclas[UP] = false;
-                       break;
-                       case ALLEGRO_KEY_DOWN:
-                        teclas[DOWN] = false;
-                       break;
-                       case ALLEGRO_KEY_LEFT:
-                        teclas[LEFT] = false;
-                       break;
-                       case ALLEGRO_KEY_RIGHT:
-                        teclas[RIGHT] = false;
-                       break;
-                    }
-                  }
-                  pos_y -= teclas[UP] * 10;
-                  pos_y += teclas[DOWN] * 10;
-                  pos_x -= teclas[LEFT] * 10;
-                  pos_x += teclas[RIGHT] * 10;
-                al_draw_bitmap(navea, pos_x, pos_y, 0);
-                }
-                //printf("Nave 2: %d\n", nave2);
+
+//=======================================================================================================
+//      MOVIMENTAÇÃO DA NAVE 2 NO NIVEL
+
                     if(nave2 == true)
-                 {
-                     if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
-                   {
-                      switch(evento.keyboard.keycode)
                     {
-                       case ALLEGRO_KEY_UP:
-                        teclas[UP] = true;
-                       break;
-                       case ALLEGRO_KEY_DOWN:
-                        teclas[DOWN] = true;
-                       break;
-                       case ALLEGRO_KEY_LEFT:
-                        teclas[LEFT] = true;
-                       break;
-                       case ALLEGRO_KEY_RIGHT:
-                        teclas[RIGHT] = true;
-                       break;
+                        if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
+                        {
+                            switch(evento.keyboard.keycode)
+                            {
+                               case ALLEGRO_KEY_UP:
+                                   teclas[UP] = true;
+                                   break;
+                               case ALLEGRO_KEY_DOWN:
+                                   teclas[DOWN] = true;
+                                   break;
+                               case ALLEGRO_KEY_LEFT:
+                                   teclas[LEFT] = true;
+                                   break;
+                               case ALLEGRO_KEY_RIGHT:
+                                   teclas[RIGHT] = true;
+                                   break;
+                            }
+                        }
+                        if (evento.type == ALLEGRO_EVENT_KEY_UP)
+                        {
+                            switch(evento.keyboard.keycode)
+                            {
+                               case ALLEGRO_KEY_UP:
+                                   teclas[UP] = false;
+                                   break;
+                               case ALLEGRO_KEY_DOWN:
+                                   teclas[DOWN] = false;
+                                   break;
+                               case ALLEGRO_KEY_LEFT:
+                                   teclas[LEFT] = false;
+                                   break;
+                               case ALLEGRO_KEY_RIGHT:
+                                   teclas[RIGHT] = false;
+                                   break;
+                            }
+                        }
+                        al_draw_bitmap(naveb, pos_x, pos_y, 0);
+                        pos_y -= teclas[UP] * 10;
+                        pos_y += teclas[DOWN] * 10;
+                        pos_x -= teclas[LEFT] * 10;
+                        pos_x += teclas[RIGHT] * 10;
                     }
-                  }
-                  if (evento.type == ALLEGRO_EVENT_KEY_UP)
-                   {
-                      switch(evento.keyboard.keycode)
+
+//=======================================================================================================
+//      MOVIMENTAÇÃO DA NAVE 3 NO NIVEL
+
+                    if(nave3 == true)
                     {
-                       case ALLEGRO_KEY_UP:
-                        teclas[UP] = false;
-                       break;
-                       case ALLEGRO_KEY_DOWN:
-                        teclas[DOWN] = false;
-                       break;
-                       case ALLEGRO_KEY_LEFT:
-                        teclas[LEFT] = false;
-                       break;
-                       case ALLEGRO_KEY_RIGHT:
-                        teclas[RIGHT] = false;
-                       break;
+                        if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
+                        {
+                            switch(evento.keyboard.keycode)
+                            {
+                                case ALLEGRO_KEY_UP:
+                                    teclas[UP] = true;
+                                    break;
+                                case ALLEGRO_KEY_DOWN:
+                                    teclas[DOWN] = true;
+                                    break;
+                                case ALLEGRO_KEY_LEFT:
+                                    teclas[LEFT] = true;
+                                    break;
+                                case ALLEGRO_KEY_RIGHT:
+                                    teclas[RIGHT] = true;
+                                    break;
+                            }
+                        }
+                        if (evento.type == ALLEGRO_EVENT_KEY_UP)
+                        {
+                            switch(evento.keyboard.keycode)
+                            {
+                                case ALLEGRO_KEY_UP:
+                                    teclas[UP] = false;
+                                    break;
+                                case ALLEGRO_KEY_DOWN:
+                                    teclas[DOWN] = false;
+                                    break;
+                                case ALLEGRO_KEY_LEFT:
+                                    teclas[LEFT] = false;
+                                    break;
+                                case ALLEGRO_KEY_RIGHT:
+                                    teclas[RIGHT] = false;
+                                    break;
+                            }
+                        }
+                        al_draw_bitmap(navec, pos_x, pos_y, 0);
+                        pos_y -= teclas[UP] * 10;
+                        pos_y += teclas[DOWN] * 10;
+                        pos_x -= teclas[LEFT] * 10;
+                        pos_x += teclas[RIGHT] * 10;
                     }
-                  }
-                  pos_y -= teclas[UP] * 10;
-                  pos_y += teclas[DOWN] * 10;
-                  pos_x -= teclas[LEFT] * 10;
-                  pos_x += teclas[RIGHT] * 10;
-                //printf("Nave 2: %d\n", nave2);
-                al_draw_bitmap(naveb, pos_x, pos_y, 0);
-                }
-                //printf("Nave 3: %d\n", nave3);
-                     if(nave3 == true)
-                 {
-                      if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
-                   {
-                      switch(evento.keyboard.keycode)
-                    {
-                       case ALLEGRO_KEY_UP:
-                        teclas[UP] = true;
-                       break;
-                       case ALLEGRO_KEY_DOWN:
-                        teclas[DOWN] = true;
-                       break;
-                       case ALLEGRO_KEY_LEFT:
-                        teclas[LEFT] = true;
-                       break;
-                       case ALLEGRO_KEY_RIGHT:
-                        teclas[RIGHT] = true;
-                       break;
-                    }
-                  }
-                  if (evento.type == ALLEGRO_EVENT_KEY_UP)
-                   {
-                      switch(evento.keyboard.keycode)
-                    {
-                       case ALLEGRO_KEY_UP:
-                        teclas[UP] = false;
-                       break;
-                       case ALLEGRO_KEY_DOWN:
-                        teclas[DOWN] = false;
-                       break;
-                       case ALLEGRO_KEY_LEFT:
-                        teclas[LEFT] = false;
-                       break;
-                       case ALLEGRO_KEY_RIGHT:
-                        teclas[RIGHT] = false;
-                       break;
-                    }
-                  }
-                  pos_y -= teclas[UP] * 10;
-                  pos_y += teclas[DOWN] * 10;
-                  pos_x -= teclas[LEFT] * 10;
-                  pos_x += teclas[RIGHT] * 10;
-                al_draw_bitmap(navec, pos_x, pos_y, 0);
-                }
 
                     jogando = true;
 
                     if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                     {
-                      saire = true; // BOTÃO "X" DA TELA
+                        saire = true; // BOTÃO "X" DA TELA
                     }
 
                 }
@@ -626,7 +648,6 @@ int main(void)
 
 bool inicializar()
 {
-
     if (!al_init())
     {
         fprintf(stderr, "Não inicializou Allegro.\n");
