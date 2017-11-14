@@ -51,15 +51,16 @@ bool nave3 = false;
 bool btvoltar_datela_ajustes = false;
 bool btvoltar_datela_escolha = false;
 bool btcomecar_datela_escolha = false;
+bool btsair_datela_donivel = false;
 bool tela_da_capa = true;
 bool saire = false;
 bool jogando = false;
 bool funcao_tiro = false;
 bool teclas[5] = {false, false, false, false, false};
-bool apagar_coracao = false;
 bool tampar1 = false;
 bool tampar2 = false;
 bool tampar3 = false;
+bool apagar_coracao = false;
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -184,6 +185,23 @@ int main(void)
                         {
                             btvoltar_datela_escolha = true;
                             tela_de_escolha = false;
+                        }
+                    }
+                }
+
+                if(btsair_datela_donivel== true)
+                {
+                    tela_da_capa = true;
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                    {
+                        if (evento.mouse.x >= 1054 &&
+                            evento.mouse.x <= 1150 &&
+                            evento.mouse.y >= 590 &&
+                            evento.mouse.y <= 678)
+                        {
+                            btsair_datela_donivel = true;
+                            btcomecar_datela_escolha = false;
                         }
                     }
                 }
@@ -472,27 +490,55 @@ int main(void)
                 al_draw_bitmap(coracao, 120, 0, 0);
                 al_draw_bitmap(coracao, 190, 0, 0);
 
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                {
+                    if (evento.mouse.x >= 1054 &&
+                        evento.mouse.x <= 1150 &&
+                        evento.mouse.y >= 590 &&
+                        evento.mouse.y <= 678)
+                    {
+                        btsair_datela_donivel = true;
+                    }
+                }
+
 //=======================================================================================================
 //      FUNÇÃO TAMPAR CORAÇÃO "VIDA"
                 if(apagar_coracao == true)
                 {
-                    if(tampar1 == true)
+                    if((pos_y == 0 || pos_y == 630 || pos_x == 371 || pos_x == 830) && (tampar1 == false))
                     {
-                        al_draw_bitmap(tampa_coracao, 210, 10, 0);
-                        //tampar1 = false;
+                        tampar1 = true;
+                        pos_x = 1202 / 2;
+                        pos_y = 1200 / 2;
+                    }
+                    else if((pos_y == 0 || pos_y == 630 || pos_x == 371 || pos_x == 830) && (tampar1 == true) && (tampar2 == false))
+                    {
+                        tampar2 = true;
+                        pos_x = 1202 / 2;
+                        pos_y = 1200 / 2;
+                    }
+                    else if((pos_y == 0 || pos_y == 630 || pos_x == 371 || pos_x == 830) && (tampar1 == true) && (tampar2 == true) && (tampar3 == false))
+                    {
+                        tampar3 = true;
+                        pos_x = 1202 / 2;
+                        pos_y = 1200 / 2;
                     }
 
-                    if(tampar2 == true)
-                    {
-                        al_draw_bitmap(tampa_coracao, 140, 10, 0);
-                        tampar2 = false;
-                    }
+                }
 
-                    if(tampar3 == true)
-                    {
-                        al_draw_bitmap(tampa_coracao, 70, 10, 0);
-                        tampar3 = false;
-                    }
+                if(tampar1 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 210, 10, 0);
+                }
+
+                if(tampar2 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 140, 10, 0);
+                }
+
+                if(tampar3 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 70, 10, 0);
                 }
 
 //=======================================================================================================
@@ -566,12 +612,9 @@ int main(void)
                         teclas[UP] = false;
                     }
 
-                    if(pos_y == 0 || pos_y == 720 || pos_x == 371 || pos_x == 830)
+                    if(apagar_coracao == false)
                     {
-                       apagar_coracao = true;
-                       tampar1 = true;
-                       //tampar2 = true;
-                       //tampar3 = true;
+                        apagar_coracao = true;
                     }
 
                 }
@@ -642,6 +685,11 @@ int main(void)
                         teclas[UP] = false;
                     }
 
+                    if(apagar_coracao == false)
+                    {
+                        apagar_coracao = true;
+                    }
+
                 }
 
 //=======================================================================================================
@@ -708,6 +756,11 @@ int main(void)
                     else if(pos_y<=0)
                     {
                         teclas[UP] = false;
+                    }
+
+                    if(apagar_coracao == false)
+                    {
+                        apagar_coracao = true;
                     }
                 }
 
