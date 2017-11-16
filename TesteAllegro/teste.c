@@ -202,6 +202,11 @@ int main(void)
                         {
                             btsair_datela_donivel = true;
                             btcomecar_datela_escolha = false;
+                            pos_x = 1202 / 2;
+                            pos_y = 1200 / 2;
+                            tampar1 = false;
+                            tampar2 = false;
+                            tampar3 = false;
                         }
                     }
                 }
@@ -498,6 +503,21 @@ int main(void)
                         evento.mouse.y <= 678)
                     {
                         btsair_datela_donivel = true;
+                    }
+                }
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                {
+                    if (evento.mouse.x >= 110 &&
+                        evento.mouse.x <= 240 &&
+                        evento.mouse.y >= 600 &&
+                        evento.mouse.y <= 690)
+                    {
+                        pos_x = 1202 / 2;
+                        pos_y = 1200 / 2;
+                        tampar1 = false;
+                        tampar2 = false;
+                        tampar3 = false;
                     }
                 }
 
