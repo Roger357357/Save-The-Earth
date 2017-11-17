@@ -31,6 +31,7 @@ ALLEGRO_BITMAP *navec = NULL;
 ALLEGRO_BITMAP *IMG_tiro = NULL;
 ALLEGRO_BITMAP *fundo_nivel = NULL;
 ALLEGRO_BITMAP *coracao = NULL;
+ALLEGRO_BITMAP *gameover = NULL;
 ALLEGRO_BITMAP *tampa_coracao = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
 
@@ -109,6 +110,7 @@ int main(void)
     IMG_tiro = al_load_bitmap("tiro.png");
     coracao = al_load_bitmap("vida.png");
     tampa_coracao = al_load_bitmap("tampa.png");
+    gameover = al_load_bitmap("tela_gameover.png");
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // VERIFICAÇÃO DO CARREGAMENTO DO BACKGROUND (FUNDO)
@@ -133,21 +135,24 @@ int main(void)
             ALLEGRO_EVENT evento;
             al_wait_for_event(fila_eventos, &evento);
 
-                if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-                {
-                    saire = true; //BOTÃO "X" DA TELA
-                }
+            if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+            {
+                saire = true; //BOTÃO "X" DA TELA
+            }
 
-                if (evento.type == ALLEGRO_EVENT_MOUSE_AXES) {
-                    printf("[%d, %d]\n", evento.mouse.x, evento.mouse.y);
-                }
+            if (evento.type == ALLEGRO_EVENT_MOUSE_AXES)
+            {
+                printf("[%d, %d]\n", evento.mouse.x, evento.mouse.y);
+            }
 // ----------------------------------------------------------------------------------------------------------------------------------------
                 // RESET DE VARIÁVEIS DE CONTROLE
 // ########################################################################################################################################
 
-                if (!jogando) {
-                    btcomecar_datela_escolha = false;
-                }
+            if (!jogando)
+            {
+                btcomecar_datela_escolha = false;
+            }
+
 // ----------------------------------------------------------------------------------------------------------------------------------------
         //  BOTÃO VOLTAR DA TELA AJUSTES
 // ########################################################################################################################################
@@ -156,7 +161,7 @@ int main(void)
                 {
                     tela_da_capa = true;
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
                         if (evento.mouse.x >= 73 &&
                             evento.mouse.x <= 290 &&
@@ -165,6 +170,7 @@ int main(void)
                         {
                             btvoltar_datela_ajustes = true;
                             tela_ajustes = false;
+                            tela_de_escolha = false;
                         }
                     }
                 }
@@ -176,7 +182,7 @@ int main(void)
                 {
                     tela_da_capa = true;
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
                         if (evento.mouse.x >= 130 &&
                             evento.mouse.x <= 290 &&
@@ -185,9 +191,16 @@ int main(void)
                         {
                             btvoltar_datela_escolha = true;
                             tela_de_escolha = false;
+                            nave1 = false;
+                            nave2 = false;
+                            nave3 = false;
                         }
                     }
                 }
+
+// ----------------------------------------------------------------------------------------------------------------------------------------
+        //  BOTÃO SAIR DA TELA DO NIVEL DO JOGO
+// ########################################################################################################################################
 
                 if(btsair_datela_donivel== true)
                 {
@@ -233,6 +246,7 @@ int main(void)
                         evento.mouse.y <= 644)
                     {
                         tela_ajustes = true;
+                        tela_de_escolha = false;
                     }
                 }
 //=======================================================================================================
@@ -246,6 +260,7 @@ int main(void)
                         evento.mouse.y <= 644)
                     {
                         tela_de_escolha = true;
+                        tela_ajustes = false;
                     }
                 }
 //=======================================================================================================
@@ -267,6 +282,7 @@ int main(void)
 
             if(tela_ajustes == true)
             {
+                tela_da_capa = false;
                 tela_de_escolha = false;
                 saire = false;
 
@@ -359,6 +375,7 @@ int main(void)
 // ########################################################################################################################################
           if(tela_de_escolha == true)
             {
+                tela_da_capa = false;
                 tela_ajustes = false;
                 saire = false;
 
@@ -380,13 +397,16 @@ int main(void)
                     {
                         btvoltar_datela_escolha = true;
                         tela_de_escolha = false;
+                        nave1 = false;
+                        nave2 = false;
+                        nave3 = false;
                     }
                 }
 //=======================================================================================================
 //     BOTÃO DE COMEÇAR PARA JOGAR
 
                 printf("antes do if: %d\n", btcomecar_datela_escolha);
-               if(btcomecar_datela_escolha == false) // VERIFICAÇÃO DO ESTADO DO BOTÃO
+                if(btcomecar_datela_escolha == false) // VERIFICAÇÃO DO ESTADO DO BOTÃO
                 {
                     printf("dentro do if da tela de escolha\n");
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
@@ -488,12 +508,17 @@ int main(void)
             if((btcomecar_datela_escolha == true) && (nave1 == true || nave2 == true || nave3 == true)) // VERIFICAÇÃO DO ESTADO DO BOTÃO
             {
                 printf("dentro do if da tela do jogo\n");
+                tela_ajustes = false;
+                tela_de_escolha = false;
                 saire = false;
 
                 al_draw_bitmap(fundo_nivel, 0, 0, 0);
                 al_draw_bitmap(coracao, 50, 0, 0);
                 al_draw_bitmap(coracao, 120, 0, 0);
                 al_draw_bitmap(coracao, 190, 0, 0);
+
+//=======================================================================================================
+//      BOTÃO DE SAIR DO NIVEL DO JOGO PARA A CAPA
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                 {
@@ -503,8 +528,17 @@ int main(void)
                         evento.mouse.y <= 678)
                     {
                         btsair_datela_donivel = true;
+                        //btcomecar_datela_escolha = false;
                     }
                 }
+
+                if(tampar1 == true && tampar2 == true && tampar3 == true)
+                {
+                    al_draw_bitmap(gameover, 0, 0, 0);
+                }
+
+//=======================================================================================================
+//      BOTÃO DE REINICIAR O NÍVEL DO JOGO
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                 {
@@ -810,6 +844,7 @@ int main(void)
     al_destroy_bitmap(correto);
     al_destroy_bitmap(IMG_tiro);
     al_destroy_bitmap(coracao);
+    al_destroy_bitmap(gameover);
     al_destroy_sample(musica_capa);
     al_destroy_event_queue(fila_eventos);
     al_destroy_display(janela);
