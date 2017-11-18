@@ -62,6 +62,7 @@ bool tampar1 = false;
 bool tampar2 = false;
 bool tampar3 = false;
 bool apagar_coracao = false;
+bool tela_gameover = false;
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -223,6 +224,15 @@ int main(void)
                         }
                     }
                 }
+
+            if(tela_gameover == true)
+            {
+                al_draw_bitmap(gameover, 0, 0, 0);
+                btcomecar_datela_escolha = false;
+                nave1 = false;
+                nave2 = false;
+                nave3 = false;
+            }
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // TELA DA CAPA DE FUNDO
 // ########################################################################################################################################
@@ -534,7 +544,8 @@ int main(void)
 
                 if(tampar1 == true && tampar2 == true && tampar3 == true)
                 {
-                    al_draw_bitmap(gameover, 0, 0, 0);
+                    btcomecar_datela_escolha = false;
+                    tela_gameover = true;
                 }
 
 //=======================================================================================================
