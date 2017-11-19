@@ -221,6 +221,9 @@ int main(void)
                             tampar1 = false;
                             tampar2 = false;
                             tampar3 = false;
+                            nave1 = false;
+                            nave2 = false;
+                            nave3 = false;
                         }
                     }
                 }
@@ -228,10 +231,20 @@ int main(void)
             if(tela_gameover == true)
             {
                 al_draw_bitmap(gameover, 0, 0, 0);
-                btcomecar_datela_escolha = false;
-                nave1 = false;
-                nave2 = false;
-                nave3 = false;
+
+                switch(evento.keyboard.keycode)
+                {
+                    case ALLEGRO_KEY_ENTER:
+                        tela_de_escolha = true;
+                        btcomecar_datela_escolha = false;
+                        nave1 = false;
+                        nave2 = false;
+                        nave3 = false;
+                        tampar1 = false;
+                        tampar2 = false;
+                        tampar3 = false;
+                    break;
+                }
             }
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // TELA DA CAPA DE FUNDO
@@ -549,7 +562,7 @@ int main(void)
                 }
 
 //=======================================================================================================
-//      BOTÃO DE REINICIAR O NÍVEL DO JOGO
+//      BOTÃO DE PAUSE DO NÍVEL DO JOGO
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                 {
@@ -558,11 +571,7 @@ int main(void)
                         evento.mouse.y >= 600 &&
                         evento.mouse.y <= 690)
                     {
-                        pos_x = 1202 / 2;
-                        pos_y = 1200 / 2;
-                        tampar1 = false;
-                        tampar2 = false;
-                        tampar3 = false;
+                        printf("o jogo esta pausado\n");
                     }
                 }
 
