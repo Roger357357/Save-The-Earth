@@ -63,6 +63,7 @@ bool tampar2 = false;
 bool tampar3 = false;
 bool apagar_coracao = false;
 bool tela_gameover = false;
+bool pausado = false;
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -227,6 +228,9 @@ int main(void)
                         }
                     }
                 }
+// ----------------------------------------------------------------------------------------------------------------------------------------
+        // TELA DE GAME OVER
+// ########################################################################################################################################
 
             if(tela_gameover == true)
             {
@@ -246,6 +250,27 @@ int main(void)
                     break;
                 }
             }
+
+            if(pausado == true)
+            {
+                btcomecar_datela_escolha = false;
+
+//                if(pausado == true && btcomecar_datela_escolha == false)
+//                {
+//                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+//                    {
+//                        if (evento.mouse.x >= 110 &&
+//                            evento.mouse.x <= 240 &&
+//                            evento.mouse.y >= 600 &&
+//                            evento.mouse.y <= 690)
+//                        {
+//                            printf("o jogo esta pausado\n");
+//                            btcomecar_datela_escolha = true;
+//                        }
+//                    }
+//                }
+//            }
+
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // TELA DA CAPA DE FUNDO
 // ########################################################################################################################################
@@ -534,6 +559,7 @@ int main(void)
                 tela_ajustes = false;
                 tela_de_escolha = false;
                 saire = false;
+                tela_gameover = false;
 
                 al_draw_bitmap(fundo_nivel, 0, 0, 0);
                 al_draw_bitmap(coracao, 50, 0, 0);
@@ -551,9 +577,11 @@ int main(void)
                         evento.mouse.y <= 678)
                     {
                         btsair_datela_donivel = true;
-                        //btcomecar_datela_escolha = false;
                     }
                 }
+
+//=======================================================================================================
+//      CONDIÇÃO DA TELA GAME OVER
 
                 if(tampar1 == true && tampar2 == true && tampar3 == true)
                 {
@@ -572,6 +600,7 @@ int main(void)
                         evento.mouse.y <= 690)
                     {
                         printf("o jogo esta pausado\n");
+                        pausado = true;
                     }
                 }
 
