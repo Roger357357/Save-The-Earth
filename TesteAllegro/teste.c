@@ -12,6 +12,7 @@
 
 const int LARGURA_TELA = 1280;
 const int ALTURA_TELA = 720;
+const int NUM_BULLETS = 5;
 const int NUM_COMETS = 70;
 int i;
 
@@ -45,7 +46,19 @@ ALLEGRO_SAMPLE_ID *id_music = NULL;
 
 
 enum teclas{UP, DOWN, LEFT, RIGHT, SPACE};
-enum IDS{ENEMY};
+enum IDS{PLAYER, BULLET, ENEMY};
+
+struct SpaceShip
+{
+	int ID;
+	int x;
+	int y;
+	int lives;
+	int speed;
+	int boundx;
+	int boundy;
+	int score;
+}SpaceShip;
 
 typedef struct Comet
 {
@@ -57,6 +70,14 @@ typedef struct Comet
 	int boundx;
 	int boundy;
 }Comet;
+typedef struct Bullet
+{
+	int ID;
+	int x;
+	int y;
+	bool live;
+	int speed;
+}Bullet;
 
 
 bool tela_ajustes = false;
@@ -79,10 +100,22 @@ bool tampar2 = false;
 bool tampar3 = false;
 bool tiro = false;
 
+//void InitShip(SpaceShip ship);
+//void DrawShip(SpaceShip ship);
+
 void InitComet(Comet comets[], int size);
 void DrawComet(Comet comets[], int size);
 void StartComet(Comet comets[], int size);
 void UpdateComet(Comet comets[], int size);
+//void CollideComet(Comet comets[], int cSize, SpaceShip ship);
+
+void InitBullet(Bullet bullet[], int size);
+void DrawBullet(Bullet bullet[], int size);
+void FireBullet(Bullet bullet[], int size);
+void UpdateBullet(Bullet bullet[], int size);
+void CollideBullet(Bullet bullet[], int bSize, Comet comets[], int cSize);
+
+
 
 
 
@@ -136,9 +169,12 @@ int main(void)
     tampa_coracao = al_load_bitmap("tampa.png");
     bala = al_load_bitmap("tiros.png");
 
+//    SpaceShip ship;
     Comet comets[NUM_COMETS];
+    Bullet bullets[NUM_BULLETS];
 
     InitComet(comets, NUM_COMETS);
+    InitBullet(bullets, NUM_BULLETS);
 
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -535,8 +571,12 @@ int main(void)
                 if(nave1 == true) // MOVER A NAVE COM O TECLADO PRESSIONADO
                 {
                     DrawComet(comets, NUM_COMETS);
+                    DrawBullet(bullets, NUM_BULLETS);
                     StartComet(comets, NUM_COMETS);
 			        UpdateComet(comets, NUM_COMETS);
+			        UpdateBullet(bullets, NUM_BULLETS);
+			        CollideBullet(bullets, NUM_BULLETS, comets, NUM_COMETS);
+//			        CollideComet(comets, NUM_COMETS, ship);
 
                     if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
                     {
@@ -555,13 +595,8 @@ int main(void)
                                 teclas[RIGHT] = true;
                                 break;
                             case ALLEGRO_KEY_SPACE:
-                                if (teclas[SPACE] == false)
-                                {
-                                  teclas[SPACE] = true;
-                                  pos_xbala = pos_x - 210;
-                                  pos_ybala = pos_y - 200;
-                                }
-
+                                teclas[SPACE] = true;
+                                FireBullet(bullets, NUM_BULLETS);
                                 break;
                         }
                     }
@@ -581,14 +616,10 @@ int main(void)
                             case ALLEGRO_KEY_RIGHT:
                             teclas[RIGHT] = false;
                             break;
-
+                            case ALLEGRO_KEY_SPACE:
+                            teclas[SPACE] = true;
+                            break;
                         }
-                    }
-                     if(teclas[SPACE]== true)
-                    {
-                        //pos_ybala-10;
-                        al_draw_bitmap(bala, pos_xbala, pos_ybala,0);
-                        pos_ybala= pos_ybala - 20;
                     }
                     al_draw_bitmap(navea, pos_x, pos_y, 0);
                     pos_y -= teclas[UP] * 10;
@@ -789,6 +820,21 @@ int main(void)
 
     return 0;
 }
+//void InitShip(SpaceShip &ship)
+//{
+//	ship.x = 20;
+//	ship.y = HEIGHT / 2;
+//	ship.ID = PLAYER;
+//	ship.lives = 3;
+//	ship.speed = 7;
+//	ship.boundx = 6;
+//	ship.boundy = 7;
+//	ship.score = 0;
+//}
+//void DrawShip(SpaceShip &ship)
+//{
+//	al_draw_bitmap(navea, pos_x, pos_y, 0);
+//}
 void InitComet(Comet comets[], int size)
 {
 	for( i = 0; i < size; i++)
@@ -841,6 +887,93 @@ void UpdateComet(Comet comets[], int size)
 
 			if(comets[i].x < 0)
 				comets[i].live = false;
+		}
+	}
+}
+//void CollideComet(Comet comets[], int cSize, SpaceShip &ship)
+//{
+//	for(int i = 0; i < cSize; i++)
+//	{
+//		if(comets[i].live)
+//		{
+//			if(comets[i].x - comets[i].boundx < ship.x + ship.boundx &&
+//				comets[i].x + comets[i].boundx > ship.x - ship.boundx &&
+//				comets[i].y - comets[i].boundy < ship.y + ship.boundy &&
+//				comets[i].y + comets[i].boundy > ship.y - ship.boundy)
+//			{
+//				ship.lives--;
+//				comets[i].live = false;
+//			}
+//			else if(comets[i].x < 0)
+//			{
+//				comets[i].live = false;
+//				ship.lives--;
+//			}
+//		}
+//	}
+//}
+void InitBullet(Bullet bullet[], int size)
+{
+	for(int i = 0; i < size; i++)
+	{
+		bullet[i].ID = BULLET;
+		bullet[i].speed = 10;
+		bullet[i].live = false;
+	}
+}
+void DrawBullet(Bullet bullet[], int size)
+{
+	for( int i = 0; i < size; i++)
+	{
+		if(bullet[i].live)
+			al_draw_filled_circle(bullet[i].x, bullet[i].y, 10, al_map_rgb(0, 0, 0));
+	}
+}
+void FireBullet(Bullet bullet[], int size)
+{
+	for( int i = 0; i < size; i++)
+	{
+		if(!bullet[i].live)
+		{
+			bullet[i].x = 700;
+			bullet[i].y = 500;
+			bullet[i].live = true;
+			break;
+		}
+	}
+}
+void UpdateBullet(Bullet bullet[], int size)
+{
+	for(int i = 0; i < size; i++)
+	{
+		if(bullet[i].live)
+		{
+			bullet[i].y -= bullet[i].speed;
+			if(bullet[i].y > ALTURA_TELA)
+				bullet[i].live = false;
+		}
+	}
+}
+void CollideBullet(Bullet bullet[], int bSize, Comet comets[], int cSize)
+{
+	for(int i = 0; i < bSize; i++)
+	{
+		if(bullet[i].live)
+		{
+			for(int j =0; j < cSize; j++)
+			{
+				if(comets[j].live)
+				{
+					if(bullet[i].x > (comets[j].x - comets[j].boundx) &&
+						bullet[i].x < (comets[j].x + comets[j].boundx) &&
+						bullet[i].y > (comets[j].y - comets[j].boundy) &&
+						bullet[i].y < (comets[j].y + comets[j].boundy))
+					{
+						bullet[i].live = false;
+						comets[j].live = false;
+					}
+				}
+			}
 		}
 	}
 }
