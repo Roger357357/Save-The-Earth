@@ -3615,7 +3615,7 @@
 1511560206 c:\users\roger.fgalmeida\documents\github\save-the-earth\allegro5\include\allegro5\allegro_primitives.h
 	<allegro5/allegro.h>
 
-1511675069 source:c:\users\rogerfelipe\desktop\save-the-earth-master\save-the-earth\save-the-earth\testeallegro\teste.c
+1511738873 source:c:\users\rogerfelipe\desktop\save-the-earth-master\save-the-earth\save-the-earth\testeallegro\teste.c
 	<allegro5/allegro.h>
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
@@ -3623,6 +3623,7 @@
 	<allegro5/allegro_primitives.h>
 	<stdbool.h>
 	<stdio.h>
+	"Estruturas.h"
 
 1511575391 c:\users\rogerfelipe\desktop\save-the-earth-master\save-the-earth\save-the-earth\allegro5\include\allegro5\allegro.h
 	"allegro5/base.h"
@@ -3915,4 +3916,6 @@
 
 1511575391 c:\users\rogerfelipe\desktop\save-the-earth-master\save-the-earth\save-the-earth\allegro5\include\allegro5\allegro_primitives.h
 	<allegro5/allegro.h>
+
+1511734404 c:\users\rogerfelipe\desktop\save-the-earth-master\save-the-earth\save-the-earth\testeallegro\estruturas.h
 
