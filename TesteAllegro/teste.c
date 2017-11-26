@@ -154,9 +154,9 @@ int main(void)
 
                 if(btvoltar_datela_ajustes == true)
                 {
-                    tela_da_capa = true;
+                    //tela_da_capa = true;
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && tela_de_escolha != true)
                     {
                         if (evento.mouse.x >= 73 &&
                             evento.mouse.x <= 290 &&
@@ -165,6 +165,7 @@ int main(void)
                         {
                             btvoltar_datela_ajustes = false;
                             tela_ajustes = false;
+                            tela_da_capa = true;
                         }
                     }
                 }
@@ -175,7 +176,7 @@ int main(void)
                 if(btvoltar_datela_escolha == true)
                 {
 
-                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && tela_da_capa != true && tela_ajustes != true)
                     {
                         if (evento.mouse.x >= 130 &&
                             evento.mouse.x <= 290 &&
@@ -272,6 +273,8 @@ int main(void)
             {
                 al_draw_bitmap(fundo , 0, 0, 0);
                 printf("tela_da_capa = true\n");
+                btvoltar_datela_escolha = false;
+                btvoltar_datela_ajustes = false;
 
                 if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                 {
@@ -281,7 +284,7 @@ int main(void)
 //=======================================================================================================
 //      BOTÃO PARA A TELA AJUSTES
 
-                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && tela_de_escolha != true )
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && tela_de_escolha != true && tela_da_capa == true)
                 {
                     if (evento.mouse.x >= 190 &&
                         evento.mouse.x <= 419 &&
@@ -291,6 +294,8 @@ int main(void)
                         tela_ajustes = true;
                         tela_de_escolha = false;
                         tela_da_capa = false;
+                        btvoltar_datela_escolha = true;
+                        btvoltar_datela_escolha = false;
                     }
                 }
 //=======================================================================================================
