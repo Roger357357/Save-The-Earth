@@ -5,16 +5,13 @@
 #include <allegro5/allegro_primitives.h>
 #include <stdbool.h>
 #include <stdio.h>
+
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // VARIÁVEIS GLOBAIS
 // ########################################################################################################################################
 
 const int LARGURA_TELA = 1280;
 const int ALTURA_TELA = 720;
-
-// ----------------------------------------------------------------------------------------------------------------------------------------
-
-// ########################################################################################################################################
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_SAMPLE *musica_capa = NULL;
@@ -34,11 +31,6 @@ ALLEGRO_BITMAP *coracao = NULL;
 ALLEGRO_BITMAP *gameover = NULL;
 ALLEGRO_BITMAP *tampa_coracao = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
-
-
-// ----------------------------------------------------------------------------------------------------------------------------------------
-
-// ########################################################################################################################################
 
 enum teclas{UP, DOWN, LEFT, RIGHT, SPACE};
 
@@ -73,6 +65,7 @@ bool inicializar();
 
 int main(void)
 {
+
 //=======================================================================================================
 //      POSIÇÃO INICIAL DA NAVE NA TELA
 
@@ -142,10 +135,10 @@ int main(void)
                 saire = true; //BOTÃO "X" DA TELA
             }
 
-            if (evento.type == ALLEGRO_EVENT_MOUSE_AXES)
+            /*if (evento.type == ALLEGRO_EVENT_MOUSE_AXES)
             {
                 printf("[%d, %d]\n", evento.mouse.x, evento.mouse.y);
-            }
+            }*/
 // ----------------------------------------------------------------------------------------------------------------------------------------
                 // RESET DE VARIÁVEIS DE CONTROLE
 // ########################################################################################################################################
@@ -170,9 +163,8 @@ int main(void)
                             evento.mouse.y >= 526 &&
                             evento.mouse.y <= 679)
                         {
-                            btvoltar_datela_ajustes = true;
+                            btvoltar_datela_ajustes = false;
                             tela_ajustes = false;
-                            tela_de_escolha = false;
                         }
                     }
                 }
@@ -191,11 +183,11 @@ int main(void)
                             evento.mouse.y >= 535 &&
                             evento.mouse.y <= 645)
                         {
-                            btvoltar_datela_escolha = true;
-                            tela_de_escolha = false;
                             nave1 = false;
                             nave2 = false;
                             nave3 = false;
+                            tela_de_escolha = false;
+                            btvoltar_datela_escolha = false;
                         }
                     }
                 }
@@ -251,20 +243,23 @@ int main(void)
                     break;
                 }
             }
+// ----------------------------------------------------------------------------------------------------------------------------------------
+        // FUNÇÃO "PAUSE"
+// ########################################################################################################################################
 
             if(pausado == true)
             {
-                if(nave1 == true)
+                if(nave1 == true || nave2 == true || nave3 == true)
                 {
-                    nave1 = false;
-                }
-                if(nave2 == true)
-                {
-                    nave2 = false;
-                }
-                if(nave3 == true)
-                {
-                    nave3 = false;
+                    btcomecar_datela_escolha = false;
+                    switch(evento.keyboard.keycode)
+                    {
+                        case ALLEGRO_KEY_SPACE:
+                            printf("O jogo esta pausado\n");
+                            btcomecar_datela_escolha = true;
+                            pausado = false;
+                        break;
+                    }
                 }
             }
 
@@ -280,6 +275,7 @@ int main(void)
                 {
                     saire = true; //BOTÃO "X" DA TELA
                 }
+
 //=======================================================================================================
 //      BOTÃO PARA A TELA AJUSTES
 
@@ -292,6 +288,7 @@ int main(void)
                     {
                         tela_ajustes = true;
                         tela_de_escolha = false;
+                        tela_da_capa = false;
                     }
                 }
 //=======================================================================================================
@@ -306,6 +303,7 @@ int main(void)
                     {
                         tela_de_escolha = true;
                         tela_ajustes = false;
+                        tela_da_capa = false;
                     }
                 }
 //=======================================================================================================
@@ -418,6 +416,7 @@ int main(void)
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // TELA DE ESCOLHA DE NAVES
 // ########################################################################################################################################
+
           if(tela_de_escolha == true)
             {
                 tela_da_capa = false;
@@ -588,18 +587,6 @@ int main(void)
 
 //=======================================================================================================
 //      BOTÃO DE PAUSE DO NÍVEL DO JOGO
-
-                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-                {
-                    if (evento.mouse.x >= 110 &&
-                        evento.mouse.x <= 240 &&
-                        evento.mouse.y >= 600 &&
-                        evento.mouse.y <= 690)
-                    {
-                        printf("o jogo esta pausado\n");
-                        pausado = true;
-                    }
-                }
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                 {
