@@ -219,6 +219,7 @@ int main(void)
                             btcomecar_datela_escolha = false;
                             pos_x = 1202 / 2;
                             pos_y = 1200 / 2;
+                            pausado = false;
                             tampar1 = false;
                             tampar2 = false;
                             tampar3 = false;
@@ -253,23 +254,19 @@ int main(void)
 
             if(pausado == true)
             {
-                btcomecar_datela_escolha = false;
-
-//                if(pausado == true && btcomecar_datela_escolha == false)
-//                {
-//                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-//                    {
-//                        if (evento.mouse.x >= 110 &&
-//                            evento.mouse.x <= 240 &&
-//                            evento.mouse.y >= 600 &&
-//                            evento.mouse.y <= 690)
-//                        {
-//                            printf("o jogo esta pausado\n");
-//                            btcomecar_datela_escolha = true;
-//                        }
-//                    }
-//                }
-//            }
+                if(nave1 == true)
+                {
+                    nave1 = false;
+                }
+                if(nave2 == true)
+                {
+                    nave2 = false;
+                }
+                if(nave3 == true)
+                {
+                    nave3 = false;
+                }
+            }
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // TELA DA CAPA DE FUNDO
@@ -591,6 +588,18 @@ int main(void)
 
 //=======================================================================================================
 //      BOTÃO DE PAUSE DO NÍVEL DO JOGO
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                {
+                    if (evento.mouse.x >= 110 &&
+                        evento.mouse.x <= 240 &&
+                        evento.mouse.y >= 600 &&
+                        evento.mouse.y <= 690)
+                    {
+                        printf("o jogo esta pausado\n");
+                        pausado = true;
+                    }
+                }
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                 {
