@@ -174,7 +174,6 @@ int main(void)
 
                 if(btvoltar_datela_escolha == true)
                 {
-                    tela_da_capa = true;
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
                     {
@@ -187,6 +186,7 @@ int main(void)
                             nave2 = false;
                             nave3 = false;
                             tela_de_escolha = false;
+                            tela_da_capa = true;
                             btvoltar_datela_escolha = false;
                         }
                     }
@@ -228,6 +228,7 @@ int main(void)
             if(tela_gameover == true)
             {
                 al_draw_bitmap(gameover, 0, 0, 0);
+                printf("tela_gameover = true\n");
 
                 switch(evento.keyboard.keycode)
                 {
@@ -270,6 +271,7 @@ int main(void)
             if(tela_da_capa == true)
             {
                 al_draw_bitmap(fundo , 0, 0, 0);
+                printf("tela_da_capa = true\n");
 
                 if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
                 {
@@ -279,7 +281,7 @@ int main(void)
 //=======================================================================================================
 //      BOTÃO PARA A TELA AJUSTES
 
-                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && tela_de_escolha != true )
                 {
                     if (evento.mouse.x >= 190 &&
                         evento.mouse.x <= 419 &&
@@ -328,6 +330,7 @@ int main(void)
                 tela_da_capa = false;
                 tela_de_escolha = false;
                 saire = false;
+                printf("tela_ajustes = true\n");
 
                 al_draw_bitmap(ajustes, 0, 0, 0);
 
@@ -422,6 +425,7 @@ int main(void)
                 tela_da_capa = false;
                 tela_ajustes = false;
                 saire = false;
+                printf("tela de escolha = true\n");
 
                 al_draw_bitmap(escolha, 0, 0, 0);
 
