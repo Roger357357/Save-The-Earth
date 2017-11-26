@@ -199,7 +199,7 @@ int main(void)
 
                 if(btsair_datela_donivel== true)
                 {
-                    tela_da_capa = true;
+                    //tela_da_capa = true;
 
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
@@ -208,7 +208,8 @@ int main(void)
                             evento.mouse.y >= 590 &&
                             evento.mouse.y <= 678)
                         {
-                            btsair_datela_donivel = true;
+                            tela_da_capa = true;
+                            btsair_datela_donivel = false;
                             btcomecar_datela_escolha = false;
                             pos_x = 1202 / 2;
                             pos_y = 1200 / 2;
@@ -336,6 +337,7 @@ int main(void)
                 tela_de_escolha = false;
                 saire = false;
                 printf("tela_ajustes = true\n");
+                btvoltar_datela_ajustes = true;
 
                 al_draw_bitmap(ajustes, 0, 0, 0);
 
@@ -353,7 +355,7 @@ int main(void)
                         evento.mouse.y >= 526 &&
                         evento.mouse.y <= 679)
                     {
-                        btvoltar_datela_ajustes = true;
+                        //btvoltar_datela_ajustes = true;
                         tela_ajustes = false;
                     }
                 }
