@@ -1,0 +1,77 @@
+
+\documentclass[14pt, a2paper, portrait]{tikzposter}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lipsum}
+ 
+\newcommand{\bs}{\textbackslash}   
+\newcommand{\cmd}[1]{{\bf \color{red}#1}}   
+\tikzposterlatexaffectionproofon
+
+\title{Pôster no {\LaTeX} com tikzposter}
+\author{Eduardo Takeo Ueda\\ 
+	    \texttt{eduardo.tueda@sp.senac.br}}
+
+\institute{Centro Universitário Senac}
+
+ % Set colortheme
+ % (default, anil, armin, edgar, emre, hanna, james, kai, lena, manuel,
+ % martin, max, nicolas, pascal, peter, philipp, richard, roman, stefanie,
+ % vinay)
+\usecolortheme{lena}
+
+\definecolor{framecolor}{named}{black}
+
+\settitlebodystyle{rectangular}
+\setblocktitlestyle{rounded}
+\setblockbodystyle{shaded}
+
+\begin{document}
+
+\titleblock[left fig=logo.png, embedded]
+
+\block[l]{Introdução}{
+   \lipsum[1]
+}
+
+\begin{columns}
+% 1a coluna
+\column{0.48}
+
+\block[c]{Materiais e Métodos}{
+   \lipsum[2]
+	 \lipsum[3]
+}
+% 2a coluna
+\column{0.52}
+
+\block[c]{Resultado}{
+   \lipsum[4]
+}
+
+\block{Considerações Finais}{
+   \lipsum[5]
+}
+
+\end{columns}
+
+\block[c,width=30cm]{Referências}{
+\begingroup
+   \renewcommand{\section}[2]{}
+   \begin{thebibliography}{10}
+	
+	    \bibitem{Oetiker} OETIKER, Tobias et. al. {\sl Introdução ao {\LaTeXe}}, 2001.
+
+	    \bibitem{Tantau} TANTAU, Till. {\sl The TikZ and PGF Packages}, http://www.texample.net/tikz/, 2014.
+			
+			\bibitem{Richter} RICHTER, Pascal et. al. {\sl The TikZposter class}, http://www.ctan.org/pkg/tikzposter/, 2014.
+
+   \end{thebibliography}
+\endgroup
+}
+
+\end{document}
+
+
