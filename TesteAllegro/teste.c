@@ -37,6 +37,7 @@ ALLEGRO_BITMAP *fundo_nivel = NULL;
 ALLEGRO_BITMAP *coracao = NULL;
 ALLEGRO_BITMAP *tampa_coracao = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
+ALLEGRO_TIMER *timer = NULL;
 
 
 
@@ -48,7 +49,7 @@ ALLEGRO_SAMPLE_ID *id_music = NULL;
 enum teclas{UP, DOWN, LEFT, RIGHT, SPACE};
 enum IDS{PLAYER, BULLET, ENEMY};
 
-struct SpaceShip
+typedef struct SpaceShip
 {
 	int ID;
 	int x;
@@ -99,9 +100,14 @@ bool tampar1 = false;
 bool tampar2 = false;
 bool tampar3 = false;
 bool tiro = false;
+bool redraw = true;
 
-//void InitShip(SpaceShip ship);
-//void DrawShip(SpaceShip ship);
+void InitShip(SpaceShip ship);
+void DrawShip(SpaceShip ship);
+void MoveShipUp(SpaceShip ship);
+void MoveShipDown(SpaceShip ship);
+void MoveShipLeft(SpaceShip ship);
+void MoveShipRight(SpaceShip ship);
 
 void InitComet(Comet comets[], int size);
 void DrawComet(Comet comets[], int size);
@@ -111,7 +117,7 @@ void UpdateComet(Comet comets[], int size);
 
 void InitBullet(Bullet bullet[], int size);
 void DrawBullet(Bullet bullet[], int size);
-void FireBullet(Bullet bullet[], int size);
+void FireBullet(Bullet bullet[], int size, SpaceShip ship);
 void UpdateBullet(Bullet bullet[], int size);
 void CollideBullet(Bullet bullet[], int bSize, Comet comets[], int cSize);
 
@@ -134,6 +140,7 @@ int main(void)
     int pos_y = 1200 / 2;
     int pos_xbala = navea;
     int pos_ybala = 1200 / 2 - 30;
+    int FPS = 60;
 
 
     if (!inicializar())
@@ -169,10 +176,15 @@ int main(void)
     tampa_coracao = al_load_bitmap("tampa.png");
     bala = al_load_bitmap("tiros.png");
 
-//    SpaceShip ship;
+
+    srand(time(NULL));
+
+
+    SpaceShip ship;
     Comet comets[NUM_COMETS];
     Bullet bullets[NUM_BULLETS];
 
+    InitShip(ship);
     InitComet(comets, NUM_COMETS);
     InitBullet(bullets, NUM_BULLETS);
 
@@ -534,8 +546,8 @@ int main(void)
             {
                 printf("dentro do if da tela do jogo\n");
                 saire = false;
+                al_start_timer(timer);
 
-                //InitComet(comets, NUM_COMETS);
 
                 al_draw_bitmap(fundo_nivel, 0, 0, 0);
                 al_draw_bitmap(coracao, 50, 0, 0);
@@ -570,13 +582,28 @@ int main(void)
 
                 if(nave1 == true) // MOVER A NAVE COM O TECLADO PRESSIONADO
                 {
-                    DrawComet(comets, NUM_COMETS);
-                    DrawBullet(bullets, NUM_BULLETS);
-                    StartComet(comets, NUM_COMETS);
-			        UpdateComet(comets, NUM_COMETS);
-			        UpdateBullet(bullets, NUM_BULLETS);
-			        CollideBullet(bullets, NUM_BULLETS, comets, NUM_COMETS);
-//			        CollideComet(comets, NUM_COMETS, ship);
+                    if(evento.type == ALLEGRO_EVENT_TIMER)
+		            {
+                          printf("Depois do Timer\n");
+			if(teclas[UP])
+				MoveShipUp(ship);
+			if(teclas[DOWN])
+				MoveShipDown(ship);
+			if(teclas[LEFT])
+				MoveShipLeft(ship);
+			if(teclas[RIGHT])
+				MoveShipRight(ship);
+                      redraw = true;
+			          UpdateBullet(bullets, NUM_BULLETS);
+			          StartComet(comets, NUM_COMETS);
+                      UpdateComet(comets, NUM_COMETS);
+			          CollideBullet(bullets, NUM_BULLETS, comets, NUM_COMETS);
+			          CollideComet(comets, NUM_COMETS, ship);
+                    }
+                    else if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		            {
+			             saire = true;
+		            }
 
                     if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
                     {
@@ -596,7 +623,7 @@ int main(void)
                                 break;
                             case ALLEGRO_KEY_SPACE:
                                 teclas[SPACE] = true;
-                                FireBullet(bullets, NUM_BULLETS);
+                                FireBullet(bullets, NUM_BULLETS, ship);
                                 break;
                         }
                     }
@@ -651,6 +678,16 @@ int main(void)
                        //tampar2 = true;
                        //tampar3 = true;
                     }
+                    if(redraw && al_is_event_queue_empty(fila_eventos))
+		{
+			redraw = false;
+            printf("Desenhando nave\n");
+			DrawShip(ship);
+			DrawBullet(bullets, NUM_BULLETS);
+			DrawComet(comets, NUM_COMETS);
+
+
+		}
                 }
 
 //=======================================================================================================
@@ -817,24 +854,53 @@ int main(void)
     al_destroy_sample(musica_capa);
     al_destroy_event_queue(fila_eventos);
     al_destroy_display(janela);
+    al_destroy_timer(timer);
 
     return 0;
 }
-//void InitShip(SpaceShip &ship)
-//{
-//	ship.x = 20;
-//	ship.y = HEIGHT / 2;
-//	ship.ID = PLAYER;
-//	ship.lives = 3;
-//	ship.speed = 7;
-//	ship.boundx = 6;
-//	ship.boundy = 7;
-//	ship.score = 0;
-//}
-//void DrawShip(SpaceShip &ship)
-//{
-//	al_draw_bitmap(navea, pos_x, pos_y, 0);
-//}
+void InitShip(SpaceShip ship)
+{
+	ship.x = 1202 / 2;
+	ship.y = 1200 / 2;
+	ship.ID = PLAYER;
+	ship.lives = 3;
+	ship.speed = 7;
+	ship.boundx = 6;
+	ship.boundy = 7;
+	ship.score = 0;
+}
+void DrawShip(SpaceShip ship)
+{
+	al_draw_filled_rectangle(ship.x + 9, ship.y, ship.x + 7, ship.y - 10, al_map_rgb(255, 0, 0));
+    al_draw_filled_rectangle(ship.x - 9 , ship.y, ship.x - 7, ship.y - 10, al_map_rgb(255, 0, 0));
+
+    al_draw_filled_triangle(ship.x + 17, ship.y + 12, ship.x, ship.y - 12, ship.x - 17, ship.y + 12, al_map_rgb(255, 255, 255));
+    al_draw_filled_rectangle(ship.x + 2, ship.y + 12, ship.x - 2, ship.y - 15, al_map_rgb(0, 0, 255));
+}
+void MoveShipUp(SpaceShip ship)
+{
+	ship.y -= ship.speed;
+	if(ship.y < 0)
+		ship.y = 0;
+}
+void MoveShipDown(SpaceShip ship)
+{
+	ship.y += ship.speed;
+	if(ship.y > ALTURA_TELA)
+		ship.y = ALTURA_TELA;
+}
+void MoveShipLeft(SpaceShip ship)
+{
+	ship.x -= ship.speed;
+	if(ship.x < 0)
+		ship.x = 0;
+}
+void MoveShipRight(SpaceShip ship)
+{
+	ship.x += ship.speed;
+	if(ship.x > 300)
+		ship.x = 300;
+}
 void InitComet(Comet comets[], int size)
 {
 	for( i = 0; i < size; i++)
@@ -890,28 +956,28 @@ void UpdateComet(Comet comets[], int size)
 		}
 	}
 }
-//void CollideComet(Comet comets[], int cSize, SpaceShip &ship)
-//{
-//	for(int i = 0; i < cSize; i++)
-//	{
-//		if(comets[i].live)
-//		{
-//			if(comets[i].x - comets[i].boundx < ship.x + ship.boundx &&
-//				comets[i].x + comets[i].boundx > ship.x - ship.boundx &&
-//				comets[i].y - comets[i].boundy < ship.y + ship.boundy &&
-//				comets[i].y + comets[i].boundy > ship.y - ship.boundy)
-//			{
-//				ship.lives--;
-//				comets[i].live = false;
-//			}
-//			else if(comets[i].x < 0)
-//			{
-//				comets[i].live = false;
-//				ship.lives--;
-//			}
-//		}
-//	}
-//}
+void CollideComet(Comet comets[], int cSize, SpaceShip ship)
+{
+	for(int i = 0; i < cSize; i++)
+	{
+		if(comets[i].live)
+		{
+			if(comets[i].x - comets[i].boundx < ship.x + ship.boundx &&
+				comets[i].x + comets[i].boundx > ship.x - ship.boundx &&
+				comets[i].y - comets[i].boundy < ship.y + ship.boundy &&
+				comets[i].y + comets[i].boundy > ship.y - ship.boundy)
+			{
+				ship.lives--;
+				comets[i].live = false;
+			}
+			else if(comets[i].x < 0)
+			{
+				comets[i].live = false;
+				ship.lives--;
+			}
+		}
+	}
+}
 void InitBullet(Bullet bullet[], int size)
 {
 	for(int i = 0; i < size; i++)
@@ -929,14 +995,14 @@ void DrawBullet(Bullet bullet[], int size)
 			al_draw_filled_circle(bullet[i].x, bullet[i].y, 10, al_map_rgb(0, 0, 0));
 	}
 }
-void FireBullet(Bullet bullet[], int size)
+void FireBullet(Bullet bullet[], int size, SpaceShip ship)
 {
 	for( int i = 0; i < size; i++)
 	{
 		if(!bullet[i].live)
 		{
-			bullet[i].x = 700;
-			bullet[i].y = 500;
+			bullet[i].x = ship.x;
+			bullet[i].y = ship.y + 30;
 			bullet[i].live = true;
 			break;
 		}
@@ -1069,10 +1135,20 @@ bool inicializar()
         return false;
     }
 
+    timer = al_create_timer(1.0/35);
+    if (!timer)
+    {
+        fprintf(stderr, "Falha ao criar timer.\n");
+        al_destroy_event_queue(fila_eventos);
+        al_destroy_display(janela);
+        return false;
+    }
+
 //=======================================================================================================
 //      REGISTROS DE EVENTOS
     al_register_event_source(fila_eventos, al_get_mouse_event_source());
     al_register_event_source(fila_eventos, al_get_keyboard_event_source());
+    al_register_event_source(fila_eventos, al_get_timer_event_source(timer));
     al_register_event_source(fila_eventos, al_get_display_event_source(janela));
 
     return true;
