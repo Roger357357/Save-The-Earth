@@ -75,7 +75,6 @@ void InitComet(Comet comets[], int size);
 void DrawComet(Comet comets[], int size);
 void StartComet(Comet comets[], int size);
 void UpdateComet(Comet comets[], int size);
-//void CollideComet(Comet comets[], int cSize, SpaceShip ship);
 
 void InitBullet(Bullet bullet[], int size);
 void DrawBullet(Bullet bullet[], int size);
@@ -95,10 +94,9 @@ int main(void)
 //=======================================================================================================
 //      POSIÇÃO INICIAL DA NAVE NA TELA
 
-    int tecla = 0;
     int pos_x = 1202 / 2;
     int pos_y = 1200 / 2;
-    int pos_xbala = navea;
+    int pos_xbala = 0;
     int pos_ybala = 1200 / 2 - 30;
 
     if (!inicializar())
@@ -289,7 +287,7 @@ int main(void)
                     btcomecar_datela_escolha = false;
                     switch(evento.keyboard.keycode)
                     {
-                        case ALLEGRO_KEY_SPACE:
+                        case ALLEGRO_KEY_ENTER:
                             printf("O jogo esta pausado\n");
                             btcomecar_datela_escolha = true;
                             pausado = false;
@@ -797,6 +795,31 @@ int main(void)
 
                 if(nave2 == true)
                 {
+                    if(evento.type == ALLEGRO_EVENT_TIMER)
+                    {
+                        printf("Depois do Timer\n");
+                        redraw = true;
+                        if(teclas[UP])
+                            MoveShipUp(ship);
+                        if(teclas[DOWN])
+                            MoveShipDown(ship);
+                        if(teclas[LEFT])
+                            MoveShipLeft(ship);
+                        if(teclas[RIGHT])
+                            MoveShipRight(ship);
+
+                      UpdateBullet(bullets, NUM_BULLETS);
+                      StartComet(comets, NUM_COMETS);
+                      UpdateComet(comets, NUM_COMETS);
+                      CollideBullet(bullets, NUM_BULLETS, comets, NUM_COMETS);
+                      CollideComet(comets, NUM_COMETS, ship);
+                    }
+
+                    else if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                    {
+                         saire = true;
+                    }
+
                     if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
                     {
                         switch(evento.keyboard.keycode)
@@ -812,6 +835,9 @@ int main(void)
                             break;
                             case ALLEGRO_KEY_RIGHT:
                             teclas[RIGHT] = true;
+                            case ALLEGRO_KEY_SPACE:
+                            teclas[SPACE] = true;
+                            FireBullet(bullets, NUM_BULLETS, ship);
                             break;
                         }
                     }
@@ -862,7 +888,14 @@ int main(void)
                     {
                         apagar_coracao = true;
                     }
-
+                    if(redraw && al_is_event_queue_empty(fila_eventos))
+                    {
+                        redraw = false;
+                        printf("Desenhando nave\n");
+                        DrawShip(ship);
+                        DrawBullet(bullets, NUM_BULLETS);
+                        DrawComet(comets, NUM_COMETS);
+                    }
                 }
 
 //=======================================================================================================
@@ -870,6 +903,31 @@ int main(void)
 
                 if(nave3 == true)
                 {
+                    if(evento.type == ALLEGRO_EVENT_TIMER)
+                    {
+                        printf("Depois do Timer\n");
+                        redraw = true;
+                        if(teclas[UP])
+                            MoveShipUp(ship);
+                        if(teclas[DOWN])
+                            MoveShipDown(ship);
+                        if(teclas[LEFT])
+                            MoveShipLeft(ship);
+                        if(teclas[RIGHT])
+                            MoveShipRight(ship);
+
+                      UpdateBullet(bullets, NUM_BULLETS);
+                      StartComet(comets, NUM_COMETS);
+                      UpdateComet(comets, NUM_COMETS);
+                      CollideBullet(bullets, NUM_BULLETS, comets, NUM_COMETS);
+                      CollideComet(comets, NUM_COMETS, ship);
+                    }
+
+                    else if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                    {
+                         saire = true;
+                    }
+
                     if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
                     {
                         switch(evento.keyboard.keycode)
@@ -886,9 +944,12 @@ int main(void)
                             case ALLEGRO_KEY_RIGHT:
                             teclas[RIGHT] = true;
                             break;
+                            case ALLEGRO_KEY_SPACE:
+                            teclas[SPACE] = true;
+                            FireBullet(bullets, NUM_BULLETS, ship);
+                            break;
                         }
                     }
-
                     if (evento.type == ALLEGRO_EVENT_KEY_UP)
                     {
                         switch(evento.keyboard.keycode)
@@ -905,10 +966,13 @@ int main(void)
                             case ALLEGRO_KEY_RIGHT:
                             teclas[RIGHT] = false;
                             break;
+                            case ALLEGRO_KEY_SPACE:
+                            teclas[SPACE] = false;
+                            break;
                         }
                     }
 
-                    al_draw_bitmap(navec, pos_x, pos_y, 0);
+                    al_draw_bitmap(navea, pos_x, pos_y, 0);
                     pos_y -= teclas[UP] * 10;
                     pos_y += teclas[DOWN] * 10;
                     pos_x -= teclas[LEFT] * 10;
@@ -922,7 +986,7 @@ int main(void)
                     {
                         teclas[LEFT] = false;
                     }
-                    if(pos_y>=626)
+                    if(pos_y>=630)
                     {
                         teclas[DOWN] = false;
                     }
@@ -935,15 +999,17 @@ int main(void)
                     {
                         apagar_coracao = true;
                     }
+
+                    if(redraw && al_is_event_queue_empty(fila_eventos))
+                    {
+                        redraw = false;
+                        printf("Desenhando nave\n");
+                        DrawShip(ship);
+                        DrawBullet(bullets, NUM_BULLETS);
+                        DrawComet(comets, NUM_COMETS);
+                    }
+
                 }
-
-                jogando = true;
-
-                if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-                {
-                    saire = true; // BOTÃO "X" DA TELA
-                }
-
             }
 
         }
@@ -1105,7 +1171,9 @@ void DrawBullet(Bullet bullet[], int size)
     for(i = 0; i < size; i++)
     {
         if(bullet[i].live)
-            al_draw_filled_circle(bullet[i].x, bullet[i].y, 10, al_map_rgb(0, 0, 0));
+        {
+            al_draw_filled_circle(bullet[i].x, bullet[i].y, 5, al_map_rgb(0, 255, 0));
+        }
     }
 }
 void FireBullet(Bullet bullet[], int size, SpaceShip ship)
@@ -1255,7 +1323,6 @@ bool inicializar()
         al_destroy_display(janela);
         return false;
     }
-
 
 //=======================================================================================================
 //      REGISTROS DE EVENTOS
