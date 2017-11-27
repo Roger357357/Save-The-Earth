@@ -5,6 +5,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "Estruturas.h"
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // VARIÁVEIS GLOBAIS
@@ -12,7 +13,7 @@
 
 const int LARGURA_TELA = 1280;
 const int ALTURA_TELA = 720;
-const int NUM_BULLETS = 5;
+const int NUM_BULLETS = 80;
 const int NUM_COMETS = 70;
 int i, j;
 
@@ -38,38 +39,6 @@ ALLEGRO_TIMER *timer = NULL;
 
 
 enum teclas{UP, DOWN, LEFT, RIGHT, SPACE};
-enum IDS{PLAYER, BULLET, ENEMY};
-
-typedef struct SpaceShip
-{
-    int ID;
-    int x;
-    int y;
-    int lives;
-    int speed;
-    int boundx;
-    int boundy;
-    int score;
-}SpaceShip;
-
-typedef struct Comet
-{
-    int ID;
-    int x;
-    int y;
-    bool live;
-    int speed;
-    int boundx;
-    int boundy;
-}Comet;
-typedef struct Bullet
-{
-    int ID;
-    int x;
-    int y;
-    bool live;
-    int speed;
-}Bullet;
 
 bool tela_ajustes = false;
 bool melodia = false;
@@ -202,11 +171,6 @@ int main(void)
             {
                 saire = true; //BOTÃO "X" DA TELA
             }
-
-            /*if (evento.type == ALLEGRO_EVENT_MOUSE_AXES)
-            {
-                printf("[%d, %d]\n", evento.mouse.x, evento.mouse.y);
-            }*/
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
                 // RESET DE VARIÁVEIS DE CONTROLE
@@ -399,11 +363,9 @@ int main(void)
                 tela_da_capa = false;
                 tela_de_escolha = false;
                 saire = false;
-<<<<<<< HEAD
+
                 printf("tela_ajustes = true\n");
                 btvoltar_datela_ajustes = true;
-=======
->>>>>>> 8aad1e3beeafc6e87f170d1b8ad90ca3c728b3c4
 
                 al_draw_bitmap(ajustes, 0, 0, 0);
 
@@ -726,6 +688,7 @@ int main(void)
                     if(evento.type == ALLEGRO_EVENT_TIMER)
                     {
                         printf("Depois do Timer\n");
+                        redraw = true;
                         if(teclas[UP])
                             MoveShipUp(ship);
                         if(teclas[DOWN])
@@ -734,8 +697,6 @@ int main(void)
                             MoveShipLeft(ship);
                         if(teclas[RIGHT])
                             MoveShipRight(ship);
-
-                      redraw = true;
 
                       UpdateBullet(bullets, NUM_BULLETS);
                       StartComet(comets, NUM_COMETS);
@@ -1153,8 +1114,8 @@ void FireBullet(Bullet bullet[], int size, SpaceShip ship)
     {
         if(!bullet[i].live)
         {
-            bullet[i].x = ship.x;
-            bullet[i].y = ship.y + 30;
+            bullet[i].x = 500;
+            bullet[i].y = 500;
             bullet[i].live = true;
             break;
         }
