@@ -36,6 +36,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Estruturas.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="teste.c">
 			<Option compilerVar="CC" />
 		</Unit>
