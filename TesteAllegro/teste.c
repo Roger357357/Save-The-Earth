@@ -753,10 +753,10 @@ int main(void)
                     }
 
                     al_draw_bitmap(navea, pos_x, pos_y, 0);
-                    pos_y -= teclas[UP] * 10;
-                    pos_y += teclas[DOWN] * 10;
-                    pos_x -= teclas[LEFT] * 10;
-                    pos_x += teclas[RIGHT] * 10;
+                    pos_y -= teclas[UP] * 7;
+                    pos_y += teclas[DOWN] * 7;
+                    pos_x -= teclas[LEFT] * 7;
+                    pos_x += teclas[RIGHT] * 7;
 
                     if(pos_x>=830)
                     {
@@ -854,10 +854,10 @@ int main(void)
                     }
 
                     al_draw_bitmap(naveb, pos_x, pos_y, 0);
-                    pos_y -= teclas[UP] * 10;
-                    pos_y += teclas[DOWN] * 10;
-                    pos_x -= teclas[LEFT] * 10;
-                    pos_x += teclas[RIGHT] * 10;
+                    pos_y -= teclas[UP] * 7;
+                    pos_y += teclas[DOWN] * 7;
+                    pos_x -= teclas[LEFT] * 7;
+                    pos_x += teclas[RIGHT] * 7;
 
                     if(pos_x>=830)
                     {
@@ -895,7 +895,7 @@ int main(void)
 
                 if(nave3 == true)
                 {
-                                        if(evento.type == ALLEGRO_EVENT_TIMER)
+                    if(evento.type == ALLEGRO_EVENT_TIMER)
                     {
                       redraw = true;
 
@@ -956,10 +956,10 @@ int main(void)
                     }
 
                     al_draw_bitmap(navec, pos_x, pos_y, 0);
-                    pos_y -= teclas[UP] * 10;
-                    pos_y += teclas[DOWN] * 10;
-                    pos_x -= teclas[LEFT] * 10;
-                    pos_x += teclas[RIGHT] * 10;
+                    pos_y -= teclas[UP] * 7;
+                    pos_y += teclas[DOWN] * 7;
+                    pos_x -= teclas[LEFT] * 7;
+                    pos_x += teclas[RIGHT] * 7;
 
                     if(pos_x>=830)
                     {
