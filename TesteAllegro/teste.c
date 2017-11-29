@@ -3,6 +3,9 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -15,6 +18,7 @@ const int ALTURA_TELA = 720;
 const int NUM_Balas = 10000;
 const int NUM_Inimigo = 60;
 int i, j;
+int pontos = 0;
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_SAMPLE *musica_capa = NULL;
@@ -34,6 +38,7 @@ ALLEGRO_BITMAP *coracao = NULL;
 ALLEGRO_BITMAP *gameover = NULL;
 ALLEGRO_BITMAP *tampa_coracao = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
+ALLEGRO_FONT *fonte = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
 
@@ -146,6 +151,7 @@ int main(void)
     coracao = al_load_bitmap("vida.png");
     tampa_coracao = al_load_bitmap("tampa.png");
     gameover = al_load_bitmap("tela_gameover.png");
+    fonte = al_load_font("arial.ttf", 48, 0);
 
     srand(time(NULL));
 
@@ -156,7 +162,7 @@ int main(void)
     IniciaBala(balas, NUM_Balas);
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
-        // VERIFICAÇÃO DO CARREGAMENTO DO BACKGROUND (FUNDO)
+        // VERIFICAÇÃO DO CARREGAMENTO
 // ########################################################################################################################################
 
     if (!fundo)
@@ -165,6 +171,12 @@ int main(void)
         al_destroy_event_queue(fila_eventos);
         al_destroy_display(janela);
         al_destroy_sample(sample);
+        return false;
+    }
+
+    if (!fonte){
+        fprintf(stderr,"Falha ao carregar fonte\n");
+        al_destroy_display(janela);
         return false;
     }
 // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -268,6 +280,7 @@ int main(void)
                             nave1 = false;
                             nave2 = false;
                             nave3 = false;
+                            pontos = 0;
                         }
                     }
                 }
@@ -609,6 +622,7 @@ int main(void)
                 al_draw_bitmap(coracao, 50, 0, 0);
                 al_draw_bitmap(coracao, 120, 0, 0);
                 al_draw_bitmap(coracao, 190, 0, 0);
+                al_draw_textf(fonte, al_map_rgb(255, 255, 255), 1100, 93, ALLEGRO_ALIGN_CENTRE, "%d", pontos);
 
 //=======================================================================================================
 //      BOTÃO DE SAIR DO NIVEL DO JOGO PARA A CAPA
@@ -1022,6 +1036,7 @@ int main(void)
     al_destroy_sample(musica_capa);
     al_destroy_event_queue(fila_eventos);
     al_destroy_display(janela);
+    al_destroy_font(fonte);
     al_destroy_timer(timer);
 
     return 0;
@@ -1163,6 +1178,7 @@ void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize)
                     {
                         balas[i].live = false;
                         inimigo[j].live = false;
+                        pontos++;
                     }
                 }
             }
@@ -1193,6 +1209,16 @@ bool inicializar()
     if (!al_init_acodec_addon())
     {
         fprintf(stderr, "Falha ao inicializar codecs de áudio.\n");
+        return false;
+    }
+
+    if (!al_init_font_addon())
+    {
+        fprintf(stderr,"Falha ao inicializar fontes addon.\n");
+        return false;
+    }
+    if (!al_init_ttf_addon()){
+        fprintf(stderr,"Falha ao inicializar add-on allegro_ttf");
         return false;
     }
 
@@ -1260,7 +1286,14 @@ bool inicializar()
         al_destroy_sample(sample);
         return false;
     }
+
+    void error_msg(char *text)
+    {
+    al_show_native_message_box(NULL,"ERRO", "Ocorreu o seguinte erro e o programa sera finalizado:", text,NULL,ALLEGRO_MESSAGEBOX_ERROR);
+    }
+
     timer = al_create_timer(1.0/35);
+
     if (!timer)
     {
         fprintf(stderr, "Falha ao criar timer.\n");

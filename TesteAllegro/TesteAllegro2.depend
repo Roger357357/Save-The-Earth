@@ -2110,12 +2110,15 @@
 
 1508990617 source:c:\users\rogerfelipe\documents\github\save-the-earth\testeallegro\teste.c
 
-1511842008 source:c:\users\matheus\documents\github\save-the-earth\testeallegro\teste.c
+1511960687 source:c:\users\matheus\documents\github\save-the-earth\testeallegro\teste.c
 	<allegro5/allegro.h>
 	<allegro5/allegro_audio.h>
 	<allegro5/allegro_acodec.h>
 	<allegro5/allegro_image.h>
 	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_native_dialog.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
 	<stdbool.h>
 	<stdio.h>
 
@@ -3917,4 +3920,14 @@
 	<allegro5/allegro.h>
 
 1511734404 c:\users\rogerfelipe\desktop\save-the-earth-master\save-the-earth\save-the-earth\testeallegro\estruturas.h
+
+1511746817 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\allegro_native_dialog.h
+	"allegro5/allegro.h"
+
+1511746817 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\allegro_font.h
+	"allegro5/allegro.h"
+
+1511746817 c:\users\matheus\documents\github\save-the-earth\allegro5\include\allegro5\allegro_ttf.h
+	"allegro5/allegro.h"
+	"allegro5/allegro_font.h"
 
