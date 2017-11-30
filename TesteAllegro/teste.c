@@ -8,6 +8,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "Estruturas.h"
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // VARIÁVEIS GLOBAIS
@@ -16,7 +17,10 @@
 const int LARGURA_TELA = 1280;
 const int ALTURA_TELA = 720;
 const int NUM_Balas = 10000;
-const int NUM_Inimigo = 60;
+const int NUM_Inimigo = 50;
+const int NUM_objetos = 10;
+int pos_x = 1202 / 2;
+int pos_y = 1200 / 2;
 int i, j;
 int pontos = 0;
 
@@ -43,26 +47,7 @@ ALLEGRO_TIMER *timer = NULL;
 
 
 enum teclas{UP, DOWN, LEFT, RIGHT, SPACE};
-enum IDS{Tiro, Adversario};
 
-typedef struct Inimigo
-{
-    int ID;
-    int x;
-    int y;
-    bool live;
-    int speed;
-    int boundx;
-    int boundy;
-}Inimigo;
-typedef struct Bala
-{
-    int ID;
-    int x;
-    int y;
-    bool live;
-    int speed;
-}Bala;
 
 bool tela_ajustes = false;
 bool melodia = false;
@@ -94,11 +79,16 @@ void ComecaInimigo(Inimigo inimigo[], int size);
 void CarregarInimigo(Inimigo inimigo[], int size);
 //void CollideComet(Comet comets[], int cSize, SpaceShip ship);
 
+void IniciaObjeto(Objeto objetos[], int size);
+void DesenhaObjeto(Objeto objetos[], int size);
+void ComecaObjeto(Objeto objetos[], int size);
+void CarregarObjeto(Objeto objetos[], int size);
+
 void IniciaBala(Bala balas[], int size);
 void DesenharBala(Bala balas[], int size);
 void AtirarBala(Bala balas[], int size);
 void CarregarBala(Bala balas[], int size);
-void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize);
+void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize, Objeto objetos[], int dSize);
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -106,8 +96,7 @@ void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize);
 
 bool inicializar();
 
-    int pos_x = 1202 / 2;
-    int pos_y = 1200 / 2;
+
 int main(void)
 {
 
@@ -119,6 +108,7 @@ int main(void)
     int pos_ybala = 1200 / 2 - 30;
     int tempx = pos_x;
     int tempy = pos_y;
+
     if (!inicializar())
     {
         fprintf(stderr, "Falha ao inicializar Allegro.\n");
@@ -153,12 +143,15 @@ int main(void)
     gameover = al_load_bitmap("tela_gameover.png");
     fonte = al_load_font("arial.ttf", 48, 0);
 
+
     srand(time(NULL));
 
     Inimigo inimigo[NUM_Inimigo];
+    Objeto objetos[NUM_objetos];
     Bala balas[NUM_Balas];
 
     IniciaInimigo(inimigo, NUM_Inimigo);
+    IniciaObjeto(objetos, NUM_objetos);
     IniciaBala(balas, NUM_Balas);
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -713,7 +706,9 @@ int main(void)
                       CarregarBala(balas, NUM_Balas);
                       ComecaInimigo(inimigo, NUM_Inimigo);
                       CarregarInimigo(inimigo, NUM_Inimigo);
-                      ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo);
+                      ComecaObjeto(objetos, NUM_objetos);
+                      CarregarObjeto(objetos, NUM_objetos);
+                      ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo, objetos, NUM_objetos);
 //                      CollideComet(inimigo, NUM_Inimigo, ship);
                     }
 
@@ -799,6 +794,7 @@ int main(void)
                         redraw = false;
                         DesenharBala(balas, NUM_Balas);
                         DesenhaInimigo(inimigo, NUM_Inimigo);
+                        DesenhaObjeto(objetos, NUM_objetos);
                     }
                 }
 
@@ -814,7 +810,7 @@ int main(void)
                       CarregarBala(balas, NUM_Balas);
                       ComecaInimigo(inimigo, NUM_Inimigo);
                       CarregarInimigo(inimigo, NUM_Inimigo);
-                      ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo);
+                      //ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo);
 //                      CollideComet(inimigo, NUM_Inimigo, ship);
                     }
 
@@ -916,7 +912,7 @@ int main(void)
                       CarregarBala(balas, NUM_Balas);
                       ComecaInimigo(inimigo, NUM_Inimigo);
                       CarregarInimigo(inimigo, NUM_Inimigo);
-                      ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo);
+                      //ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo);
 //                      CollideComet(inimigo, NUM_Inimigo, ship);
                     }
 
@@ -1041,22 +1037,95 @@ int main(void)
 
     return 0;
 }
+void IniciaObjeto(Objeto objetos[], int size)
+{
+    for( i = 0; i < size; i++)
+    {
+        objetos[i].ID = Coisa;
+        objetos[i].vida = false;
+        objetos[i].velocidade = 2;
+        objetos[i].limite_x = 18;
+        objetos[i].limite_y = 18;
+    }
+}
+void DesenhaObjeto(Objeto objetos[], int size)
+{
+    for(i = 0; i < size; i++)
+    {
+        if(objetos[i].vida)
+        {
+            al_draw_filled_circle(objetos[i].x, objetos[i].y, 13, al_map_rgb(37, 255, 90));
+        }
+    }
+}
+void ComecaObjeto(Objeto objetos[], int size)
+{
+    for( i = 0; i < size; i++)
+    {
+        if(!objetos[i].vida)
+        {
+            if(rand() % 1000 == 0)
+            {
+                objetos[i].vida = true;
+                objetos[i].x = 400 + rand() % (LARGURA_TELA - 800);
+                objetos[i].y = 0;
+
+                break;
+            }
+        }
+    }
+}
+void CarregarObjeto(Objeto objetos[], int size)
+{
+    for( i = 0; i < size; i++)
+    {
+        if(objetos[i].vida)
+        {
+            objetos[i].y += objetos[i].velocidade;
+
+            if(objetos[i].x < 0)
+                objetos[i].vida = false;
+        }
+    }
+}
+//void CollideComet(Inimigo inimigo[], int cSize)
+//{
+//    for(i = 0; i < cSize; i++)
+//    {
+//        if(comets[i].vida)
+//        {
+//            if(comets[i].x - inimigo[i].limite_x < pos_x + ship.limite_x &&
+//                comets[i].x + inimigo[i].limite_x > pos_x - ship.limite_x &&
+//                comets[i].y - inimigo[i].limite_y < pos_y + ship.limite_y &&
+//                comets[i].y + inimigo[i].limite_y > pos_y - ship.limite_y)
+//            {
+//                apagar_coracao = true;
+//                comets[i].vida = false;
+//            }
+//            else if(comets[i].x < 0)
+//            {
+//                comets[i].vida = false;
+//                ship.vidas--;
+//            }
+//        }
+//    }
+//}
 void IniciaInimigo(Inimigo inimigo[], int size)
 {
     for( i = 0; i < size; i++)
     {
         inimigo[i].ID = Adversario;
-        inimigo[i].live = false;
-        inimigo[i].speed = 4;
-        inimigo[i].boundx = 18;
-        inimigo[i].boundy = 18;
+        inimigo[i].vida = false;
+        inimigo[i].velocidade = 4;
+        inimigo[i].limite_x = 18;
+        inimigo[i].limite_y = 18;
     }
 }
 void DesenhaInimigo(Inimigo inimigo[], int size)
 {
     for(i = 0; i < size; i++)
     {
-        if(inimigo[i].live)
+        if(inimigo[i].vida)
         {
             al_draw_filled_rectangle(inimigo[i].x - 9, inimigo[i].y, inimigo[i].x - 7, inimigo[i].y + 10, al_map_rgb(255, 0, 0));
             al_draw_filled_rectangle(inimigo[i].x +9 , inimigo[i].y, inimigo[i].x + 7, inimigo[i].y + 10, al_map_rgb(255, 0, 0));
@@ -1070,11 +1139,11 @@ void ComecaInimigo(Inimigo inimigo[], int size)
 {
     for( i = 0; i < size; i++)
     {
-        if(!inimigo[i].live)
+        if(!inimigo[i].vida)
         {
             if(rand() % 1000 == 0)
             {
-                inimigo[i].live = true;
+                inimigo[i].vida = true;
                 inimigo[i].x = 400 + rand() % (LARGURA_TELA - 800);
                 inimigo[i].y = 0;
 
@@ -1087,51 +1156,29 @@ void CarregarInimigo(Inimigo inimigo[], int size)
 {
     for( i = 0; i < size; i++)
     {
-        if(inimigo[i].live)
+        if(inimigo[i].vida)
         {
-            inimigo[i].y += inimigo[i].speed;
+            inimigo[i].y += inimigo[i].velocidade;
 
             if(inimigo[i].x < 0)
-                inimigo[i].live = false;
+                inimigo[i].vida = false;
         }
     }
 }
-//void CollideComet(Inimigo inimigo[], int cSize)
-//{
-//    for(i = 0; i < cSize; i++)
-//    {
-//        if(comets[i].live)
-//        {
-//            if(comets[i].x - inimigo[i].boundx < pos_x + ship.boundx &&
-//                comets[i].x + inimigo[i].boundx > pos_x - ship.boundx &&
-//                comets[i].y - inimigo[i].boundy < pos_y + ship.boundy &&
-//                comets[i].y + inimigo[i].boundy > pos_y - ship.boundy)
-//            {
-//                apagar_coracao = true;
-//                comets[i].live = false;
-//            }
-//            else if(comets[i].x < 0)
-//            {
-//                comets[i].live = false;
-//                ship.lives--;
-//            }
-//        }
-//    }
-//}
 void IniciaBala(Bala balas[], int size)
 {
     for(i = 0; i < size; i++)
     {
         balas[i].ID = Tiro;
-        balas[i].speed = 10;
-        balas[i].live = false;
+        balas[i].velocidade = 10;
+        balas[i].vida = false;
     }
 }
 void DesenharBala(Bala balas[], int size)
 {
     for(i = 0; i < size; i++)
     {
-        if(balas[i].live)
+        if(balas[i].vida)
             al_draw_filled_circle(balas[i].x, balas[i].y, 7, al_map_rgb(0, 0, 0));
     }
 }
@@ -1139,12 +1186,12 @@ void AtirarBala(Bala balas[], int size)
 {
     for(i = 0; i < size; i++)
     {
-        if(!balas[i].live)
+        if(!balas[i].vida)
         {
             printf("%d\n",balas[i].x);
             balas[i].x = pos_x + 40;
             balas[i].y = pos_y;
-            balas[i].live = true;
+            balas[i].vida = true;
             break;
         }
     }
@@ -1153,32 +1200,47 @@ void CarregarBala(Bala balas[], int size)
 {
     for(i = 0; i < size; i++)
     {
-        if(balas[i].live)
+        if(balas[i].vida)
         {
-            balas[i].y -= balas[i].speed;
+            balas[i].y -= balas[i].velocidade;
             if(balas[i].y > ALTURA_TELA)
-                balas[i].live = false;
+                balas[i].vida = false;
         }
     }
 }
-void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize)
+void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize, Objeto objetos[], int dSize)
 {
     for(i = 0; i < bSize; i++)
     {
-        if(balas[i].live)
+        if(balas[i].vida)
         {
             for(j =0; j < cSize; j++)
             {
-                if(inimigo[j].live)
+                if(inimigo[j].vida)
                 {
-                    if(balas[i].x > (inimigo[j].x - inimigo[j].boundx) &&
-                        balas[i].x < (inimigo[j].x + inimigo[j].boundx) &&
-                        balas[i].y > (inimigo[j].y - inimigo[j].boundy) &&
-                        balas[i].y < (inimigo[j].y + inimigo[j].boundy))
+                    if(balas[i].x > (inimigo[j].x - inimigo[j].limite_x) &&
+                        balas[i].x < (inimigo[j].x + inimigo[j].limite_x) &&
+                        balas[i].y > (inimigo[j].y - inimigo[j].limite_y) &&
+                        balas[i].y < (inimigo[j].y + inimigo[j].limite_y))
                     {
-                        balas[i].live = false;
-                        inimigo[j].live = false;
+                        balas[i].vida = false;
+                        inimigo[j].vida = false;
                         pontos++;
+                    }
+                }
+            }
+            for(j =0; j < dSize; j++)
+            {
+                if(objetos[j].vida)
+                {
+                    if(balas[i].x > (objetos[j].x - objetos[j].limite_x) &&
+                        balas[i].x < (objetos[j].x + objetos[j].limite_x) &&
+                        balas[i].y > (objetos[j].y - objetos[j].limite_y) &&
+                        balas[i].y < (objetos[j].y + objetos[j].limite_y))
+                    {
+                        balas[i].vida = false;
+                        objetos[j].vida = false;
+                        pontos+=10;
                     }
                 }
             }
