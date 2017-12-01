@@ -43,6 +43,7 @@ ALLEGRO_BITMAP *gameover = NULL;
 ALLEGRO_BITMAP *tampa_coracao = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
 ALLEGRO_FONT *fonte = NULL;
+ALLEGRO_FONT *cifrao = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
 
@@ -77,7 +78,7 @@ void IniciaInimigo(Inimigo inimigo[], int size);
 void DesenhaInimigo(Inimigo inimigo[], int size);
 void ComecaInimigo(Inimigo inimigo[], int size);
 void CarregarInimigo(Inimigo inimigo[], int size);
-//void CollideComet(Comet comets[], int cSize, SpaceShip ship);
+//void CollideComet(Comet inimigo[], int cSize, SpaceShip ship);
 
 void IniciaObjeto(Objeto objetos[], int size);
 void DesenhaObjeto(Objeto objetos[], int size);
@@ -142,6 +143,8 @@ int main(void)
     tampa_coracao = al_load_bitmap("tampa.png");
     gameover = al_load_bitmap("tela_gameover.png");
     fonte = al_load_font("arial.ttf", 48, 0);
+    cifrao= al_load_font("arial.ttf", 2, 0);
+
 
 
     srand(time(NULL));
@@ -656,21 +659,22 @@ int main(void)
 
 //=======================================================================================================
 //      FUNÇÃO TAMPAR CORAÇÃO "VIDA"
+
 //                if(apagar_coracao == true)
 //                {
-//                    if((pos_y == 0 || pos_y == 630 || pos_x == 371 || pos_x == 830) && (tampar1 == false))
+//                    if(() && (tampar1 == false))
 //                    {
 //                        tampar1 = true;
 //                        pos_x = 1202 / 2;
 //                        pos_y = 1200 / 2;
 //                    }
-//                    else if((pos_y == 0 || pos_y == 630 || pos_x == 371 || pos_x == 830) && (tampar1 == true) && (tampar2 == false))
+//                    else if(() && (tampar1 == true) && (tampar2 == false))
 //                    {
 //                        tampar2 = true;
 //                        pos_x = 1202 / 2;
 //                        pos_y = 1200 / 2;
 //                    }
-//                    else if((pos_y == 0 || pos_y == 630 || pos_x == 371 || pos_x == 830) && (tampar1 == true) && (tampar2 == true) && (tampar3 == false))
+//                    else if(() && (tampar1 == true) && (tampar2 == true) && (tampar3 == false))
 //                    {
 //                        tampar3 = true;
 //                        pos_x = 1202 / 2;
@@ -678,21 +682,57 @@ int main(void)
 //                    }
 //
 //                }
+//
+//                if(tampar1 == true)
+//                {
+//                    al_draw_bitmap(tampa_coracao, 210, 10, 0);
+//                }
+//
+//                if(tampar2 == true)
+//                {
+//                    al_draw_bitmap(tampa_coracao, 140, 10, 0);
+//                }
+//
+//                if(tampar3 == true)
+//                {
+//                    al_draw_bitmap(tampa_coracao, 70, 10, 0);
+//                }
 
-                if(tampar1 == true)
-                {
-                    al_draw_bitmap(tampa_coracao, 210, 10, 0);
-                }
+//                if(apagar_coracao == true)
+//                {
+//                    if(tampar1 == false)
+//                    {
+//                        tampar1 = true;
+//                        apagar_coracao = false;
+//                    }
+//                    else if((tampar1 == true) && (tampar2 == false))
+//                    {
+//                        tampar2 = true;
+//                        apagar_coracao = false;
+//                    }
+//                    else if((tampar1 == true) && (tampar2 == true) && (tampar3 == false))
+//                    {
+//                        tampar3 = true;
+//                        apagar_coracao = false;
+//                    }
+//
+//                }
+//
+//                if(tampar1 == true)
+//                {
+//                    al_draw_bitmap(tampa_coracao, 210, 10, 0);
+//                }
+//
+//                if(tampar2 == true)
+//                {
+//                    al_draw_bitmap(tampa_coracao, 140, 10, 0);
+//                }
+//
+//                if(tampar3 == true)
+//                {
+//                    al_draw_bitmap(tampa_coracao, 70, 10, 0);
+//                }
 
-                if(tampar2 == true)
-                {
-                    al_draw_bitmap(tampa_coracao, 140, 10, 0);
-                }
-
-                if(tampar3 == true)
-                {
-                    al_draw_bitmap(tampa_coracao, 70, 10, 0);
-                }
 
 //=======================================================================================================
 //      JOGANDO COM A NAVE 1
@@ -709,7 +749,7 @@ int main(void)
                       ComecaObjeto(objetos, NUM_objetos);
                       CarregarObjeto(objetos, NUM_objetos);
                       ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo, objetos, NUM_objetos);
-//                      CollideComet(inimigo, NUM_Inimigo, ship);
+                      CollideComet(inimigo, NUM_Inimigo);
                     }
 
                     else if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -1054,8 +1094,10 @@ void DesenhaObjeto(Objeto objetos[], int size)
     {
         if(objetos[i].vida)
         {
-            al_draw_filled_circle(objetos[i].x, objetos[i].y, 13, al_map_rgb(37, 255, 90));
-        }
+
+            al_draw_filled_rectangle(objetos[i].x, objetos[i].y, objetos[i].x + 23, objetos[i].y + 15, al_map_rgb(0, 255, 0));
+            al_draw_filled_circle(objetos[i].x + 11, objetos[i].y + 7, 4, al_map_rgb(0, 160, 0));
+;        }
     }
 }
 void ComecaObjeto(Objeto objetos[], int size)
@@ -1088,28 +1130,30 @@ void CarregarObjeto(Objeto objetos[], int size)
         }
     }
 }
-//void CollideComet(Inimigo inimigo[], int cSize)
-//{
-//    for(i = 0; i < cSize; i++)
-//    {
-//        if(comets[i].vida)
-//        {
-//            if(comets[i].x - inimigo[i].limite_x < pos_x + ship.limite_x &&
-//                comets[i].x + inimigo[i].limite_x > pos_x - ship.limite_x &&
-//                comets[i].y - inimigo[i].limite_y < pos_y + ship.limite_y &&
-//                comets[i].y + inimigo[i].limite_y > pos_y - ship.limite_y)
-//            {
-//                apagar_coracao = true;
-//                comets[i].vida = false;
-//            }
-//            else if(comets[i].x < 0)
-//            {
-//                comets[i].vida = false;
-//                ship.vidas--;
-//            }
-//        }
-//    }
-//}
+void CollideComet(Inimigo inimigo[], int cSize)
+{
+	for(i = 0; i < cSize; i++)
+	{
+		if(inimigo[i].vida)
+		{
+			if(inimigo[i].x - inimigo[i].limite_x < pos_x + 80 &&
+				inimigo[i].x + inimigo[i].limite_x > pos_x &&
+				inimigo[i].y - inimigo[i].limite_y < pos_y + 180 &&
+				inimigo[i].y + inimigo[i].limite_y > pos_y)
+			{
+				inimigo[i].vida = false;
+				apagar_coracao = true;
+			}
+
+			/*else if(inimigo[i].y > 719)
+			{
+				inimigo[i].vida = false;
+				apagar_coracao = true;
+			}*/
+
+		}
+	}
+}
 void IniciaInimigo(Inimigo inimigo[], int size)
 {
     for( i = 0; i < size; i++)
