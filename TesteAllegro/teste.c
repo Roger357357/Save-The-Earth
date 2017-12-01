@@ -349,6 +349,7 @@ int main(void)
                         tela_de_escolha = false;
                         tela_da_capa = false;
                         btvoltar_datela_escolha = false;
+                        btvoltar_datela_ajustes = true;
                     }
                 }
 //=======================================================================================================
@@ -390,8 +391,6 @@ int main(void)
                 saire = false;
                 btvoltar_datela_ajustes = true;
 
-                btvoltar_datela_ajustes = true;
-
 
                 al_draw_bitmap(ajustes, 0, 0, 0);
 
@@ -402,17 +401,17 @@ int main(void)
 //=======================================================================================================
 //      BOTÃO DE VOLTAR PARA A TELA DA CAPA
 
-                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-                {
-                    if (evento.mouse.x >= 73 &&
-                        evento.mouse.x <= 290 &&
-                        evento.mouse.y >= 526 &&
-                        evento.mouse.y <= 679)
-                    {
-                        //btvoltar_datela_ajustes = true;
-                        tela_ajustes = false;
-                    }
-                }
+//                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+//                {
+//                    if (evento.mouse.x >= 73 &&
+//                        evento.mouse.x <= 290 &&
+//                        evento.mouse.y >= 526 &&
+//                        evento.mouse.y <= 679)
+//                    {
+//                        //btvoltar_datela_ajustes = true;
+//                        tela_ajustes = false;
+//                    }
+//                }
 //=======================================================================================================
 //      BOTÃO DE MELODIA (LIGAR E DESLIGAR)
 
@@ -486,6 +485,7 @@ int main(void)
                 tela_da_capa = false;
                 tela_ajustes = false;
                 saire = false;
+                btvoltar_datela_ajustes = false;
 
                 al_draw_bitmap(escolha, 0, 0, 0);
 
@@ -503,7 +503,8 @@ int main(void)
                         evento.mouse.y >= 510 &&
                         evento.mouse.y <= 650)
                     {
-                        btvoltar_datela_escolha = true;
+                        //btvoltar_datela_escolha = true;
+                        tela_da_capa = true;
                         tela_de_escolha = false;
                         nave1 = false;
                         nave2 = false;
@@ -734,7 +735,7 @@ int main(void)
                     nave2 = false;
                     nave3 = false;
                     pausado = false;
-                        
+
                     if(nave1 == true)
                     {
                         switch(evento.keyboard.keycode)
@@ -798,7 +799,7 @@ int main(void)
                             break;
                         }
                     }*/
-                
+
 
 
 //=======================================================================================================
@@ -1017,27 +1018,27 @@ void CarregarInimigo(Inimigo inimigo[], int size)
         }
     }
 }
-/*void ColisaoInimigo(Inimigo inimigo[], int cSize)
-{
-    for(i = 0; i < cSize; i++)
-    {
-        if(inimigo[i].vida)
-        {
-           if(inimigo[i].x - inimigo[i].limite_x < pos_x + ship.limite_x &&
-              inimigo[i].x + inimigo[i].limite_x > pos_x - ship.limite_x &&
-              inimigo[i].y - inimigo[i].limite_y < pos_y + ship.limite_y &&
-              inimigo[i].y + inimigo[i].limite_y > pos_y - ship.limite_y)
-            {
-                apagar_coracao = true;
-                inimigo[i].vida = false;
-            }
-            else if(inimigo[i].x < 0)
-            {
-                inimigo[i].vida = false;
-            }
-        }
-    }
-}*/
+//void ColisaoInimigo(Inimigo inimigo[], int cSize)
+//{
+//    for(i = 0; i < cSize; i++)
+//    {
+//        if(inimigo[i].vida)
+//        {
+//           if(inimigo[i].x - inimigo[i].limite_x < pos_x + Inimigo.limite_x &&
+//              inimigo[i].x + inimigo[i].limite_x > pos_x - Inimigo.limite_x &&
+//              inimigo[i].y - inimigo[i].limite_y < pos_y + Inimigo.limite_y &&
+//              inimigo[i].y + inimigo[i].limite_y > pos_y - Inimigo.limite_y)
+//            {
+//                apagar_coracao = true;
+//                inimigo[i].vida = false;
+//            }
+//            else if(inimigo[i].x < 0)
+//            {
+//                inimigo[i].vida = false;
+//            }
+//        }
+//    }
+//}
 
 void IniciaBala(Bala balas[], int size)
 {
