@@ -1144,6 +1144,47 @@ void CollideComet(Inimigo inimigo[], int cSize)
 				inimigo[i].vida = false;
 				apagar_coracao = true;
 			}
+			 if(apagar_coracao == true)
+                {
+                    if((tampar1 == false) && (inimigo[i].x - inimigo[i].limite_x < pos_x + 80 &&
+				inimigo[i].x + inimigo[i].limite_x > pos_x &&
+				inimigo[i].y - inimigo[i].limite_y < pos_y + 180 &&
+				inimigo[i].y + inimigo[i].limite_y > pos_y))
+                    {
+                        tampar1 = true;
+                    }
+                    else if((tampar1 == true) && (tampar2 == false) && (inimigo[i].x - inimigo[i].limite_x < pos_x + 80 &&
+				inimigo[i].x + inimigo[i].limite_x > pos_x &&
+				inimigo[i].y - inimigo[i].limite_y < pos_y + 180 &&
+				inimigo[i].y + inimigo[i].limite_y > pos_y))
+                    {
+                        tampar2 = true;
+                    }
+                    else if((tampar1 == true) && (tampar2 == true) && (tampar3 == false) && (inimigo[i].x - inimigo[i].limite_x < pos_x + 80 &&
+				inimigo[i].x + inimigo[i].limite_x > pos_x &&
+				inimigo[i].y - inimigo[i].limite_y < pos_y + 180 &&
+				inimigo[i].y + inimigo[i].limite_y > pos_y))
+                    {
+                        tampar3 = true;
+                    }
+
+                }
+
+                if(tampar1 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 210, 10, 0);
+                }
+
+                if(tampar2 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 140, 10, 0);
+                }
+
+                if(tampar3 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 70, 10, 0);
+                }
+
 
 			/*else if(inimigo[i].y > 719)
 			{
