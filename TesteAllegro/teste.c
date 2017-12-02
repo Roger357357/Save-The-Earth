@@ -23,9 +23,11 @@ int pos_x = 1202 / 2;
 int pos_y = 1200 / 2;
 int i, j;
 int pontos = 0;
+int missaoponto = 200;
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_SAMPLE *musica_capa = NULL;
+ALLEGRO_SAMPLE *semaudio = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_BITMAP *fundo = NULL;
@@ -43,7 +45,7 @@ ALLEGRO_BITMAP *gameover = NULL;
 ALLEGRO_BITMAP *tampa_coracao = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
 ALLEGRO_FONT *fonte = NULL;
-ALLEGRO_FONT *cifrao = NULL;
+ALLEGRO_FONT *missao = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
 
@@ -124,6 +126,7 @@ int main(void)
     al_init_image_addon();
     al_init_primitives_addon();
     al_install_keyboard();
+    al_play_sample(musica_capa, 0.6, 0.3, 1, ALLEGRO_PLAYMODE_LOOP, id_music);
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // CARREGAMENTO DOS ARQUIVOS "IMAGENS"
@@ -143,7 +146,7 @@ int main(void)
     tampa_coracao = al_load_bitmap("tampa.png");
     gameover = al_load_bitmap("tela_gameover.png");
     fonte = al_load_font("arial.ttf", 48, 0);
-    cifrao= al_load_font("arial.ttf", 2, 0);
+    missao = al_load_font("arial.ttf", 18, 0);
 
 
 
@@ -172,6 +175,11 @@ int main(void)
 
     if (!fonte){
         fprintf(stderr,"Falha ao carregar fonte\n");
+        al_destroy_display(janela);
+        return false;
+    }
+    if (!missao){
+        fprintf(stderr,"Falha ao carregar missao\n");
         al_destroy_display(janela);
         return false;
     }
@@ -427,11 +435,13 @@ int main(void)
                             evento.mouse.y <= 355)
                         {
                             melodia = false;
+                            al_play_sample(musica_capa, 0.6, 0.3, 1, ALLEGRO_PLAYMODE_LOOP, id_music);
                         }
                     }
                 }
                 else if(melodia == false)  // VERIFICAÇÃO DO ESTADO DO BOTÃO
                 {
+
                     if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
                     {
                         if (evento.mouse.x >= 440 &&
@@ -440,9 +450,11 @@ int main(void)
                             evento.mouse.y <= 355)
                         {
                             melodia = true;
+                            al_stop_sample(id_music);
                         }
                     }
                 }
+
 //=======================================================================================================
 //      BOTÃO DE EFEITOS SONOROS (LIGAR E DESLIGAR)
 
@@ -619,6 +631,9 @@ int main(void)
                 al_draw_bitmap(coracao, 120, 0, 0);
                 al_draw_bitmap(coracao, 190, 0, 0);
                 al_draw_textf(fonte, al_map_rgb(255, 255, 255), 1100, 93, ALLEGRO_ALIGN_CENTRE, "%d", pontos);
+                al_draw_textf(missao, al_map_rgb(255, 255, 255), 85, 273, ALLEGRO_ALIGN_LEFT, "ATINGIR %d PONTOS.", missaoponto);
+                al_draw_textf(missao, al_map_rgb(255, 255, 255), 85, 313, ALLEGRO_ALIGN_LEFT, "°- NAO MORRER.");
+
 
 //=======================================================================================================
 //      BOTÃO DE SAIR DO NIVEL DO JOGO PARA A CAPA
@@ -660,78 +675,6 @@ int main(void)
 //=======================================================================================================
 //      FUNÇÃO TAMPAR CORAÇÃO "VIDA"
 
-//                if(apagar_coracao == true)
-//                {
-//                    if(() && (tampar1 == false))
-//                    {
-//                        tampar1 = true;
-//                        pos_x = 1202 / 2;
-//                        pos_y = 1200 / 2;
-//                    }
-//                    else if(() && (tampar1 == true) && (tampar2 == false))
-//                    {
-//                        tampar2 = true;
-//                        pos_x = 1202 / 2;
-//                        pos_y = 1200 / 2;
-//                    }
-//                    else if(() && (tampar1 == true) && (tampar2 == true) && (tampar3 == false))
-//                    {
-//                        tampar3 = true;
-//                        pos_x = 1202 / 2;
-//                        pos_y = 1200 / 2;
-//                    }
-//
-//                }
-//
-//                if(tampar1 == true)
-//                {
-//                    al_draw_bitmap(tampa_coracao, 210, 10, 0);
-//                }
-//
-//                if(tampar2 == true)
-//                {
-//                    al_draw_bitmap(tampa_coracao, 140, 10, 0);
-//                }
-//
-//                if(tampar3 == true)
-//                {
-//                    al_draw_bitmap(tampa_coracao, 70, 10, 0);
-//                }
-
-//                if(apagar_coracao == true)
-//                {
-//                    if(tampar1 == false)
-//                    {
-//                        tampar1 = true;
-//                        apagar_coracao = false;
-//                    }
-//                    else if((tampar1 == true) && (tampar2 == false))
-//                    {
-//                        tampar2 = true;
-//                        apagar_coracao = false;
-//                    }
-//                    else if((tampar1 == true) && (tampar2 == true) && (tampar3 == false))
-//                    {
-//                        tampar3 = true;
-//                        apagar_coracao = false;
-//                    }
-//
-//                }
-//
-//                if(tampar1 == true)
-//                {
-//                    al_draw_bitmap(tampa_coracao, 210, 10, 0);
-//                }
-//
-//                if(tampar2 == true)
-//                {
-//                    al_draw_bitmap(tampa_coracao, 140, 10, 0);
-//                }
-//
-//                if(tampar3 == true)
-//                {
-//                    al_draw_bitmap(tampa_coracao, 70, 10, 0);
-//                }
 
 
 //=======================================================================================================
@@ -1070,9 +1013,11 @@ int main(void)
     al_destroy_bitmap(coracao);
     al_destroy_bitmap(gameover);
     al_destroy_sample(musica_capa);
+    al_destroy_sample(semaudio);
     al_destroy_event_queue(fila_eventos);
     al_destroy_display(janela);
     al_destroy_font(fonte);
+    al_destroy_font(missao);
     al_destroy_timer(timer);
 
     return 0;
@@ -1397,7 +1342,7 @@ bool inicializar()
 
     id_music = malloc(sizeof(ALLEGRO_SAMPLE_ID));
     musica_capa = al_load_sample("04.wav");
-    al_play_sample(musica_capa, 0.6, 0.3, 1, ALLEGRO_PLAYMODE_LOOP, id_music);
+    semaudio = al_load_sample("semaudio.wav");
     if (!musica_capa)
     {
         fprintf(stderr, "Falha ao carregar audio.\n");
