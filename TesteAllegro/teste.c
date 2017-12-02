@@ -17,14 +17,17 @@
 const int LARGURA_TELA = 1280;
 const int ALTURA_TELA = 720;
 const int NUM_Balas = 10000;
-const int NUM_Inimigo = 60;
-
+const int NUM_Inimigo = 40;
+const int NUM_objetos = 10;
+int pos_x = 1202 / 2;
+int pos_y = 1200 / 2;
 int i, j;
 char pause[100];
 int pontos = 0;
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_SAMPLE *musica_capa = NULL;
+ALLEGRO_SAMPLE *semaudio = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_BITMAP *fundo = NULL;
@@ -42,6 +45,8 @@ ALLEGRO_BITMAP *gameover = NULL;
 ALLEGRO_BITMAP *tampa_coracao = NULL;
 ALLEGRO_SAMPLE_ID *id_music = NULL;
 ALLEGRO_FONT *fonte = NULL;
+ALLEGRO_FONT *cifrao = NULL;
+ALLEGRO_FONT *missao = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
 
@@ -78,7 +83,11 @@ void IniciaInimigo(Inimigo inimigo[], int size);
 void DesenhaInimigo(Inimigo inimigo[], int size);
 void ComecaInimigo(Inimigo inimigo[], int size);
 void CarregarInimigo(Inimigo inimigo[], int size);
-//void ColisaoInimigo(Comet inimigo[], int cSize, SpaceShip ship);
+
+void IniciaObjeto(Objeto objetos[], int size);
+void DesenhaObjeto(Objeto objetos[], int size);
+void ComecaObjeto(Objeto objetos[], int size);
+void CarregarObjeto(Objeto objetos[], int size);
 
 void IniciaBala(Bala balas[], int size);
 void DesenharBala(Bala balas[], int size);
@@ -86,7 +95,7 @@ void DesenharBala1(Bala balas[], int size);
 void DesenharBala2(Bala balas[], int size);
 void AtirarBala(Bala balas[], int size);
 void CarregarBala(Bala balas[], int size);
-void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize);
+void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize, Objeto objetos[], int dSize);
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -94,15 +103,14 @@ void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize);
 
 bool inicializar();
 
-    int pos_x = 1202 / 2;
-    int pos_y = 1200 / 2;
-
 int main(void)
 {
 
 //=======================================================================================================
 //      VALORES INICAIS DE VARIAVEIS
 
+    //int tecla = 0;
+    //int pos_xbala = navea;
     int pos_ybala = 1200 / 2 - 30;
     int tempx = pos_x;
     int tempy = pos_y;
@@ -121,6 +129,8 @@ int main(void)
     al_init_image_addon();
     al_init_primitives_addon();
     al_install_keyboard();
+    al_play_sample(musica_capa, 0.6, 0.3, 1, ALLEGRO_PLAYMODE_LOOP, id_music);
+
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
         // CARREGAMENTO DOS ARQUIVOS "IMAGENS"
@@ -140,13 +150,17 @@ int main(void)
     tampa_coracao = al_load_bitmap("tampa.png");
     gameover = al_load_bitmap("tela_gameover.png");
     fonte = al_load_font("Square.ttf", 35, 0);
+    cifrao = al_load_font("Square.ttf", 9, 0);
+    missao = al_load_font("Square.ttf", 24, 0);
 
     srand(time(NULL));
 
     Inimigo inimigo[NUM_Inimigo];
+    Objeto objetos[NUM_objetos];
     Bala balas[NUM_Balas];
 
     IniciaInimigo(inimigo, NUM_Inimigo);
+    IniciaObjeto(objetos, NUM_objetos);
     IniciaBala(balas, NUM_Balas);
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -162,8 +176,16 @@ int main(void)
         return false;
     }
 
-    if (!fonte){
+    if (!fonte)
+    {
         fprintf(stderr,"Falha ao carregar fonte\n");
+        al_destroy_display(janela);
+        return false;
+    }
+
+    if (!missao)
+    {
+        fprintf(stderr,"Falha ao carregar missao\n");
         al_destroy_display(janela);
         return false;
     }
@@ -398,20 +420,7 @@ int main(void)
                 {
                     saire = true; //BOTÃO "X" DA TELA
                 }
-//=======================================================================================================
-//      BOTÃO DE VOLTAR PARA A TELA DA CAPA
 
-//                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-//                {
-//                    if (evento.mouse.x >= 73 &&
-//                        evento.mouse.x <= 290 &&
-//                        evento.mouse.y >= 526 &&
-//                        evento.mouse.y <= 679)
-//                    {
-//                        //btvoltar_datela_ajustes = true;
-//                        tela_ajustes = false;
-//                    }
-//                }
 //=======================================================================================================
 //      BOTÃO DE MELODIA (LIGAR E DESLIGAR)
 
@@ -427,6 +436,7 @@ int main(void)
                             evento.mouse.y <= 355)
                         {
                             melodia = false;
+                            al_play_sample(musica_capa, 0.6, 0.3, 1, ALLEGRO_PLAYMODE_LOOP, id_music);
                         }
                     }
                 }
@@ -440,6 +450,8 @@ int main(void)
                             evento.mouse.y <= 355)
                         {
                             melodia = true;
+                            al_stop_sample(id_music);
+
                         }
                     }
                 }
@@ -621,6 +633,10 @@ int main(void)
                 al_draw_bitmap(coracao, 120, 0, 0);
                 al_draw_bitmap(coracao, 190, 0, 0);
                 al_draw_textf(fonte, al_map_rgb(255, 255, 255), 1100, 100, ALLEGRO_ALIGN_CENTRE, "%d", pontos);
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 127, 273, ALLEGRO_ALIGN_LEFT, "|....| ATINGIR");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 120, 310, ALLEGRO_ALIGN_LEFT, "200 PONTOS");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 373, ALLEGRO_ALIGN_LEFT, "|....| ELIMINAR");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 410, ALLEGRO_ALIGN_LEFT, "50 INIMIGOS");
 
 //=======================================================================================================
 //      BOTÃO DE SAIR DO NIVEL DO JOGO PARA A CAPA
@@ -658,31 +674,6 @@ int main(void)
                         pausado = true;
                     }
                 }
-
-//=======================================================================================================
-//      FUNÇÃO TAMPAR CORAÇÃO "VIDA"
-//                if(apagar_coracao == true)
-//                {
-//                    if((pos_y == 0 || pos_y == 630 || pos_x == 371 || pos_x == 830) && (tampar1 == false))
-//                    {
-//                        tampar1 = true;
-//                        pos_x = 1202 / 2;
-//                        pos_y = 1200 / 2;
-//                    }
-//                    else if((pos_y == 0 || pos_y == 630 || pos_x == 371 || pos_x == 830) && (tampar1 == true) && (tampar2 == false))
-//                    {
-//                        tampar2 = true;
-//                        pos_x = 1202 / 2;
-//                        pos_y = 1200 / 2;
-//                    }
-//                    else if((pos_y == 0 || pos_y == 630 || pos_x == 371 || pos_x == 830) && (tampar1 == true) && (tampar2 == true) && (tampar3 == false))
-//                    {
-//                        tampar3 = true;
-//                        pos_x = 1202 / 2;
-//                        pos_y = 1200 / 2;
-//                    }
-//
-//                }
 
                 if(tampar1 == true)
                 {
@@ -742,7 +733,8 @@ int main(void)
                         {
                             case ALLEGRO_KEY_SPACE:
                                 nave1 = true;
-                                comecar_nivel = false;                                    tampar1 = false;
+                                comecar_nivel = false;
+                                tampar1 = false;
                                 tampar2 = false;
                                 tampar3 = false;
                                 pontos = 0;
@@ -757,7 +749,8 @@ int main(void)
                                 nave2 = true;
                                 comecar_nivel = false;
                                 tampar1 = false;
-                                tampar2 = false;                                    tampar3 = false;
+                                tampar2 = false;
+                                tampar3 = false;
                                 pontos = 0;
                             break;
                         }
@@ -777,30 +770,6 @@ int main(void)
                         }
                     }
                 }
-                    /*if(nave1 == true || nave2 == true || nave3 == true)
-                    {
-                        btcomecar_datela_escolha = false;
-                        nave1 = false;
-                        nave2 = false;
-                        nave3 = false;
-                        inimigo[i].vida = false;
-
-                        switch(evento.keyboard.keycode)
-                        {
-                            case ALLEGRO_KEY_ENTER:
-                                btcomecar_datela_escolha = true;
-                                comecar_nivel = false;
-                                pos_x = 1202 / 2;
-                                pos_y = 1200 / 2;
-                                tampar1 = false;
-                                tampar2 = false;
-                                tampar3 = false;
-                                pontos = 0;
-                            break;
-                        }
-                    }*/
-
-
 
 //=======================================================================================================
 //      JOGANDO COM A NAVE 1 OU NAVE 2 OU NAVE 3
@@ -809,13 +778,15 @@ int main(void)
                 {
                     if(evento.type == ALLEGRO_EVENT_TIMER)
                     {
-                      redraw = true;
+                        redraw = true;
 
-                      CarregarBala(balas, NUM_Balas);
-                      ComecaInimigo(inimigo, NUM_Inimigo);
-                      CarregarInimigo(inimigo, NUM_Inimigo);
-                      ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo);
-//                      ColisaoInimigo(inimigo, NUM_Inimigo, ship);
+                        CarregarBala(balas, NUM_Balas);
+                        ComecaInimigo(inimigo, NUM_Inimigo);
+                        CarregarInimigo(inimigo, NUM_Inimigo);
+                        ComecaObjeto(objetos, NUM_objetos);
+                        CarregarObjeto(objetos, NUM_objetos);
+                        ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo, objetos, NUM_objetos);
+                        ColisaoInimigo(inimigo, NUM_Inimigo);
                     }
 
                     else if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -914,11 +885,8 @@ int main(void)
                         DesenharBala1(balas, NUM_Balas);
                         DesenharBala2(balas, NUM_Balas);
                         DesenhaInimigo(inimigo, NUM_Inimigo);
+                        DesenhaObjeto(objetos, NUM_objetos);
                     }
-                    //if(pontos == 15)
-                    //{
-                    //    comecar_nivel = true;
-                    //}
                 }
 
                 jogando = true;
@@ -951,10 +919,75 @@ int main(void)
     al_destroy_event_queue(fila_eventos);
     al_destroy_display(janela);
     al_destroy_font(fonte);
+    al_destroy_display(cifrao);
+    al_destroy_display(missao);
     al_destroy_timer(timer);
 
     return 0;
 }
+
+void IniciaObjeto(Objeto objetos[], int size)
+{
+    for( i = 0; i < size; i++)
+    {
+        objetos[i].ID = Coisa;
+        objetos[i].vida = false;
+        objetos[i].velocidade = 2;
+        objetos[i].limite_x = 18;
+        objetos[i].limite_y = 18;
+    }
+}
+void DesenhaObjeto(Objeto objetos[], int size)
+{
+    for(i = 0; i < size; i++)
+    {
+        if(objetos[i].vida)
+        {
+
+            al_draw_filled_rectangle(objetos[i].x, objetos[i].y, objetos[i].x + 25, objetos[i].y + 17, al_map_rgb(50, 205, 50));
+            al_draw_filled_rectangle(objetos[i].x + 2.5, objetos[i].y + 2.5, objetos[i].x + 22.5, objetos[i].y + 14.5, al_map_rgb(0, 160, 0));
+            al_draw_filled_rectangle(objetos[i].x + 3, objetos[i].y + 3, objetos[i].x + 21.5, objetos[i].y + 13.5, al_map_rgb(50, 205, 50));
+            al_draw_filled_circle(objetos[i].x + 12, objetos[i].y + 8, 5, al_map_rgb(0, 160, 0));
+            al_draw_filled_circle(objetos[i].x + 2.5, objetos[i].y + 2.5, 2, al_map_rgb(0, 160, 0));
+            al_draw_filled_circle(objetos[i].x + 22.5, objetos[i].y + 14.5, 2, al_map_rgb(0, 160, 0));
+            al_draw_filled_circle(objetos[i].x + 22.5, objetos[i].y + 2.5, 2, al_map_rgb(0, 160, 0));
+            al_draw_filled_circle(objetos[i].x + 2.5, objetos[i].y + 14.5, 2, al_map_rgb(0, 160, 0));
+            al_draw_textf(cifrao, al_map_rgb(240, 230, 140), objetos[i].x + 11, objetos[i].y + 3, ALLEGRO_ALIGN_CENTRE, "$", pause);
+
+;        }
+    }
+}
+void ComecaObjeto(Objeto objetos[], int size)
+{
+    for( i = 0; i < size; i++)
+    {
+        if(!objetos[i].vida)
+        {
+            if(rand() % 1000 == 0)
+            {
+                objetos[i].vida = true;
+                objetos[i].x = 400 + rand() % (LARGURA_TELA - 800);
+                objetos[i].y = 0;
+
+                break;
+            }
+        }
+    }
+}
+void CarregarObjeto(Objeto objetos[], int size)
+{
+    for( i = 0; i < size; i++)
+    {
+        if(objetos[i].vida)
+        {
+            objetos[i].y += objetos[i].velocidade;
+
+            if(objetos[i].x < 0)
+                objetos[i].vida = false;
+        }
+    }
+}
+
 void IniciaInimigo(Inimigo inimigo[], int size)
 {
     for( i = 0; i < size; i++)
@@ -1009,36 +1042,51 @@ void CarregarInimigo(Inimigo inimigo[], int size)
             {
                 inimigo[i].vida = false;
             }
-            /*if(inimigo[i].y > 500)
-            {
-                //vida_da_terra = true;
-                inimigo[i].vida = false;
-                vida_da_terra = true;
-            }*/
         }
     }
 }
-//void ColisaoInimigo(Inimigo inimigo[], int cSize)
-//{
-//    for(i = 0; i < cSize; i++)
-//    {
-//        if(inimigo[i].vida)
-//        {
-//           if(inimigo[i].x - inimigo[i].limite_x < pos_x + Inimigo.limite_x &&
-//              inimigo[i].x + inimigo[i].limite_x > pos_x - Inimigo.limite_x &&
-//              inimigo[i].y - inimigo[i].limite_y < pos_y + Inimigo.limite_y &&
-//              inimigo[i].y + inimigo[i].limite_y > pos_y - Inimigo.limite_y)
-//            {
-//                apagar_coracao = true;
-//                inimigo[i].vida = false;
-//            }
-//            else if(inimigo[i].x < 0)
-//            {
-//                inimigo[i].vida = false;
-//            }
-//        }
-//    }
-//}
+
+void ColisaoInimigo(Inimigo inimigo[], int cSize)
+{
+    for(i = 0; i < cSize; i++)
+    {
+        if(inimigo[i].vida)
+        {
+            if(inimigo[i].x - inimigo[i].limite_x < pos_x + 80 &&
+                inimigo[i].x + inimigo[i].limite_x > pos_x &&
+                inimigo[i].y - inimigo[i].limite_y < pos_y + 180 &&
+                inimigo[i].y + inimigo[i].limite_y > pos_y)
+            {
+                inimigo[i].vida = false;
+                apagar_coracao = true;
+            }
+            if(apagar_coracao == true)
+            {
+                if((tampar1 == false) && (inimigo[i].x - inimigo[i].limite_x < pos_x + 80 &&
+                    inimigo[i].x + inimigo[i].limite_x > pos_x &&
+                    inimigo[i].y - inimigo[i].limite_y < pos_y + 180 &&
+                    inimigo[i].y + inimigo[i].limite_y > pos_y))
+                {
+                    tampar1 = true;
+                }
+                else if((tampar1 == true) && (tampar2 == false) && (inimigo[i].x - inimigo[i].limite_x < pos_x + 80 &&
+                        inimigo[i].x + inimigo[i].limite_x > pos_x &&
+                        inimigo[i].y - inimigo[i].limite_y < pos_y + 180 &&
+                        inimigo[i].y + inimigo[i].limite_y > pos_y))
+                {
+                    tampar2 = true;
+                }
+                else if((tampar1 == true) && (tampar2 == true) && (tampar3 == false) && (inimigo[i].x - inimigo[i].limite_x < pos_x + 80 &&
+                        inimigo[i].x + inimigo[i].limite_x > pos_x &&
+                        inimigo[i].y - inimigo[i].limite_y < pos_y + 180 &&
+                        inimigo[i].y + inimigo[i].limite_y > pos_y))
+                {
+                    tampar3 = true;
+                }
+            }
+        }
+    }
+}
 
 void IniciaBala(Bala balas[], int size)
 {
@@ -1100,7 +1148,8 @@ void CarregarBala(Bala balas[], int size)
         }
     }
 }
-void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize)
+
+void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize, Objeto objetos[], int dSize)
 {
     for(i = 0; i < bSize; i++)
     {
@@ -1118,19 +1167,27 @@ void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize)
                         balas[i].vida = false;
                         inimigo[j].vida = false;
                         pontos++;
-                        if(pontos == 15)
-                        {
-                            comecar_nivel = true;
-                        }
-                        //correto = true;
-                        //al_draw_bitmap(correto, 539, 241, 0);
+                    }
+                }
+            }
+            for(j =0; j < dSize; j++)
+            {
+                if(objetos[j].vida)
+                {
+                    if(balas[i].x > (objetos[j].x - objetos[j].limite_x) &&
+                        balas[i].x < (objetos[j].x + objetos[j].limite_x) &&
+                        balas[i].y > (objetos[j].y - objetos[j].limite_y) &&
+                        balas[i].y < (objetos[j].y + objetos[j].limite_y))
+                    {
+                        balas[i].vida = false;
+                        objetos[j].vida = false;
+                        pontos += 10;
                     }
                 }
             }
         }
     }
 }
-
 
 // ----------------------------------------------------------------------------------------------------------------------------------------
         //INICIALIZAÇÕES E FUNÇÕES
@@ -1195,7 +1252,7 @@ bool inicializar()
 
     id_music = malloc(sizeof(ALLEGRO_SAMPLE_ID));
     musica_capa = al_load_sample("04.wav");
-    al_play_sample(musica_capa, 0.6, 0.3, 1, ALLEGRO_PLAYMODE_LOOP, id_music);
+    semaudio = al_load_sample("semaudio.wav");
     if (!musica_capa)
     {
         fprintf(stderr, "Falha ao carregar audio.\n");
@@ -1205,7 +1262,7 @@ bool inicializar()
         return false;
     }
             // CONFIGURAÇÃO DO TÍTULO DA JANELA
-    al_set_window_title(janela, "SAVE THE EARTH - The Social Problems");
+    al_set_window_title(janela, "SAVE THE EARTH");
 
             // TORNA APTO O USO DO MOUSE
     if (!al_install_mouse())
