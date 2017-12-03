@@ -48,6 +48,7 @@ ALLEGRO_FONT *fonte = NULL;
 ALLEGRO_FONT *cifrao = NULL;
 ALLEGRO_FONT *missao = NULL;
 ALLEGRO_TIMER *timer = NULL;
+ALLEGRO_BITMAP *vida_terra1 = NULL;
 
 
 enum teclas{UP, DOWN, LEFT, RIGHT, SPACE};
@@ -152,6 +153,7 @@ int main(void)
     fonte = al_load_font("Square.ttf", 35, 0);
     cifrao = al_load_font("Square.ttf", 9, 0);
     missao = al_load_font("Square.ttf", 24, 0);
+    vida_terra1 = al_load_bitmap("vidaterra5.png");
 
     srand(time(NULL));
 
@@ -690,31 +692,46 @@ int main(void)
                     al_draw_bitmap(tampa_coracao, 70, 10, 0);
                 }
 
+                if(vida_terra1 == true)
+                {
+                    al_draw_bitmap(vida_terra1, 0, 0, 0);
+                }
+
+                /*if(tampar2 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 140, 10, 0);
+                }
+
+                if(tampar3 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 70, 10, 0);
+                }*/
+
 //=======================================================================================================
 //      FUNÇÃO TAMPAR CORAÇÃO "VIDA"
 
-                if(vida_da_terra == true)
-                {
-                    if((inimigo[i].y > 720) && (tampar1 == false))
-                    {
-                        tampar1 = true;
-                        pos_x = 1202 / 2;
-                        pos_y = 1200 / 2;
-                    }
-                    else if((inimigo[i].y = 720) && (tampar1 == true) && (tampar2 == false))
-                    {
-                        tampar2 = true;
-                        pos_x = 1202 / 2;
-                        pos_y = 1200 / 2;
-                    }
-                    else if((inimigo[i].y = 720) && (tampar1 == true) && (tampar2 == true) && (tampar3 == false))
-                    {
-                        tampar3 = true;
-                        pos_x = 1202 / 2;
-                        pos_y = 1200 / 2;
-                    }
-
-                }
+//                if(vida_da_terra == true)
+//                {
+//                    if((inimigo[i].y > 720) && (tampar1 == false))
+//                    {
+//                        tampar1 = true;
+//                        pos_x = 1202 / 2;
+//                        pos_y = 1200 / 2;
+//                    }
+//                    else if((inimigo[i].y = 720) && (tampar1 == true) && (tampar2 == false))
+//                    {
+//                        tampar2 = true;
+//                        pos_x = 1202 / 2;
+//                        pos_y = 1200 / 2;
+//                    }
+//                    else if((inimigo[i].y = 720) && (tampar1 == true) && (tampar2 == true) && (tampar3 == false))
+//                    {
+//                        tampar3 = true;
+//                        pos_x = 1202 / 2;
+//                        pos_y = 1200 / 2;
+//                    }
+//
+//                }
 
                 if(comecar_nivel == true)
                 {
@@ -776,6 +793,8 @@ int main(void)
 
                 if(nave1 == true || nave2 == true || nave3 == true) // MOVER A NAVE COM O TECLADO PRESSIONADO
                 {
+                    //al_draw_bitmap(vida_terra1, 0, 0, 0);
+
                     if(evento.type == ALLEGRO_EVENT_TIMER)
                     {
                         redraw = true;
@@ -873,10 +892,10 @@ int main(void)
                         teclas[UP] = false;
                     }
 
-                    if(apagar_coracao == false)
+                    /*if(apagar_coracao == false)
                     {
                         apagar_coracao = true;
-                    }
+                    }*/
 
                     if(redraw && al_is_event_queue_empty(fila_eventos))
                     {
@@ -921,6 +940,7 @@ int main(void)
     al_destroy_font(fonte);
     al_destroy_display(cifrao);
     al_destroy_display(missao);
+    al_destroy_bitmap(vida_terra1);
     al_destroy_timer(timer);
 
     return 0;
@@ -1083,6 +1103,33 @@ void ColisaoInimigo(Inimigo inimigo[], int cSize)
                 {
                     tampar3 = true;
                 }
+            }
+
+            if(inimigo[i].y - inimigo[i].limite_y > 720)
+            {
+                inimigo[i].vida = false;
+                vida_da_terra = true;
+            }
+
+            if(vida_da_terra == true)
+            {
+                if((inimigo[i].y > inimigo[i].limite_y > 720) && (vida_terra1 == false))
+                {
+                    vida_terra1 = true;
+                }
+                /*else if((inimigo[i].y = 720) && (tampar1 == true) && (tampar2 == false))
+                {
+                       tampar2 = true;
+                    pos_x = 1202 / 2;
+                    pos_y = 1200 / 2;
+                }
+                else if((inimigo[i].y = 720) && (tampar1 == true) && (tampar2 == true) && (tampar3 == false))
+                {
+                    tampar3 = true;
+                    pos_x = 1202 / 2;
+                    pos_y = 1200 / 2;
+                }*/
+
             }
         }
     }
