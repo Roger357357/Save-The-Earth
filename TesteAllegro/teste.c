@@ -445,7 +445,7 @@ int main(void)
 //=======================================================================================================
 //      BOTÃO PARA A TELA TELA DE ESCOLHA
 
-                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && tela_tutorial == true)
                 {
                     if (evento.mouse.x >= 118 &&
                         evento.mouse.x <= 245 &&
@@ -566,21 +566,21 @@ int main(void)
 //=======================================================================================================
 //      BOTÃO DE VOLTAR PARA A TELA DE CAPA
 
-////                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-////                {
-////                    if (evento.mouse.x >= 100 &&
-////                        evento.mouse.x <= 316 &&
-////                        evento.mouse.y >= 510 &&
-////                        evento.mouse.y <= 650)
-////                    {
-////                        //btvoltar_datela_escolha = true;
-////                        tela_da_capa = true;
-////                        tela_de_escolha = false;
-////                        nave1 = false;
-////                        nave2 = false;
-////                        nave3 = false;
-////                    }
-////                }
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && tela_de_escolha == true)
+                {
+                    if (evento.mouse.x >= 100 &&
+                        evento.mouse.x <= 316 &&
+                        evento.mouse.y >= 510 &&
+                       evento.mouse.y <= 650)
+                    {
+                        //btvoltar_datela_escolha = true;
+                        tela_da_capa = true;
+                        tela_de_escolha = false;
+                        nave1 = false;
+                        nave2 = false;
+                        nave3 = false;
+                    }
+                }
 //=======================================================================================================
 //      BOTÃO DE COMEÇAR PARA JOGAR
                 if(btcomecar_datela_escolha == false) // VERIFICAÇÃO DO ESTADO DO BOTÃO
