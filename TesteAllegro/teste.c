@@ -30,6 +30,7 @@ int missaoponto1 = 200;
 int missaoponto2 = 400;
 int missaoponto3 = 600;
 int missaoninimigo = 50;
+int nivel = 0;
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_SAMPLE *musica_capa = NULL;
@@ -327,9 +328,10 @@ int main(void)
                 switch(evento.keyboard.keycode)
                 {
                     case ALLEGRO_KEY_ENTER:
-                        tela_de_escolha = true;
+                        tela_gameover = false;
                         btcomecar_datela_escolha = false;
                         comecar_nivel2 = false;
+                        comecar_nivel3 = false;
                         btsair_datela_donivel = false;
                         pos_x = 1202 / 2;
                         pos_y = 1200 / 2;
@@ -341,6 +343,7 @@ int main(void)
                         tampar2 = false;
                         tampar3 = false;
                         pontos = 0;
+                        tela_de_escolha = true;
                     break;
                 }
             }
@@ -556,6 +559,7 @@ int main(void)
                 tela_tutorial = false;
                 saire = false;
                 btvoltar_datela_ajustes = false;
+                nivel = 0;
 
                 al_draw_bitmap(escolha, 0, 0, 0);
 
@@ -594,6 +598,7 @@ int main(void)
                         {
                             btcomecar_datela_escolha = true;
                             tela_de_escolha = false;
+                            nivel = 1;
                         }
                     }
                 }
@@ -714,6 +719,7 @@ int main(void)
                 if(pontos >= missaoponto1)
                 {
                     btcomecar_datela_escolha = false;
+                    nivel = 2;
 
                     al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2 - 50, ALLEGRO_ALIGN_CENTRE, "LEVEL 2", pause);
                     al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2, ALLEGRO_ALIGN_CENTRE, "PRESSIONE ENTER", pause);
@@ -890,7 +896,7 @@ int main(void)
 //=======================================================================================================
 //      CONDIÇÃO PARA RODAR NIVEL 2
 
-            if(btcomecar_datela_escolha == false)
+            if(btcomecar_datela_escolha == false && tela_gameover != true && tela_de_escolha != true && nivel == 2)
             {
                 switch(evento.keyboard.keycode)
                 {
@@ -949,6 +955,7 @@ int main(void)
                 if(pontos >= missaoponto2)
                 {
                     comecar_nivel2 = false;
+                    nivel = 3;
 
                     al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2 - 50, ALLEGRO_ALIGN_CENTRE, "LEVEL 3", pause);
                     al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2, ALLEGRO_ALIGN_CENTRE, "PRESSIONE ENTER", pause);
@@ -1126,7 +1133,7 @@ int main(void)
 //=======================================================================================================
 //      CONDIÇÃO PARA RODAR O NIVEL 3
 
-            if(btcomecar_datela_escolha == false && comecar_nivel2 == false)
+            if(btcomecar_datela_escolha == false && comecar_nivel2 == false && tela_de_escolha != true && nivel == 3)
             {
                 switch(evento.keyboard.keycode)
                 {
@@ -1177,6 +1184,7 @@ int main(void)
                         evento.mouse.y <= 678)
                     {
                         btsair_datela_donivel = true;
+                        nivel = 0;
                     }
                 }
 
@@ -1185,6 +1193,7 @@ int main(void)
                     btcomecar_datela_escolha = false;
                     comecar_nivel2 = false;
                     comecar_nivel3 = false;
+                    nivel = 0;
 
                     al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2 - 50, ALLEGRO_ALIGN_CENTRE, "PARABENS", pause);
                     al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2, ALLEGRO_ALIGN_CENTRE, "VOCE SALVOU", pause);
@@ -1375,6 +1384,7 @@ int main(void)
                         pos_x = 1202 / 2;
                         pos_y = 1200 / 2;
                         al_draw_bitmap(fundo, 0, 0, 0);
+                        tela_da_capa = true;
                         //IniciaInimigo2(inimigo, NUM_Inimigo);
                         //IniciaObjeto2(objetos, NUM_objetos);
                         //IniciaBala(balas, NUM_Balas);
