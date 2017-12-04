@@ -24,12 +24,12 @@ const int NUM_objetos2 = 11;
 int pos_x = 1202 / 2;
 int pos_y = 1200 / 2;
 int i, j;
-char pause[200];
-int pontos = 0;
 int missaoponto1 = 200;
 int missaoponto2 = 400;
 int missaoponto3 = 600;
-int missaoninimigo = 50;
+
+char pause[200];
+int pontos = 0;
 int nivel = 0;
 
 ALLEGRO_DISPLAY *janela = NULL;
@@ -56,6 +56,16 @@ ALLEGRO_FONT *fonte = NULL;
 ALLEGRO_FONT *cifrao = NULL;
 ALLEGRO_FONT *missao = NULL;
 ALLEGRO_TIMER *timer = NULL;
+ALLEGRO_BITMAP *terra1 = NULL;
+ALLEGRO_BITMAP *terra2 = NULL;
+ALLEGRO_BITMAP *terra3 = NULL;
+ALLEGRO_BITMAP *terra4 = NULL;
+ALLEGRO_BITMAP *terra5 = NULL;
+ALLEGRO_BITMAP *terra6 = NULL;
+ALLEGRO_BITMAP *terra7 = NULL;
+ALLEGRO_BITMAP *terra8 = NULL;
+ALLEGRO_BITMAP *terra9 = NULL;
+ALLEGRO_BITMAP *terra10 = NULL;
 
 
 enum teclas{UP, DOWN, LEFT, RIGHT, SPACE, ENTER};
@@ -85,9 +95,16 @@ bool apagar_coracao = false;
 bool tela_gameover = false;
 bool pausado = false;
 bool redraw = true;
-bool vida_da_terra = false;
 bool comecar_nivel2 = false;
 bool comecar_nivel3 = false;
+bool vida_da_terra = false;
+bool vida_da_terra1 = false;
+bool vida_da_terra2 = false;
+bool vida_da_terra3 = false;
+bool vida_da_terra4 = false;
+bool vida_da_terra5 = false;
+
+
 
 void IniciaInimigo(Inimigo inimigo[], int size);
 void DesenhaInimigo(Inimigo inimigo[], int size);
@@ -109,14 +126,13 @@ void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize, Objeto o
 
 void IniciaInimigo2(Inimigo inimigo[], int size);
 void DesenhaInimigo2(Inimigo inimigo[], int size);
-void ComecaInimigo2(Inimigo inimigo[], int size);
-void CarregarInimigo2(Inimigo inimigo[], int size);
-
 void IniciaObjeto2(Objeto objetos[], int size);
 void DesenhaObjeto2(Objeto objetos[], int size);
-void ComecaObjeto2(Objeto objetos[], int size);
-void CarregarObjeto2(Objeto objetos[], int size);
 
+void IniciaInimigo3(Inimigo inimigo[], int size);
+void DesenhaInimigo3(Inimigo inimigo[], int size);
+void IniciaObjeto3(Objeto objetos[], int size);
+void DesenhaObjeto3(Objeto objetos[], int size);
 // ----------------------------------------------------------------------------------------------------------------------------------------
 
 // ########################################################################################################################################
@@ -171,6 +187,11 @@ int main(void)
     fonte = al_load_font("Square.ttf", 35, 0);
     cifrao = al_load_font("Square.ttf", 9, 0);
     missao = al_load_font("Square.ttf", 24, 0);
+    terra1 = al_load_bitmap("vidaterra1.png");
+    terra2 = al_load_bitmap("vidaterra2.png");
+    terra3 = al_load_bitmap("vidaterra3.png");
+    terra4 = al_load_bitmap("vidaterra4.png");
+    terra5 = al_load_bitmap("vidaterra5.png");
 
     srand(time(NULL));
 
@@ -325,9 +346,8 @@ int main(void)
             {
                 al_draw_bitmap(gameover, 0, 0, 0);
 
-                switch(evento.keyboard.keycode)
+                if(evento.keyboard.keycode == ALLEGRO_KEY_ENTER)
                 {
-                    case ALLEGRO_KEY_ENTER:
                         tela_gameover = false;
                         btcomecar_datela_escolha = false;
                         comecar_nivel2 = false;
@@ -342,9 +362,15 @@ int main(void)
                         tampar1 = false;
                         tampar2 = false;
                         tampar3 = false;
+                        vida_da_terra1 = false;
+                        vida_da_terra2 = false;
+                        vida_da_terra3 = false;
+                        vida_da_terra4 = false;
+                        vida_da_terra5 = false;
                         pontos = 0;
                         tela_de_escolha = true;
-                    break;
+                        inimigo[i].vida = 0;
+
                 }
             }
 // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -360,6 +386,7 @@ int main(void)
                 if(nave1 == true || nave2 == true || nave3 == true)
                 {
                     btcomecar_datela_escolha = false;
+
                     switch(evento.keyboard.keycode)
                     {
                         case ALLEGRO_KEY_ENTER:
@@ -697,10 +724,10 @@ int main(void)
                 al_draw_bitmap(coracao, 120, 0, 0);
                 al_draw_bitmap(coracao, 190, 0, 0);
                 al_draw_textf(fonte, al_map_rgb(255, 255, 255), 1100, 100, ALLEGRO_ALIGN_CENTRE, "%d", pontos);
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 127, 273, ALLEGRO_ALIGN_LEFT, "|....| ATINGIR");
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 120, 310, ALLEGRO_ALIGN_LEFT, "%d PONTOS", missaoponto1);
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 373, ALLEGRO_ALIGN_LEFT, "|....| ELIMINAR");
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 410, ALLEGRO_ALIGN_LEFT, "%d INIMIGOS", missaoninimigo);
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 127, 273, ALLEGRO_ALIGN_LEFT, "ATINGIR");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 120, 310, ALLEGRO_ALIGN_LEFT, "200 PONTOS");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 373, ALLEGRO_ALIGN_LEFT, "ACABAR COM");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 410, ALLEGRO_ALIGN_LEFT, "A CORRUPCAO");
 
 //=======================================================================================================
 //      BOTÃO DE SAIR DO NIVEL DO JOGO PARA A CAPA E MENSAGEM PARA PROXIMO NIVEL
@@ -730,6 +757,12 @@ int main(void)
 //      CONDIÇÃO DA TELA GAME OVER
 
                 if(tampar1 == true && tampar2 == true && tampar3 == true)
+                {
+                    btcomecar_datela_escolha = false;
+                    tela_gameover = true;
+                }
+
+                if((vida_da_terra1 == true) && (vida_da_terra2 == true) && (vida_da_terra3 == true) && (vida_da_terra4 == true) && (vida_da_terra5 == true))
                 {
                     btcomecar_datela_escolha = false;
                     tela_gameover = true;
@@ -765,6 +798,28 @@ int main(void)
                 if(tampar3 == true)
                 {
                     al_draw_bitmap(tampa_coracao, 70, 10, 0);
+                }
+
+
+                if(vida_da_terra1 == true)
+                {
+                    al_draw_bitmap(terra1, 0, 0, 0);
+                }
+                if(vida_da_terra2 == true)
+                {
+                    al_draw_bitmap(terra2, 0, 0, 0);
+                }
+                if(vida_da_terra3 == true)
+                {
+                    al_draw_bitmap(terra3, 0, 0, 0);
+                }
+                if(vida_da_terra4 == true)
+                {
+                    al_draw_bitmap(terra4, 0, 0, 0);
+                }
+                if(vida_da_terra5 == true)
+                {
+                    al_draw_bitmap(terra5, 0, 0, 0);
                 }
 
 //=======================================================================================================
@@ -933,10 +988,10 @@ int main(void)
                 al_draw_bitmap(coracao, 120, 0, 0);
                 al_draw_bitmap(coracao, 190, 0, 0);
                 al_draw_textf(fonte, al_map_rgb(255, 255, 255), 1100, 100, ALLEGRO_ALIGN_CENTRE, "%d", pontos);
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 127, 273, ALLEGRO_ALIGN_LEFT, "|....| ATINGIR");
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 120, 310, ALLEGRO_ALIGN_LEFT, "%d PONTOS", missaoponto2);
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 373, ALLEGRO_ALIGN_LEFT, "|....| ELIMINAR");
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 410, ALLEGRO_ALIGN_LEFT, "%d INIMIGOS", missaoninimigo + 10);
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 127, 273, ALLEGRO_ALIGN_LEFT, "ATINGIR");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 120, 310, ALLEGRO_ALIGN_LEFT, "400 PONTOS");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 373, ALLEGRO_ALIGN_LEFT, "ACABAR COM");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 410, ALLEGRO_ALIGN_LEFT, "O TRAFICO");
 
 //=======================================================================================================
 //      BOTÃO DE SAIR DO NIVEL DO JOGO PARA A CAPA E MENSAGEM PARA PROXIMO NIVEL
@@ -971,241 +1026,9 @@ int main(void)
                     tela_gameover = true;
                 }
 
-//=======================================================================================================
-//      BOTÃO DE PAUSE DO NÍVEL DO JOGO
-
-                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                if((vida_da_terra1 == true) && (vida_da_terra2 == true) && (vida_da_terra3 == true) && (vida_da_terra4 == true) && (vida_da_terra5 == true))
                 {
-                    if (evento.mouse.x >= 110 &&
-                        evento.mouse.x <= 240 &&
-                        evento.mouse.y >= 600 &&
-                        evento.mouse.y <= 690)
-                    {
-                        pausado = true;
-                    }
-                }
-
-//=======================================================================================================
-//      FUNÇÃO TAMPAR CORAÇÃO "VIDA"
-
-                if(tampar1 == true)
-                {
-                    al_draw_bitmap(tampa_coracao, 210, 10, 0);
-                }
-
-                if(tampar2 == true)
-                {
-                    al_draw_bitmap(tampa_coracao, 140, 10, 0);
-                }
-
-                if(tampar3 == true)
-                {
-                    al_draw_bitmap(tampa_coracao, 70, 10, 0);
-                }
-
-//=======================================================================================================
-//      JOGANDO
-
-
-                if(nave1 == true || nave2 == true || nave3 == true) // MOVER A NAVE COM O TECLADO PRESSIONADO
-                {
-                    if(evento.type == ALLEGRO_EVENT_TIMER)
-                    {
-                        redraw = true;
-
-                        CarregarBala(balas, NUM_Balas);
-                        ComecaInimigo(inimigo, NUM_Inimigo);
-                        CarregarInimigo(inimigo, NUM_Inimigo);
-                        ComecaObjeto(objetos, NUM_objetos);
-                        CarregarObjeto(objetos, NUM_objetos);
-                        ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo, objetos, NUM_objetos);
-                        ColisaoInimigo(inimigo, NUM_Inimigo);
-                    }
-
-                    else if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-                    {
-                         saire = true;
-                    }
-
-                    if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
-                    {
-                        switch(evento.keyboard.keycode)
-                        {
-                            case ALLEGRO_KEY_UP:
-                            teclas[UP] = true;
-                            break;
-                            case ALLEGRO_KEY_DOWN:
-                            teclas[DOWN] = true;
-                            break;
-                            case ALLEGRO_KEY_LEFT:
-                            teclas[LEFT] = true;
-                            break;
-                            case ALLEGRO_KEY_RIGHT:
-                            teclas[RIGHT] = true;
-                            break;
-                            case ALLEGRO_KEY_SPACE:
-                            teclas[SPACE] = true;
-                            AtirarBala(balas, NUM_Balas);
-                            break;
-                        }
-                    }
-                    if (evento.type == ALLEGRO_EVENT_KEY_UP)
-                    {
-                        switch(evento.keyboard.keycode)
-                        {
-                            case ALLEGRO_KEY_UP:
-                            teclas[UP] = false;
-                            break;
-                            case ALLEGRO_KEY_DOWN:
-                            teclas[DOWN] = false;
-                            break;
-                            case ALLEGRO_KEY_LEFT:
-                            teclas[LEFT] = false;
-                            break;
-                            case ALLEGRO_KEY_RIGHT:
-                            teclas[RIGHT] = false;
-                            break;
-                            case ALLEGRO_KEY_SPACE:
-                            teclas[SPACE] = false;
-                            break;
-                        }
-                    }
-
-                    if(nave1 == true)
-                    {
-                        al_draw_bitmap(navea, pos_x, pos_y, 0);
-                    }
-                    if(nave2 == true)
-                    {
-                        al_draw_bitmap(naveb, pos_x, pos_y, 0);
-                    }
-                    if(nave3 == true)
-                    {
-                        al_draw_bitmap(navec, pos_x, pos_y, 0);
-                    }
-
-                    pos_y -= teclas[UP] * 7;
-                    pos_y += teclas[DOWN] * 7;
-                    pos_x -= teclas[LEFT] * 7;
-                    pos_x += teclas[RIGHT] * 7;
-
-                    if(pos_x>=830)
-                    {
-                        teclas[RIGHT] = false;
-                    }
-                    else if(pos_x<=371)
-                    {
-                        teclas[LEFT] = false;
-                    }
-                    if(pos_y>=630)
-                    {
-                        teclas[DOWN] = false;
-                    }
-                    else if(pos_y<=0)
-                    {
-                        teclas[UP] = false;
-                    }
-
-                    if(apagar_coracao == false)
-                    {
-                        apagar_coracao = true;
-                    }
-
-                    if(redraw && al_is_event_queue_empty(fila_eventos))
-                    {
-                        redraw = false;
-                        DesenharBala(balas, NUM_Balas);
-                        DesenharBala1(balas, NUM_Balas);
-                        DesenharBala2(balas, NUM_Balas);
-                        DesenhaInimigo(inimigo, NUM_Inimigo);
-                        DesenhaObjeto(objetos, NUM_objetos);
-                    }
-                }
-
-                jogando = true;
-
-                if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-                {
-                    saire = true; // BOTÃO "X" DA TELA
-                }
-            }
-
-//=======================================================================================================
-//      CONDIÇÃO PARA RODAR O NIVEL 3
-
-            if(btcomecar_datela_escolha == false && comecar_nivel2 == false && tela_de_escolha != true && nivel == 3)
-            {
-                switch(evento.keyboard.keycode)
-                {
-                    case ALLEGRO_KEY_ENTER:
-                        comecar_nivel3 = true;
-                        //comecar_nivel2 = false;
-                        pontos = 0;
-                        tampar1 = false;
-                        tampar2 = false;
-                        tampar3 = false;
-                        pos_x = 1202 / 2;
-                        pos_y = 1200 / 2;
-                        IniciaInimigo2(inimigo, NUM_Inimigo);
-                        IniciaObjeto2(objetos, NUM_objetos);
-                        IniciaBala(balas, NUM_Balas);
-                        break;
-                }
-            }
-
-//=======================================================================================================
-//      NIVEL 3
-
-            if((comecar_nivel3 == true)) // VERIFICAÇÃO DO ESTADO DO BOTÃO
-            {
-                tela_ajustes = false;
-                tela_de_escolha = false;
-                saire = false;
-                tela_gameover = false;
-
-                al_draw_bitmap(fundo_nivel, 0, 0, 0);
-                al_draw_bitmap(coracao, 50, 0, 0);
-                al_draw_bitmap(coracao, 120, 0, 0);
-                al_draw_bitmap(coracao, 190, 0, 0);
-                al_draw_textf(fonte, al_map_rgb(255, 255, 255), 1100, 100, ALLEGRO_ALIGN_CENTRE, "%d", pontos);
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 127, 273, ALLEGRO_ALIGN_LEFT, "|....| ATINGIR");
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 120, 310, ALLEGRO_ALIGN_LEFT, "%d PONTOS", missaoponto3);
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 373, ALLEGRO_ALIGN_LEFT, "|....| ELIMINAR");
-                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 410, ALLEGRO_ALIGN_LEFT, "%d INIMIGOS", missaoninimigo + 20);
-
-//=======================================================================================================
-//      BOTÃO DE SAIR DO NIVEL DO JOGO PARA A CAPA E MENSAGEM PARA PROXIMO NIVEL
-
-                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-                {
-                    if (evento.mouse.x >= 1054 &&
-                        evento.mouse.x <= 1150 &&
-                        evento.mouse.y >= 590 &&
-                        evento.mouse.y <= 678)
-                    {
-                        btsair_datela_donivel = true;
-                        nivel = 0;
-                    }
-                }
-
-                if(pontos >= missaoponto3)
-                {
-                    btcomecar_datela_escolha = false;
                     comecar_nivel2 = false;
-                    comecar_nivel3 = false;
-                    nivel = 0;
-
-                    al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2 - 50, ALLEGRO_ALIGN_CENTRE, "PARABENS", pause);
-                    al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2, ALLEGRO_ALIGN_CENTRE, "VOCE SALVOU", pause);
-                    al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2 + 50, ALLEGRO_ALIGN_CENTRE, "A TERRA", pause);
-                }
-
-//=======================================================================================================
-//      CONDIÇÃO DA TELA GAME OVER
-
-                if(tampar1 == true && tampar2 == true && tampar3 == true)
-                {
-                    comecar_nivel3 = false;
                     tela_gameover = true;
                 }
 
@@ -1241,8 +1064,30 @@ int main(void)
                     al_draw_bitmap(tampa_coracao, 70, 10, 0);
                 }
 
+                if(vida_da_terra1 == true)
+                {
+                    al_draw_bitmap(terra1, 0, 0, 0);
+                }
+                if(vida_da_terra2 == true)
+                {
+                    al_draw_bitmap(terra2, 0, 0, 0);
+                }
+                if(vida_da_terra3 == true)
+                {
+                    al_draw_bitmap(terra3, 0, 0, 0);
+                }
+                if(vida_da_terra4 == true)
+                {
+                    al_draw_bitmap(terra4, 0, 0, 0);
+                }
+                if(vida_da_terra5 == true)
+                {
+                    al_draw_bitmap(terra5, 0, 0, 0);
+                }
+
 //=======================================================================================================
 //      JOGANDO
+
 
                 if(nave1 == true || nave2 == true || nave3 == true) // MOVER A NAVE COM O TECLADO PRESSIONADO
                 {
@@ -1368,6 +1213,271 @@ int main(void)
             }
 
 //=======================================================================================================
+//      CONDIÇÃO PARA RODAR O NIVEL 3
+
+            if(btcomecar_datela_escolha == false && comecar_nivel2 == false && tela_de_escolha != true && nivel == 3)
+            {
+                switch(evento.keyboard.keycode)
+                {
+                    case ALLEGRO_KEY_ENTER:
+                        comecar_nivel3 = true;
+                        //comecar_nivel2 = false;
+                        pontos = 0;
+                        tampar1 = false;
+                        tampar2 = false;
+                        tampar3 = false;
+                        pos_x = 1202 / 2;
+                        pos_y = 1200 / 2;
+                        IniciaInimigo3(inimigo, NUM_Inimigo);
+                        IniciaObjeto3(objetos, NUM_objetos);
+                        IniciaBala(balas, NUM_Balas);
+                        break;
+                }
+            }
+
+//=======================================================================================================
+//      NIVEL 3
+
+            if((comecar_nivel3 == true)) // VERIFICAÇÃO DO ESTADO DO BOTÃO
+            {
+                tela_ajustes = false;
+                tela_de_escolha = false;
+                saire = false;
+                tela_gameover = false;
+
+                al_draw_bitmap(fundo_nivel, 0, 0, 0);
+                al_draw_bitmap(coracao, 50, 0, 0);
+                al_draw_bitmap(coracao, 120, 0, 0);
+                al_draw_bitmap(coracao, 190, 0, 0);
+                al_draw_textf(fonte, al_map_rgb(255, 255, 255), 1100, 100, ALLEGRO_ALIGN_CENTRE, "%d", pontos);
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 127, 273, ALLEGRO_ALIGN_LEFT, "ATINGIR");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 120, 310, ALLEGRO_ALIGN_LEFT, "600 PONTOS");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 373, ALLEGRO_ALIGN_LEFT, "ACABAR COM");
+                al_draw_textf(missao, al_map_rgb(0, 128, 128), 125, 410, ALLEGRO_ALIGN_LEFT, "O RACISMO");
+
+//=======================================================================================================
+//      BOTÃO DE SAIR DO NIVEL DO JOGO PARA A CAPA E MENSAGEM PARA PROXIMO NIVEL
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                {
+                    if (evento.mouse.x >= 1054 &&
+                        evento.mouse.x <= 1150 &&
+                        evento.mouse.y >= 590 &&
+                        evento.mouse.y <= 678)
+                    {
+                        btsair_datela_donivel = true;
+                        nivel = 0;
+                    }
+                }
+
+                if(pontos >= missaoponto3)
+                {
+                    btcomecar_datela_escolha = false;
+                    comecar_nivel2 = false;
+                    comecar_nivel3 = false;
+                    nivel = 0;
+
+                    al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2 - 50, ALLEGRO_ALIGN_CENTRE, "PARABENS", pause);
+                    al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2, ALLEGRO_ALIGN_CENTRE, "VOCE SALVOU", pause);
+                    al_draw_textf(fonte, al_map_rgb(255, 0, 0), LARGURA_TELA/2, ALTURA_TELA/2 + 50, ALLEGRO_ALIGN_CENTRE, "A TERRA", pause);
+                }
+
+//=======================================================================================================
+//      CONDIÇÃO DA TELA GAME OVER
+
+                if(tampar1 == true && tampar2 == true && tampar3 == true)
+                {
+                    comecar_nivel3 = false;
+                    tela_gameover = true;
+                }
+
+                if((vida_da_terra1 == true) && (vida_da_terra2 == true) && (vida_da_terra3 == true) && (vida_da_terra4 == true) && (vida_da_terra5 == true))
+                {
+                    comecar_nivel3 = false;
+                    tela_gameover = true;
+                }
+
+
+//=======================================================================================================
+//      BOTÃO DE PAUSE DO NÍVEL DO JOGO
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                {
+                    if (evento.mouse.x >= 110 &&
+                        evento.mouse.x <= 240 &&
+                        evento.mouse.y >= 600 &&
+                        evento.mouse.y <= 690)
+                    {
+                        pausado = true;
+                    }
+                }
+
+//=======================================================================================================
+//      FUNÇÃO TAMPAR CORAÇÃO "VIDA"
+
+                if(tampar1 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 210, 10, 0);
+                }
+
+                if(tampar2 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 140, 10, 0);
+                }
+
+                if(tampar3 == true)
+                {
+                    al_draw_bitmap(tampa_coracao, 70, 10, 0);
+                }
+
+                if(vida_da_terra1 == true)
+                {
+                    al_draw_bitmap(terra1, 0, 0, 0);
+                }
+                if(vida_da_terra2 == true)
+                {
+                    al_draw_bitmap(terra2, 0, 0, 0);
+                }
+                if(vida_da_terra3 == true)
+                {
+                    al_draw_bitmap(terra3, 0, 0, 0);
+                }
+                if(vida_da_terra4 == true)
+                {
+                    al_draw_bitmap(terra4, 0, 0, 0);
+                }
+                if(vida_da_terra5 == true)
+                {
+                    al_draw_bitmap(terra5, 0, 0, 0);
+                }
+
+//=======================================================================================================
+//      JOGANDO
+
+                if(nave1 == true || nave2 == true || nave3 == true) // MOVER A NAVE COM O TECLADO PRESSIONADO
+                {
+                    if(evento.type == ALLEGRO_EVENT_TIMER)
+                    {
+                        redraw = true;
+
+                        CarregarBala(balas, NUM_Balas);
+                        ComecaInimigo(inimigo, NUM_Inimigo);
+                        CarregarInimigo(inimigo, NUM_Inimigo);
+                        ComecaObjeto(objetos, NUM_objetos);
+                        CarregarObjeto(objetos, NUM_objetos);
+                        ColisaoBala(balas, NUM_Balas, inimigo, NUM_Inimigo, objetos, NUM_objetos);
+                        ColisaoInimigo(inimigo, NUM_Inimigo);
+                    }
+
+                    else if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                    {
+                         saire = true;
+                    }
+
+                    if (evento.type == ALLEGRO_EVENT_KEY_DOWN)
+                    {
+                        switch(evento.keyboard.keycode)
+                        {
+                            case ALLEGRO_KEY_UP:
+                            teclas[UP] = true;
+                            break;
+                            case ALLEGRO_KEY_DOWN:
+                            teclas[DOWN] = true;
+                            break;
+                            case ALLEGRO_KEY_LEFT:
+                            teclas[LEFT] = true;
+                            break;
+                            case ALLEGRO_KEY_RIGHT:
+                            teclas[RIGHT] = true;
+                            break;
+                            case ALLEGRO_KEY_SPACE:
+                            teclas[SPACE] = true;
+                            AtirarBala(balas, NUM_Balas);
+                            break;
+                        }
+                    }
+                    if (evento.type == ALLEGRO_EVENT_KEY_UP)
+                    {
+                        switch(evento.keyboard.keycode)
+                        {
+                            case ALLEGRO_KEY_UP:
+                            teclas[UP] = false;
+                            break;
+                            case ALLEGRO_KEY_DOWN:
+                            teclas[DOWN] = false;
+                            break;
+                            case ALLEGRO_KEY_LEFT:
+                            teclas[LEFT] = false;
+                            break;
+                            case ALLEGRO_KEY_RIGHT:
+                            teclas[RIGHT] = false;
+                            break;
+                            case ALLEGRO_KEY_SPACE:
+                            teclas[SPACE] = false;
+                            break;
+                        }
+                    }
+
+                    if(nave1 == true)
+                    {
+                        al_draw_bitmap(navea, pos_x, pos_y, 0);
+                    }
+                    if(nave2 == true)
+                    {
+                        al_draw_bitmap(naveb, pos_x, pos_y, 0);
+                    }
+                    if(nave3 == true)
+                    {
+                        al_draw_bitmap(navec, pos_x, pos_y, 0);
+                    }
+
+                    pos_y -= teclas[UP] * 7;
+                    pos_y += teclas[DOWN] * 7;
+                    pos_x -= teclas[LEFT] * 7;
+                    pos_x += teclas[RIGHT] * 7;
+
+                    if(pos_x>=830)
+                    {
+                        teclas[RIGHT] = false;
+                    }
+                    else if(pos_x<=371)
+                    {
+                        teclas[LEFT] = false;
+                    }
+                    if(pos_y>=630)
+                    {
+                        teclas[DOWN] = false;
+                    }
+                    else if(pos_y<=0)
+                    {
+                        teclas[UP] = false;
+                    }
+
+                    if(apagar_coracao == false)
+                    {
+                        apagar_coracao = true;
+                    }
+
+                    if(redraw && al_is_event_queue_empty(fila_eventos))
+                    {
+                        redraw = false;
+                        DesenharBala(balas, NUM_Balas);
+                        DesenharBala1(balas, NUM_Balas);
+                        DesenharBala2(balas, NUM_Balas);
+                        DesenhaInimigo3(inimigo, NUM_Inimigo);
+                        DesenhaObjeto3(objetos, NUM_objetos);
+                    }
+                }
+
+                jogando = true;
+
+                if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                {
+                    saire = true; // BOTÃO "X" DA TELA
+                }
+            }
+
+//=======================================================================================================
 //      CONDIÇÃO PARA MENSAGEM DE PARABENS
 
             if(btcomecar_datela_escolha == false && comecar_nivel2 == false && comecar_nivel3 == false)
@@ -1419,6 +1529,11 @@ int main(void)
     al_destroy_display(cifrao);
     al_destroy_display(missao);
     al_destroy_timer(timer);
+    al_destroy_bitmap(terra1);
+    al_destroy_bitmap(terra2);
+    al_destroy_bitmap(terra3);
+    al_destroy_bitmap(terra4);
+    al_destroy_bitmap(terra5);
 
     return 0;
 }
@@ -1491,7 +1606,7 @@ void IniciaInimigo(Inimigo inimigo[], int size)
     {
         inimigo[i].ID = Adversario;
         inimigo[i].vida = false;
-        inimigo[i].velocidade = 2.5;
+        inimigo[i].velocidade = 3;
         inimigo[i].limite_x = 18;
         inimigo[i].limite_y = 18;
     }
@@ -1557,6 +1672,11 @@ void ColisaoInimigo(Inimigo inimigo[], int cSize)
                 inimigo[i].vida = false;
                 apagar_coracao = true;
             }
+            else if(inimigo[i].y >= 720)
+			{
+				inimigo[i].vida= false;
+				vida_da_terra = true;
+			}
             if(apagar_coracao == true)
             {
                 if((tampar1 == false) && (inimigo[i].x - inimigo[i].limite_x < pos_x + 80 &&
@@ -1581,6 +1701,29 @@ void ColisaoInimigo(Inimigo inimigo[], int cSize)
                     tampar3 = true;
                 }
             }
+            if(vida_da_terra == true)
+            {
+               if((vida_da_terra1 == false) && (inimigo[i].y >= 720))
+               {
+                   vida_da_terra1 = true;
+               }
+               else if((vida_da_terra1 == true) && (vida_da_terra2 == false) && (inimigo[i].y >= 720))
+               {
+                   vida_da_terra2 = true;
+               }
+               else if((vida_da_terra1 == true) && (vida_da_terra2 == true) && (vida_da_terra3 == false) && (inimigo[i].y >= 720))
+               {
+                   vida_da_terra3 = true;
+               }
+               else if((vida_da_terra1 == true) && (vida_da_terra2 == true) && (vida_da_terra3 == true) &&(vida_da_terra4 == false) && (inimigo[i].y >= 720))
+               {
+                   vida_da_terra4 = true;
+               }
+               else if((vida_da_terra1 == true) && (vida_da_terra2 == true) && (vida_da_terra3 == true) &&(vida_da_terra4 == true) && (vida_da_terra5 == false) && (inimigo[i].y >= 720))
+               {
+                   vida_da_terra5 = true;
+               }
+            }
         }
     }
 }
@@ -1602,16 +1745,9 @@ void DesenhaObjeto2(Objeto objetos[], int size)
     {
         if(objetos[i].vida)
         {
-
-            al_draw_filled_rectangle(objetos[i].x, objetos[i].y, objetos[i].x + 25, objetos[i].y + 17, al_map_rgb(50, 205, 50));
-            al_draw_filled_rectangle(objetos[i].x + 2.5, objetos[i].y + 2.5, objetos[i].x + 22.5, objetos[i].y + 14.5, al_map_rgb(0, 160, 0));
-            al_draw_filled_rectangle(objetos[i].x + 3, objetos[i].y + 3, objetos[i].x + 21.5, objetos[i].y + 13.5, al_map_rgb(50, 205, 50));
-            al_draw_filled_circle(objetos[i].x + 12, objetos[i].y + 8, 5, al_map_rgb(0, 160, 0));
-            al_draw_filled_circle(objetos[i].x + 2.5, objetos[i].y + 2.5, 2, al_map_rgb(0, 160, 0));
-            al_draw_filled_circle(objetos[i].x + 22.5, objetos[i].y + 14.5, 2, al_map_rgb(0, 160, 0));
-            al_draw_filled_circle(objetos[i].x + 22.5, objetos[i].y + 2.5, 2, al_map_rgb(0, 160, 0));
-            al_draw_filled_circle(objetos[i].x + 2.5, objetos[i].y + 14.5, 2, al_map_rgb(0, 160, 0));
-            al_draw_textf(cifrao, al_map_rgb(240, 230, 140), objetos[i].x + 11, objetos[i].y + 3, ALLEGRO_ALIGN_CENTRE, "$", pause);
+            al_draw_filled_rectangle(objetos[i].x, objetos[i].y, objetos[i].x + 7, objetos[i].y + 20, al_map_rgb(255, 255, 255));
+            al_draw_filled_rectangle(objetos[i].x , objetos[i].y, objetos[i].x + 7, objetos[i].y - 2 , al_map_rgb(0, 0 ,0));
+            al_draw_filled_rectangle(objetos[i].x, objetos[i].y - 2, objetos[i].x + 7, objetos[i].y - 4, al_map_rgb(255, 0, 0));
 
 ;        }
     }
@@ -1633,11 +1769,60 @@ void DesenhaInimigo2(Inimigo inimigo[], int size)
     {
         if(inimigo[i].vida)
         {
-            al_draw_filled_rectangle(inimigo[i].x - 9, inimigo[i].y, inimigo[i].x - 7, inimigo[i].y + 10, al_map_rgb(255, 0, 0));
-            al_draw_filled_rectangle(inimigo[i].x +9 , inimigo[i].y, inimigo[i].x + 7, inimigo[i].y + 10, al_map_rgb(255, 0, 0));
+            al_draw_filled_rectangle(inimigo[i].x - 9, inimigo[i].y, inimigo[i].x - 7, inimigo[i].y + 10, al_map_rgb(0,250,154));
+            al_draw_filled_rectangle(inimigo[i].x +9 , inimigo[i].y, inimigo[i].x + 7, inimigo[i].y + 10, al_map_rgb(0,250,154));
 
-            al_draw_filled_triangle(inimigo[i].x - 17, inimigo[i].y - 12, inimigo[i].x, inimigo[i].y + 12, inimigo[i].x + 17, inimigo[i].y - 12, al_map_rgb(255, 255, 255));
-            al_draw_filled_rectangle(inimigo[i].x - 2, inimigo[i].y - 12, inimigo[i].x +2, inimigo[i].y + 15, al_map_rgb(0, 0, 255));
+            al_draw_filled_triangle(inimigo[i].x - 17, inimigo[i].y - 12, inimigo[i].x, inimigo[i].y + 12, inimigo[i].x + 17, inimigo[i].y - 12, al_map_rgb(127,255,0));
+            al_draw_filled_rectangle(inimigo[i].x - 2, inimigo[i].y - 12, inimigo[i].x +2, inimigo[i].y + 15, al_map_rgb(0,100,0));
+        }
+    }
+}
+void IniciaObjeto3(Objeto objetos[], int size)
+{
+    for( i = 0; i < size; i++)
+    {
+        objetos[i].ID = Coisa;
+        objetos[i].vida = false;
+        objetos[i].velocidade = 4;
+        objetos[i].limite_x = 18;
+        objetos[i].limite_y = 18;
+    }
+}
+void DesenhaObjeto3(Objeto objetos[], int size)
+{
+    for(i = 0; i < size; i++)
+    {
+        if(objetos[i].vida)
+        {
+
+            al_draw_filled_rectangle(objetos[i].x + 10 , objetos[i].y, objetos[i].x - 10, objetos[i].y + 17, al_map_rgb(197, 164, 126));
+            al_draw_filled_rectangle(objetos[i].x, objetos[i].y, objetos[i].x + 25, objetos[i].y + 17, al_map_rgb(197, 164, 126));
+
+        }
+    }
+}
+void IniciaInimigo3(Inimigo inimigo[], int size)
+{
+    for( i = 0; i < size; i++)
+    {
+        inimigo[i].ID = Adversario;
+        inimigo[i].vida = false;
+        inimigo[i].velocidade = 7;
+        inimigo[i].limite_x = 18;
+        inimigo[i].limite_y = 18;
+    }
+}
+void DesenhaInimigo3(Inimigo inimigo[], int size)
+{
+    for(i = 0; i < size; i++)
+    {
+        if(inimigo[i].vida)
+        {
+            al_draw_filled_rectangle(inimigo[i].x - 9, inimigo[i].y, inimigo[i].x - 7, inimigo[i].y + 10, al_map_rgb(240,230,140));
+            al_draw_filled_rectangle(inimigo[i].x +9 , inimigo[i].y, inimigo[i].x + 7, inimigo[i].y + 10, al_map_rgb(240,230,140));
+
+            al_draw_filled_triangle(inimigo[i].x - 17, inimigo[i].y - 12, inimigo[i].x, inimigo[i].y + 12, inimigo[i].x + 17, inimigo[i].y - 12, al_map_rgb(255,140,0));
+            al_draw_filled_rectangle(inimigo[i].x - 2, inimigo[i].y - 12, inimigo[i].x +2, inimigo[i].y + 15, al_map_rgb(255,0,0));
         }
     }
 }
@@ -1719,7 +1904,7 @@ void ColisaoBala(Bala balas[], int bSize, Inimigo inimigo[], int cSize, Objeto o
                     {
                         balas[i].vida = false;
                         inimigo[j].vida = false;
-                        pontos+=50;
+                        pontos+=5;
                     }
                 }
             }
